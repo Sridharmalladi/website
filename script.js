@@ -6,6 +6,42 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitor-count').textContent = count;
 });
 
+// Show More functionality for projects
+document.addEventListener('DOMContentLoaded', function() {
+  const showMoreBtn = document.getElementById('showMoreBtn');
+  const hiddenProjects = document.getElementById('hiddenProjects');
+  
+  if (showMoreBtn && hiddenProjects) {
+    showMoreBtn.addEventListener('click', function() {
+      if (hiddenProjects.classList.contains('hidden')) {
+        hiddenProjects.classList.remove('hidden');
+        showMoreBtn.textContent = 'Show Less';
+      } else {
+        hiddenProjects.classList.add('hidden');
+        showMoreBtn.textContent = 'Show More';
+      }
+    });
+  }
+});
+
+// Show More functionality for certifications
+document.addEventListener('DOMContentLoaded', function() {
+  const showMoreCertBtn = document.getElementById('showMoreCertBtn');
+  const hiddenCerts = document.getElementById('hiddenCerts');
+  
+  if (showMoreCertBtn && hiddenCerts) {
+    showMoreCertBtn.addEventListener('click', function() {
+      if (hiddenCerts.classList.contains('hidden')) {
+        hiddenCerts.classList.remove('hidden');
+        showMoreCertBtn.textContent = 'Show Less';
+      } else {
+        hiddenCerts.classList.add('hidden');
+        showMoreCertBtn.textContent = 'Show More';
+      }
+    });
+  }
+});
+
 // Scrollspy
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.nav-links a');

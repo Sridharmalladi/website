@@ -1,5 +1,5 @@
 /* Import fonts */
-@import url('https://fonts.googleapis.com/css2?family=GT+Walsheim:wght@400;500;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/brooklyn-normal');
 
 :root {
   --bg-color: #1c1c1c;
@@ -16,7 +16,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'GT Walsheim', sans-serif;
+  font-family: 'Brooklyn Normal', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -170,6 +170,26 @@ section h2 {
 .tech-stack {
   font-size: 0.9rem;
   color: var(--text-secondary);
+}
+
+.hidden {
+  display: none;
+}
+
+.show-more-btn {
+  margin-top: 2rem;
+  padding: 0.8rem 2rem;
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.show-more-btn:hover {
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 /* Certifications */

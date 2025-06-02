@@ -234,6 +234,21 @@ input:checked + .slider:before {
   text-align: center;
 }
 
+/* About Section */
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  text-align: justify;
+  color: var(--text-color);
+}
+
 /* Projects */
 .projects-container {
   max-width: 1000px;
@@ -405,6 +420,13 @@ footer {
   left: 0;
   pointer-events: none;
   z-index: 9999;
+  opacity: 0.6;
+}
+
+/* Contact section heading alignment */
+#contact h2 {
+  text-align: right;
+  padding-right: 2rem;
 }
 
 /* Mobile Responsiveness */

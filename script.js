@@ -1,4 +1,4 @@
-// Mouse trail effect
+// Mouse trail effect with slower sparkles
 const canvas = document.getElementById('sparkles');
 const ctx = canvas.getContext('2d');
 
@@ -16,7 +16,8 @@ const mousePos = { x: width / 2, y: height / 2 };
 document.addEventListener('mousemove', (e) => {
   mousePos.x = e.clientX;
   mousePos.y = e.clientY;
-  addParticles(5, mousePos.x, mousePos.y);
+  // Reduce number of particles
+  addParticles(3, mousePos.x, mousePos.y);
 });
 
 function addParticles(count, x, y) {
@@ -24,9 +25,10 @@ function addParticles(count, x, y) {
     particles.push({
       x,
       y,
-      vx: (Math.random() - 0.5) * 4,
-      vy: (Math.random() - 0.5) * 4,
-      size: Math.random() * 2 + 1,
+      // Reduce velocity for slower movement
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      size: Math.random() * 1.5 + 0.5, // Smaller particles
       life: 1,
       color: document.documentElement.getAttribute('data-theme') === 'light' ? '#8B4513' : '#4ecdc4'
     });
@@ -38,7 +40,8 @@ function updateParticles() {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.life -= 0.02;
+    // Slower fade out
+    p.life -= 0.01;
     
     if (p.life <= 0) {
       particles.splice(i, 1);
@@ -51,7 +54,7 @@ function drawParticles() {
   ctx.clearRect(0, 0, width, height);
   
   particles.forEach(p => {
-    ctx.globalAlpha = p.life;
+    ctx.globalAlpha = p.life * 0.6; // Reduce opacity
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);

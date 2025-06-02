@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +10,7 @@
 <body>
   <div class="theme-switch-wrapper">
     <label class="theme-switch">
-      <input type="checkbox" id="theme-toggle">
+      <input type="checkbox" id="theme-toggle" checked>
       <span class="slider round">
         <span class="theme-icon">🌙</span>
         <span class="theme-icon">☀️</span>
@@ -51,6 +51,9 @@
         <a href="https://medium.com/@sridharmalladi" target="_blank" title="Medium">
           <img src="images/logos/medium.png" alt="Medium">
         </a>
+        <a href="#" class="email-copy" title="Copy Email" data-email="sridhar.malladi05@gmail.com">
+          <img src="images/logos/email.png" alt="Email">
+        </a>
       </div>
     </header>
 
@@ -71,55 +74,70 @@
             <span class="tool-item">SQL</span>
             <span class="tool-item">Java</span>
             <span class="tool-item">JavaScript</span>
+            <span class="tool-item">Bash</span>
           </div>
         </div>
 
         <div class="tools-category">
-          <h3 class="category-title">ML & AI</h3>
+          <h3 class="category-title">Machine Learning & AI</h3>
           <div class="tools-grid">
             <span class="tool-item">Scikit-learn</span>
             <span class="tool-item">TensorFlow</span>
             <span class="tool-item">PyTorch</span>
+            <span class="tool-item">Pandas</span>
+            <span class="tool-item">NumPy</span>
             <span class="tool-item">OpenAI API</span>
+            <span class="tool-item">Gemini API</span>
+            <span class="tool-item">Claude API</span>
+            <span class="tool-item">Hugging Face</span>
             <span class="tool-item">LangChain</span>
-            <span class="tool-item">Vector DBs</span>
+            <span class="tool-item">RAG</span>
             <span class="tool-item">LLM Agents</span>
-          </div>
-        </div>
-
-        <div class="tools-category">
-          <h3 class="category-title">Product Development</h3>
-          <div class="tools-grid">
-            <span class="tool-item">Figma</span>
-            <span class="tool-item">Firebase</span>
-            <span class="tool-item">Supabase</span>
-            <span class="tool-item">Streamlit</span>
-            <span class="tool-item">Postman</span>
-            <span class="tool-item">Trello</span>
+            <span class="tool-item">VLMs</span>
+            <span class="tool-item">n8n</span>
+            <span class="tool-item">Agentic AI</span>
+            <span class="tool-item">CrewAI</span>
+            <span class="tool-item">LangGraph</span>
+            <span class="tool-item">ChromaDB</span>
+            <span class="tool-item">Pinecone</span>
           </div>
         </div>
 
         <div class="tools-category">
           <h3 class="category-title">Data & Visualization</h3>
           <div class="tools-grid">
-            <span class="tool-item">Pandas</span>
-            <span class="tool-item">NumPy</span>
             <span class="tool-item">Power BI</span>
             <span class="tool-item">Tableau</span>
             <span class="tool-item">Seaborn</span>
             <span class="tool-item">Matplotlib</span>
+            <span class="tool-item">Plotly</span>
           </div>
         </div>
 
         <div class="tools-category">
-          <h3 class="category-title">DevOps & Infra</h3>
+          <h3 class="category-title">Product & Web Development</h3>
+          <div class="tools-grid">
+            <span class="tool-item">Streamlit</span>
+            <span class="tool-item">FastAPI</span>
+            <span class="tool-item">Flask</span>
+            <span class="tool-item">Firebase</span>
+            <span class="tool-item">Supabase</span>
+            <span class="tool-item">Figma</span>
+            <span class="tool-item">Postman</span>
+            <span class="tool-item">Trello</span>
+            <span class="tool-item">Gradio</span>
+          </div>
+        </div>
+
+        <div class="tools-category">
+          <h3 class="category-title">DevOps & Infrastructure</h3>
           <div class="tools-grid">
             <span class="tool-item">Git</span>
             <span class="tool-item">Docker</span>
             <span class="tool-item">GitHub Actions</span>
-            <span class="tool-item">AWS (S3, EC2)</span>
-            <span class="tool-item">GCP</span>
-            <span class="tool-item">Bash</span>
+            <span class="tool-item">AWS (S3, EC2, Lambda)</span>
+            <span class="tool-item">GCP (Vertex AI, Firestore)</span>
+            <span class="tool-item">REST APIs</span>
           </div>
         </div>
       </div>
@@ -236,6 +254,7 @@
     <p>Visitor count: <span id="visitor-count" class="highlight-count"></span></p>
   </footer>
 
+  <div id="toast" class="toast"></div>
   <script src="script.js"></script>
 </body>
 </html>

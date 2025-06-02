@@ -24,6 +24,28 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// Email copy functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const emailButton = document.querySelector('.email-copy');
+  const toast = document.getElementById('toast');
+  
+  emailButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    const email = this.getAttribute('data-email');
+    navigator.clipboard.writeText(email).then(() => {
+      showToast('Email copied!');
+    });
+  });
+  
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+});
+
 // Improved visitor counter with cooldown
 document.addEventListener('DOMContentLoaded', function() {
   const COOLDOWN_TIME = 5000; // 5 seconds cooldown
@@ -41,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Show More functionality for projects
+// Show More functionality for projects and certifications
 document.addEventListener('DOMContentLoaded', function() {
   const showMoreBtn = document.getElementById('showMoreBtn');
   const hiddenProjects = document.getElementById('hiddenProjects');
@@ -52,10 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
       showMoreBtn.textContent = hiddenProjects.classList.contains('hidden') ? 'Show More' : 'Show Less';
     });
   }
-});
-
-// Show More functionality for certifications
-document.addEventListener('DOMContentLoaded', function() {
+  
   const showMoreCertBtn = document.getElementById('showMoreCertBtn');
   const hiddenCerts = document.getElementById('hiddenCerts');
   
@@ -65,28 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
       showMoreCertBtn.textContent = hiddenCerts.classList.contains('hidden') ? 'Show More' : 'Show Less';
     });
   }
-});
-
-// Scrollspy
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-links a');
-
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 100;
-    const sectionHeight = section.clientHeight;
-    if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
-      current = section.getAttribute('id');
-    }
-  });
-
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === `#${current}`) {
-      link.classList.add('active');
-    }
-  });
 });
 
 // Mouse trail effect with brighter sparkles
@@ -107,7 +104,7 @@ const mousePos = { x: width / 2, y: height / 2 };
 document.addEventListener('mousemove', (e) => {
   mousePos.x = e.clientX;
   mousePos.y = e.clientY;
-  addParticles(3, mousePos.x, mousePos.y);
+  addParticles(2, mousePos.x, mousePos.y); // Reduced number of particles
 });
 
 function addParticles(count, x, y) {
@@ -115,9 +112,9 @@ function addParticles(count, x, y) {
     particles.push({
       x,
       y,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
-      size: Math.random() * 2 + 1, // Larger particles
+      vx: (Math.random() - 0.5) * 1.5, // Reduced velocity
+      vy: (Math.random() - 0.5) * 1.5,
+      size: Math.random() * 2 + 0.5, // Smaller particles
       life: 1,
       color: document.documentElement.getAttribute('data-theme') === 'light' ? '#8B4513' : '#4ecdc4'
     });
@@ -129,7 +126,7 @@ function updateParticles() {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.life -= 0.01;
+    p.life -= 0.02; // Faster fade
     
     if (p.life <= 0) {
       particles.splice(i, 1);
@@ -142,7 +139,7 @@ function drawParticles() {
   ctx.clearRect(0, 0, width, height);
   
   particles.forEach(p => {
-    ctx.globalAlpha = p.life * 0.8; // Increased opacity
+    ctx.globalAlpha = p.life * 0.6;
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);

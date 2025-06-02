@@ -2,16 +2,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   const themeToggle = document.getElementById('theme-toggle');
   
-  // Set default theme to light if not set
-  if (!localStorage.getItem('theme')) {
-    document.documentElement.setAttribute('data-theme', 'light');
-    localStorage.setItem('theme', 'light');
-    themeToggle.checked = true;
-  } else {
-    const savedTheme = localStorage.getItem('theme');
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggle.checked = savedTheme === 'light';
-  }
+  // Set default theme to light
+  document.documentElement.setAttribute('data-theme', 'light');
+  localStorage.setItem('theme', 'light');
+  themeToggle.checked = true;
   
   themeToggle.addEventListener('change', function(e) {
     if (e.target.checked) {

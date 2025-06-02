@@ -298,9 +298,9 @@ input:checked + .slider:before {
 .tool-item.hot::after {
   content: "🔥";
   position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 14px;
+  top: -6px;
+  right: -6px;
+  font-size: 12px;
   animation: pulse 2s infinite;
 }
 

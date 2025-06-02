@@ -40,7 +40,7 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 /* Theme Switch */
@@ -185,6 +185,7 @@ input:checked + .slider:before {
 .project-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 20px var(--glow-color);
+  color: var(--highlight-color);
 }
 
 /* Certifications */
@@ -269,6 +270,11 @@ section h2 {
   font-size: 1.2rem;
   color: var(--accent-color);
   margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.project-card:hover .project-content h3 {
+  color: var(--highlight-color);
 }
 
 .tech-stack {

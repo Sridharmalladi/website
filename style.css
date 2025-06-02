@@ -249,6 +249,49 @@ input:checked + .slider:before {
   color: var(--text-color);
 }
 
+/* Tools and Skills Section */
+.tools-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.tools-category {
+  margin-bottom: 2rem;
+}
+
+.category-title {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.tool-item {
+  background: var(--card-bg);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.tool-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px var(--highlight-color);
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
+}
+
 /* Projects */
 .projects-container {
   max-width: 1000px;

@@ -146,3 +146,5 @@ function animate() {
   drawParticles();
   requestAnimationFrame(animate);
 }
+
+animate();

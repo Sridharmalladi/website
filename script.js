@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Set default theme to light
   document.documentElement.setAttribute('data-theme', 'light');
   localStorage.setItem('theme', 'light');
-  themeToggle.checked = true;
+  themeToggle.checked = false;
   
   themeToggle.addEventListener('change', function(e) {
-    if (e.target.checked) {
+    if (!e.target.checked) {
       document.documentElement.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
     } else {
@@ -146,5 +146,3 @@ function animate() {
   drawParticles();
   requestAnimationFrame(animate);
 }
-
-animate();

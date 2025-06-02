@@ -98,7 +98,7 @@ const mousePos = { x: width / 2, y: height / 2 };
 document.addEventListener('mousemove', (e) => {
   mousePos.x = e.clientX;
   mousePos.y = e.clientY;
-  addParticles(2, mousePos.x, mousePos.y); // Reduced number of particles
+  addParticles(3, mousePos.x, mousePos.y); // Increased number of particles
 });
 
 function addParticles(count, x, y) {
@@ -106,9 +106,9 @@ function addParticles(count, x, y) {
     particles.push({
       x,
       y,
-      vx: (Math.random() - 0.5) * 1.5, // Reduced velocity
-      vy: (Math.random() - 0.5) * 1.5,
-      size: Math.random() * 2 + 0.5, // Smaller particles
+      vx: (Math.random() - 0.5) * 2, // Increased velocity
+      vy: (Math.random() - 0.5) * 2,
+      size: Math.random() * 3 + 1, // Larger particles
       life: 1,
       color: document.documentElement.getAttribute('data-theme') === 'light' ? '#8B4513' : '#4ecdc4'
     });
@@ -120,7 +120,7 @@ function updateParticles() {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.life -= 0.02; // Faster fade
+    p.life -= 0.015; // Slower fade
     
     if (p.life <= 0) {
       particles.splice(i, 1);
@@ -133,7 +133,7 @@ function drawParticles() {
   ctx.clearRect(0, 0, width, height);
   
   particles.forEach(p => {
-    ctx.globalAlpha = p.life * 0.6;
+    ctx.globalAlpha = p.life * 0.8; // Increased opacity
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);

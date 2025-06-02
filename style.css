@@ -139,12 +139,15 @@ section h2 {
 }
 
 /* Projects */
+.projects-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .projects-grid {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 .project-card {
@@ -173,11 +176,15 @@ section h2 {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+.show-more {
+  margin-top: 2rem;
+  text-align: center;
 }
 
 .show-more-btn {
-  margin-top: 2rem;
   padding: 0.8rem 2rem;
   background: transparent;
   border: 1px solid var(--text-secondary);
@@ -185,6 +192,7 @@ section h2 {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
 .show-more-btn:hover {

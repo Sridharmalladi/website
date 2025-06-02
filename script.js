@@ -13,13 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (showMoreBtn && hiddenProjects) {
     showMoreBtn.addEventListener('click', function() {
-      if (hiddenProjects.classList.contains('hidden')) {
-        hiddenProjects.classList.remove('hidden');
-        showMoreBtn.textContent = 'Show Less';
-      } else {
-        hiddenProjects.classList.add('hidden');
-        showMoreBtn.textContent = 'Show More';
-      }
+      hiddenProjects.classList.toggle('hidden');
+      showMoreBtn.textContent = hiddenProjects.classList.contains('hidden') ? 'Show More' : 'Show Less';
     });
   }
 });
@@ -31,13 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (showMoreCertBtn && hiddenCerts) {
     showMoreCertBtn.addEventListener('click', function() {
-      if (hiddenCerts.classList.contains('hidden')) {
-        hiddenCerts.classList.remove('hidden');
-        showMoreCertBtn.textContent = 'Show Less';
-      } else {
-        hiddenCerts.classList.add('hidden');
-        showMoreCertBtn.textContent = 'Show More';
-      }
+      hiddenCerts.classList.toggle('hidden');
+      showMoreCertBtn.textContent = hiddenCerts.classList.contains('hidden') ? 'Show More' : 'Show Less';
     });
   }
 });

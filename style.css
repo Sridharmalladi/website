@@ -1,5 +1,5 @@
 /* Import fonts */
-@import url('https://fonts.cdnfonts.com/css/brooklyn-normal');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
 :root {
   --bg-color: #1c1c1c;
@@ -16,7 +16,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Brooklyn Normal', sans-serif;
+  font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -148,6 +148,7 @@ section h2 {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .project-card {
@@ -175,38 +176,13 @@ section h2 {
   color: var(--text-secondary);
 }
 
-.hidden {
-  display: none !important;
-}
-
-.show-more {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.show-more-btn {
-  padding: 0.8rem 2rem;
-  background: transparent;
-  border: 1px solid var(--text-secondary);
-  color: var(--text-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.show-more-btn:hover {
-  border-color: var(--highlight-color);
-  color: var(--highlight-color);
-}
-
 /* Certifications */
 .certifications-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 auto 1.5rem;
 }
 
 .cert-item {
@@ -260,6 +236,33 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background: #45b2a0;
+}
+
+/* Show/Hide functionality */
+.hidden {
+  display: none !important;
+}
+
+.show-more {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.show-more-btn {
+  padding: 0.8rem 2rem;
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-family: 'Lato', sans-serif;
+}
+
+.show-more-btn:hover {
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 /* Footer */

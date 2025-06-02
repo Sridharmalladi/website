@@ -298,9 +298,9 @@ input:checked + .slider:before {
 .tool-item.hot::after {
   content: "🔥";
   position: absolute;
-  top: -6px;
-  right: -6px;
-  font-size: 12px;
+  top: -4px;
+  right: -4px;
+  font-size: 10px;
   animation: pulse 2s infinite;
 }
 
@@ -309,7 +309,7 @@ input:checked + .slider:before {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
   100% {
     transform: scale(1);

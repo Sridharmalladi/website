@@ -1,3 +1,26 @@
+// Theme switcher
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  // Check for saved theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggle.checked = savedTheme === 'light';
+  }
+  
+  // Theme switch handler
+  themeToggle.addEventListener('change', function(e) {
+    if (e.target.checked) {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+});
+
 // Visitor counter using localStorage with persistence
 document.addEventListener('DOMContentLoaded', function() {
   let count = parseInt(localStorage.getItem('visitorCount')) || 0;

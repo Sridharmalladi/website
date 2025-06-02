@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 
 :root {
+  /* Dark theme (default) */
   --bg-color: #1c1c1c;
   --card-bg: #242424;
   --text-color: #e0e0e0;
@@ -10,6 +11,19 @@
   --border-color: #333333;
   --hover-color: #2a2a2a;
   --highlight-color: #4ecdc4;
+  --glow-color: rgba(78, 205, 196, 0.3);
+}
+
+[data-theme="light"] {
+  --bg-color: #f5f5f5;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --accent-color: #4a4a4a;
+  --border-color: #e0e0e0;
+  --hover-color: #f0f0f0;
+  --highlight-color: #8B4513;
+  --glow-color: rgba(139, 69, 19, 0.2);
 }
 
 * {
@@ -26,6 +40,61 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Switch */
+.theme-switch-wrapper {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 34px;
+  width: 60px;
+  position: relative;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: var(--card-bg);
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+  border: 2px solid var(--highlight-color);
+}
+
+.slider:before {
+  background-color: var(--highlight-color);
+  bottom: 4px;
+  content: "";
+  height: 22px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 22px;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 .layout-container {
@@ -55,37 +124,21 @@ body {
   text-decoration: none;
   font-size: 1rem;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   padding: 0.8rem 1.2rem;
   border-radius: 50px;
   position: relative;
   overflow: hidden;
-}
-
-.nav-links a:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(78, 205, 196, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
-}
-
-.nav-links a:hover:before {
-  width: 200px;
-  height: 200px;
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
 .nav-links a:hover {
   color: var(--highlight-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.2);
+  box-shadow: 0 0 20px var(--glow-color);
 }
 
+/* Social Links */
 .social-links {
   display: flex;
   gap: 1rem;
@@ -100,33 +153,15 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
-}
-
-.social-links a:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(78, 205, 196, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.4s ease;
-}
-
-.social-links a:hover:before {
-  width: 100%;
-  height: 100%;
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
 .social-links a:hover {
-  transform: translateY(-4px) rotate(8deg);
-  box-shadow: 0 6px 15px rgba(78, 205, 196, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px var(--glow-color);
 }
 
 .social-links img {
@@ -136,11 +171,46 @@ body {
   transition: transform 0.3s ease;
 }
 
-.social-links a:hover img {
-  transform: scale(1.1);
+/* Projects */
+.project-card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--text-color);
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
-/* Header */
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* Certifications */
+.cert-item {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
+  box-shadow: 0 0 10px var(--glow-color);
+}
+
+.cert-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px var(--glow-color);
+  color: var(--highlight-color);
+}
+
+/* Rest of your existing styles */
 .profile-header {
   text-align: center;
   margin-bottom: 4rem;
@@ -164,7 +234,6 @@ body {
   font-size: 1.1rem;
 }
 
-/* Sections */
 section {
   margin-bottom: 4rem;
   text-align: center;
@@ -184,7 +253,6 @@ section h2 {
   padding: 0 1rem;
 }
 
-/* Projects */
 .projects-container {
   max-width: 800px;
   margin: 0 auto;
@@ -195,20 +263,6 @@ section h2 {
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
-}
-
-.project-card {
-  background: var(--card-bg);
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  color: var(--text-color);
-}
-
-.project-card:hover {
-  transform: translateY(-3px);
-  background: var(--hover-color);
 }
 
 .project-content h3 {
@@ -222,7 +276,6 @@ section h2 {
   color: var(--text-secondary);
 }
 
-/* Certifications */
 .certifications-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -235,57 +288,34 @@ section h2 {
   margin-bottom: 1.5rem;
 }
 
-.cert-item {
-  background: var(--card-bg);
-  padding: 1.5rem;
-  border-radius: 8px;
+.hidden {
+  display: none !important;
+}
+
+.show-more {
+  margin-top: 2rem;
   text-align: center;
-  font-size: 1rem;
+}
+
+.show-more-btn {
+  padding: 0.8rem 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--text-secondary);
   color: var(--text-color);
-  text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.4;
-  position: relative;
-  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-family: 'Lato', sans-serif;
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
-.cert-item:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(78, 205, 196, 0.1);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.5s ease;
-}
-
-.cert-item:hover:before {
-  width: 300px;
-  height: 300px;
-}
-
-.cert-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(78, 205, 196, 0.15);
+.show-more-btn:hover {
+  border-color: var(--highlight-color);
   color: var(--highlight-color);
+  box-shadow: 0 0 20px var(--glow-color);
 }
 
-#hiddenCerts {
-  margin-top: 1.5rem;
-}
-
-#hiddenCerts .certifications-grid {
-  margin-bottom: 0;
-}
-
-/* Contact Form */
 .contact-form {
   max-width: 500px;
   margin: 0 auto;
@@ -304,6 +334,13 @@ section h2 {
   border-radius: 8px;
   color: var(--text-color);
   font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 10px var(--glow-color);
 }
 
 button[type="submit"] {
@@ -315,41 +352,14 @@ button[type="submit"] {
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 button[type="submit"]:hover {
-  background: #45b2a0;
+  opacity: 0.9;
+  box-shadow: 0 0 15px var(--glow-color);
 }
 
-/* Show/Hide functionality */
-.hidden {
-  display: none !important;
-}
-
-.show-more {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.show-more-btn {
-  padding: 0.8rem 2rem;
-  background: transparent;
-  border: 1px solid var(--text-secondary);
-  color: var(--text-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  font-family: 'Lato', sans-serif;
-}
-
-.show-more-btn:hover {
-  border-color: var(--highlight-color);
-  color: var(--highlight-color);
-}
-
-/* Footer */
 footer {
   text-align: center;
   padding: 3rem 0;
@@ -378,5 +388,9 @@ footer {
   
   .profile-header h1 {
     font-size: 2rem;
+  }
+  
+  .certifications-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,3 +1,72 @@
+// Mouse trail effect
+const canvas = document.getElementById('sparkles');
+const ctx = canvas.getContext('2d');
+
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
+
+const particles = [];
+const mousePos = { x: width / 2, y: height / 2 };
+
+document.addEventListener('mousemove', (e) => {
+  mousePos.x = e.clientX;
+  mousePos.y = e.clientY;
+  addParticles(5, mousePos.x, mousePos.y);
+});
+
+function addParticles(count, x, y) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 4,
+      vy: (Math.random() - 0.5) * 4,
+      size: Math.random() * 2 + 1,
+      life: 1,
+      color: document.documentElement.getAttribute('data-theme') === 'light' ? '#8B4513' : '#4ecdc4'
+    });
+  }
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.02;
+    
+    if (p.life <= 0) {
+      particles.splice(i, 1);
+      continue;
+    }
+  }
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, width, height);
+  
+  particles.forEach(p => {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function animate() {
+  updateParticles();
+  drawParticles();
+  requestAnimationFrame(animate);
+}
+
+animate();
+
 // Theme switcher
 document.addEventListener('DOMContentLoaded', function() {
   const themeToggle = document.getElementById('theme-toggle');

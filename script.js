@@ -1,4 +1,4 @@
-// Visitor counter using localStorage
+// Visitor counter using localStorage with persistence
 document.addEventListener('DOMContentLoaded', function() {
   let count = parseInt(localStorage.getItem('visitorCount')) || 0;
   count++;

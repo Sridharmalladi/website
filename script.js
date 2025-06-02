@@ -3,20 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let count = parseInt(localStorage.getItem('visitorCount')) || 0;
   count++;
   localStorage.setItem('visitorCount', count);
-  document.getElementById('visitor-count').textContent = `This page has been visited ${count} times`;
-});
-
-// Show More Projects functionality
-document.addEventListener('DOMContentLoaded', function() {
-  const showMoreBtn = document.getElementById('showMoreBtn');
-  const hiddenProjects = document.getElementById('hiddenProjects');
-  
-  if (showMoreBtn && hiddenProjects) {
-    showMoreBtn.addEventListener('click', function() {
-      hiddenProjects.style.display = hiddenProjects.style.display === 'none' ? 'grid' : 'none';
-      showMoreBtn.textContent = hiddenProjects.style.display === 'none' ? 'Show More Projects' : 'Show Less';
-    });
-  }
+  document.getElementById('visitor-count').textContent = count;
 });
 
 // Scrollspy

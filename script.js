@@ -1,4 +1,4 @@
-// Visitor counter using cookies
+// Visitor counter using localStorage
 document.addEventListener('DOMContentLoaded', function() {
   let count = parseInt(localStorage.getItem('visitorCount')) || 0;
   count++;
@@ -6,7 +6,20 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('visitor-count').textContent = `This page has been visited ${count} times`;
 });
 
-// Scrollspy active class
+// Show More Projects functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const showMoreBtn = document.getElementById('showMoreBtn');
+  const hiddenProjects = document.getElementById('hiddenProjects');
+  
+  if (showMoreBtn && hiddenProjects) {
+    showMoreBtn.addEventListener('click', function() {
+      hiddenProjects.style.display = hiddenProjects.style.display === 'none' ? 'grid' : 'none';
+      showMoreBtn.textContent = hiddenProjects.style.display === 'none' ? 'Show More Projects' : 'Show Less';
+    });
+  }
+});
+
+// Scrollspy
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.nav-links a');
 

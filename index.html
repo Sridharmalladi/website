@@ -13,7 +13,6 @@
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
         <a href="#certifications">Certifications</a>
         <a href="#contact">Contact</a>
       </div>
@@ -39,39 +38,58 @@
           <img src="images/projects/projectimg1.png" alt="AI Inventory Optimizer">
           <div class="project-content">
             <h3>AI Inventory Optimizer</h3>
-            <div class="tech-stack">XGBoost • RandomForest • Streamlit • Python • LangChain</div>
+            <div class="tech-stack">XGBoost • RandomForest • Streamlit</div>
           </div>
         </div>
         <div class="project-card">
           <img src="images/projects/projectimg2.png" alt="Supply Chain Analysis">
           <div class="project-content">
             <h3>Supply Chain Analysis</h3>
-            <div class="tech-stack">AWS • Streamlit • Apache Airflow • PyTorch • RAG</div>
+            <div class="tech-stack">AWS • Streamlit • Apache Airflow</div>
           </div>
         </div>
         <div class="project-card">
           <img src="images/projects/projectimg3.jpg" alt="Driver Drowsiness Detection">
           <div class="project-content">
             <h3>Driver Drowsiness Detection</h3>
-            <div class="tech-stack">Python • OpenCV • TensorFlow • VLM • LLM</div>
+            <div class="tech-stack">Python • OpenCV • TensorFlow</div>
           </div>
         </div>
       </div>
-    </section>
-
-    <section id="skills">
-      <h2>Skills</h2>
-      <div class="skills-grid">
-        <div class="skill-item">Large Language Models</div>
-        <div class="skill-item">RAG Systems</div>
-        <div class="skill-item">Vision Language Models</div>
-        <div class="skill-item">LangChain</div>
-        <div class="skill-item">PyTorch</div>
-        <div class="skill-item">Vector Databases</div>
-        <div class="skill-item">Prompt Engineering</div>
-        <div class="skill-item">MLOps</div>
-        <div class="skill-item">Deep Learning</div>
-        <div class="skill-item">Computer Vision</div>
+      
+      <div id="hiddenProjects" class="projects-grid" style="display: none; margin-top: 1.5rem;">
+        <div class="project-card">
+          <img src="images/projects/projectimg5.png" alt="Battery Degradation Analysis">
+          <div class="project-content">
+            <h3>Battery Degradation Analysis</h3>
+            <div class="tech-stack">Python • NumPy • Scikit-learn</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="images/projects/projectimg6.png" alt="Document Analysis System">
+          <div class="project-content">
+            <h3>Document Analysis System</h3>
+            <div class="tech-stack">LangChain • Hugging Face • PyTorch</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="images/projects/projectimg7.png" alt="ML Experiments Portfolio">
+          <div class="project-content">
+            <h3>ML Experiments Portfolio</h3>
+            <div class="tech-stack">Python • Jupyter • Scikit-learn</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="images/projects/projectimg8.png" alt="Customer Behavioral Analysis">
+          <div class="project-content">
+            <h3>Customer Behavioral Analysis</h3>
+            <div class="tech-stack">Tableau • Airflow • Python</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="show-more">
+        <button id="showMoreBtn" class="show-more-btn">Show More Projects</button>
       </div>
     </section>
 
@@ -82,12 +100,12 @@
         <div class="cert-item">Generative AI for Project Managers</div>
         <div class="cert-item">IBM AI Engineering</div>
         <div class="cert-item">Google AI Essentials</div>
-        <div class="cert-item">Google Project Management: Professional Certificate</div>
+        <div class="cert-item">Google Project Management</div>
         <div class="cert-item">Google Prompting Essentials</div>
         <div class="cert-item">IBM AI Product Manager</div>
         <div class="cert-item">Prompt Engineering Specialization</div>
-        <div class="cert-item">Advanced Data Analytics Professional Certificate</div>
-        <div class="cert-item">Data Science Professional Certificate</div>
+        <div class="cert-item">Advanced Data Analytics</div>
+        <div class="cert-item">Data Science Professional</div>
       </div>
       <a href="https://www.linkedin.com/in/sridhar-malladi/details/certifications/" class="cert-link" target="_blank">See certificates →</a>
     </section>
@@ -111,7 +129,7 @@
 
   <footer>
     <p>© 2025 Sridhar Malladi. All rights reserved.</p>
-    <p id="visitor-count">This page has been visited 0 times</p>
+    <p id="visitor-count"></p>
   </footer>
 
   <script src="script.js"></script>

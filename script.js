@@ -1,5 +1,13 @@
+// Initialize Supabase client
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+
 // Theme initialization
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   const themeToggle = document.getElementById('theme-toggle');
   
   // Set default theme to light
@@ -16,6 +24,32 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('theme', 'dark');
     }
   });
+
+  // Initialize visitor counter
+  try {
+    // Get current visitor count
+    const { data: visitorCount, error: countError } = await supabase
+      .from('visitors')
+      .select('count')
+      .single();
+
+    if (countError) throw countError;
+
+    // Update the visitor count in the UI
+    const visitorCountElement = document.getElementById('visitorCount');
+    if (visitorCountElement) {
+      visitorCountElement.textContent = visitorCount?.count || 0;
+    }
+
+    // Increment the visitor count
+    const { error: updateError } = await supabase
+      .rpc('increment_visitors');
+
+    if (updateError) throw updateError;
+
+  } catch (error) {
+    console.error('Error managing visitor count:', error);
+  }
 });
 
 // Email copy functionality
@@ -81,7 +115,7 @@ const mousePos = { x: width / 2, y: height / 2 };
 document.addEventListener('mousemove', (e) => {
   mousePos.x = e.clientX;
   mousePos.y = e.clientY;
-  addParticles(3, mousePos.x, mousePos.y); // Increased number of particles
+  addParticles(3, mousePos.x, mousePos.y);
 });
 
 function addParticles(count, x, y) {
@@ -89,9 +123,9 @@ function addParticles(count, x, y) {
     particles.push({
       x,
       y,
-      vx: (Math.random() - 0.5) * 2, // Increased velocity
+      vx: (Math.random() - 0.5) * 2,
       vy: (Math.random() - 0.5) * 2,
-      size: Math.random() * 3 + 1, // Larger particles
+      size: Math.random() * 3 + 1,
       life: 1,
       color: document.documentElement.getAttribute('data-theme') === 'light' ? '#8B4513' : '#4ecdc4'
     });
@@ -103,7 +137,7 @@ function updateParticles() {
     const p = particles[i];
     p.x += p.vx;
     p.y += p.vy;
-    p.life -= 0.015; // Slower fade
+    p.life -= 0.015;
     
     if (p.life <= 0) {
       particles.splice(i, 1);
@@ -116,7 +150,7 @@ function drawParticles() {
   ctx.clearRect(0, 0, width, height);
   
   particles.forEach(p => {
-    ctx.globalAlpha = p.life * 0.8; // Increased opacity
+    ctx.globalAlpha = p.life * 0.8;
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);

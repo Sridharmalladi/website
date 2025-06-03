@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (showMoreBtn && hiddenProjects) {
     showMoreBtn.addEventListener('click', function() {
       hiddenProjects.classList.toggle('hidden');
-      showMoreBtn.textContent = hiddenProjects.classList.contains('hidden') ? 'Show More' : 'Show Less';
+      this.textContent = hiddenProjects.classList.contains('hidden') ? 'Show More' : 'Show Less';
     });
   }
   
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (showMoreCertBtn && hiddenCerts) {
     showMoreCertBtn.addEventListener('click', function() {
       hiddenCerts.classList.toggle('hidden');
-      showMoreCertBtn.textContent = hiddenCerts.classList.contains('hidden') ? 'Show More' : 'Show Less';
+      this.textContent = hiddenCerts.classList.contains('hidden') ? 'Show More' : 'Show Less';
     });
   }
 });

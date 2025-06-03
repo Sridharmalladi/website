@@ -10,6 +10,7 @@
   --border-color: #e0e0e0;
   --hover-color: #f0f0f0;
   --highlight-color: #8B4513;
+  --tech-stack-color: #c4a484;
 }
 
 [data-theme="dark"] {
@@ -21,6 +22,7 @@
   --border-color: #333333;
   --hover-color: #2a2a2a;
   --highlight-color: #4ecdc4;
+  --tech-stack-color: #4ecdc4;
 }
 
 * {
@@ -330,6 +332,20 @@ section h2::after {
 
 .project-content {
   text-align: center;
+}
+
+.project-content h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.tech-stack {
+  font-size: 0.85rem;
+  color: var(--tech-stack-color);
+  opacity: 0.9;
+  font-weight: 400;
+  margin-top: 0.25rem;
 }
 
 /* Certifications */

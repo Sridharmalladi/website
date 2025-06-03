@@ -40,23 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Improved visitor counter with cooldown
-document.addEventListener('DOMContentLoaded', function() {
-  const COOLDOWN_TIME = 5000; // 5 seconds cooldown
-  const lastVisitTime = localStorage.getItem('lastVisitTime');
-  const currentTime = Date.now();
-  
-  if (!lastVisitTime || (currentTime - parseInt(lastVisitTime)) > COOLDOWN_TIME) {
-    let count = parseInt(localStorage.getItem('visitorCount')) || 0;
-    count++;
-    localStorage.setItem('visitorCount', count);
-    localStorage.setItem('lastVisitTime', currentTime);
-    document.getElementById('visitor-count').textContent = count;
-  } else {
-    document.getElementById('visitor-count').textContent = localStorage.getItem('visitorCount') || 0;
-  }
-});
-
 // Show More functionality for projects and certifications
 document.addEventListener('DOMContentLoaded', function() {
   const showMoreBtn = document.getElementById('showMoreBtn');

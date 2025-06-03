@@ -1,13 +1,5 @@
-// Initialize Supabase client
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
-
 // Theme initialization
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
   const themeToggle = document.getElementById('theme-toggle');
   
   // Set default theme to light
@@ -24,32 +16,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       localStorage.setItem('theme', 'dark');
     }
   });
-
-  // Initialize visitor counter
-  try {
-    // Get current visitor count
-    const { data: visitorCount, error: countError } = await supabase
-      .from('visitors')
-      .select('count')
-      .single();
-
-    if (countError) throw countError;
-
-    // Update the visitor count in the UI
-    const visitorCountElement = document.getElementById('visitorCount');
-    if (visitorCountElement) {
-      visitorCountElement.textContent = visitorCount?.count || 0;
-    }
-
-    // Increment the visitor count
-    const { error: updateError } = await supabase
-      .rpc('increment_visitors');
-
-    if (updateError) throw updateError;
-
-  } catch (error) {
-    console.error('Error managing visitor count:', error);
-  }
 });
 
 // Email copy functionality
@@ -97,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// Mouse trail effect with brighter sparkles
+// Mouse trail effect with sparkles
 const canvas = document.getElementById('sparkles');
 const ctx = canvas.getContext('2d');
 

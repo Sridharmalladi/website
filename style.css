@@ -258,27 +258,6 @@ section h2::after {
   text-align: left;
 }
 
-.impacts-section h3 {
-  font-size: 1.8rem;
-  color: var(--accent-color);
-  margin-bottom: 1.5rem;
-  text-align: center;
-  position: relative;
-  padding-bottom: 0.5rem;
-}
-
-.impacts-section h3::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 2px;
-  background-color: var(--highlight-color);
-  border-radius: 1px;
-}
-
 .impacts-list {
   list-style: none;
   padding: 0;

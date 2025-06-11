@@ -238,9 +238,9 @@ section h2::after {
 
 /* About Section */
 .about-content {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 3rem;
 }
 
 .about-content p {
@@ -288,9 +288,9 @@ section h2::after {
 
 /* Tools and Skills Section */
 .tools-container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 3rem;
 }
 
 .tools-category {
@@ -578,6 +578,12 @@ footer {
   .toast {
     top: 150px;
   }
+
+  /* Reduce margins on mobile for About and Tools sections */
+  .about-content,
+  .tools-container {
+    padding: 0 1.5rem;
+  }
 }
 
 /* Small mobile devices */
@@ -593,5 +599,11 @@ footer {
 
   .toast {
     top: 130px;
+  }
+
+  /* Further reduce margins on small mobile for About and Tools sections */
+  .about-content,
+  .tools-container {
+    padding: 0 1rem;
   }
 }

@@ -522,7 +522,7 @@ footer {
 /* Toast */
 .toast {
   position: fixed;
-  bottom: 20px;
+  top: 80px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--highlight-color);
@@ -573,6 +573,10 @@ footer {
     font-size: 0.95rem;
     padding-left: 1.2rem;
   }
+
+  .toast {
+    top: 60px;
+  }
 }
 
 /* Small mobile devices */
@@ -584,5 +588,9 @@ footer {
   .impacts-list li {
     font-size: 0.9rem;
     padding-left: 1rem;
+  }
+
+  .toast {
+    top: 50px;
   }
 }

@@ -252,6 +252,61 @@ section h2::after {
   letter-spacing: 0.01em;
 }
 
+/* Impacts Section */
+.impacts-section {
+  margin-top: 3rem;
+  text-align: left;
+}
+
+.impacts-section h3 {
+  font-size: 1.8rem;
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.impacts-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background-color: var(--highlight-color);
+  border-radius: 1px;
+}
+
+.impacts-list {
+  list-style: none;
+  padding: 0;
+}
+
+.impacts-list li {
+  margin-bottom: 1.2rem;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-color);
+}
+
+.impacts-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--highlight-color);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.impacts-list li strong {
+  color: var(--highlight-color);
+  font-weight: 600;
+}
+
 /* Tools and Skills Section */
 .tools-container {
   max-width: 1000px;
@@ -530,11 +585,25 @@ footer {
     top: 10px;
     right: 10px;
   }
+
+  .impacts-section {
+    text-align: left;
+  }
+
+  .impacts-list li {
+    font-size: 0.95rem;
+    padding-left: 1.2rem;
+  }
 }
 
 /* Small mobile devices */
 @media (max-width: 480px) {
   .profile-header h1 {
     font-size: 2.2rem;
+  }
+
+  .impacts-list li {
+    font-size: 0.9rem;
+    padding-left: 1rem;
   }
 }

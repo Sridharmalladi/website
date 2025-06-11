@@ -522,7 +522,7 @@ footer {
 /* Toast */
 .toast {
   position: fixed;
-  top: 80px;
+  top: 200px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--highlight-color);
@@ -533,6 +533,7 @@ footer {
   visibility: hidden;
   transition: all 0.3s ease;
   z-index: 1000;
+  text-align: center;
 }
 
 .toast.show {
@@ -575,7 +576,7 @@ footer {
   }
 
   .toast {
-    top: 60px;
+    top: 150px;
   }
 }
 
@@ -591,6 +592,6 @@ footer {
   }
 
   .toast {
-    top: 50px;
+    top: 130px;
   }
 }

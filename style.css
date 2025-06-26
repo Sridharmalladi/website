@@ -286,6 +286,20 @@ section h2::after {
   font-weight: 600;
 }
 
+/* App Links */
+.app-link {
+  text-decoration: none;
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.app-link:hover {
+  transform: scale(1.2);
+  filter: brightness(1.2);
+}
+
 /* Tools and Skills Section */
 .tools-container {
   max-width: 900px;

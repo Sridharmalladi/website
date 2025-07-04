@@ -170,10 +170,10 @@ class ChainParticle {
 
   draw() {
     const theme = document.documentElement.getAttribute('data-theme');
-    // Fixed particle colors and opacity
-    const color = theme === 'light' ? 'rgba(139, 69, 19, 0.4)' : 'rgba(78, 205, 196, 0.4)';
+    // Increased brightness significantly for both themes
+    const color = theme === 'light' ? 'rgba(139, 69, 19, 0.7)' : 'rgba(78, 205, 196, 0.8)';
     
-    chainCtx.globalAlpha = theme === 'light' ? 0.6 : 0.7; // Increased dark mode opacity by 10%
+    chainCtx.globalAlpha = theme === 'light' ? 0.8 : 0.9; // Much brighter
     chainCtx.fillStyle = color;
     chainCtx.beginPath();
     chainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -182,8 +182,8 @@ class ChainParticle {
 
   drawConnections(particles) {
     const theme = document.documentElement.getAttribute('data-theme');
-    // Fixed line colors with proper visibility for both themes
-    const lineColor = theme === 'light' ? 'rgba(139, 69, 19, 0.25)' : 'rgba(78, 205, 196, 0.35)';
+    // Increased brightness for connection lines
+    const lineColor = theme === 'light' ? 'rgba(139, 69, 19, 0.5)' : 'rgba(78, 205, 196, 0.6)';
     
     particles.forEach(other => {
       if (other === this) return;
@@ -193,8 +193,8 @@ class ChainParticle {
       const distance = Math.sqrt(dx * dx + dy * dy);
       
       if (distance < 180) {
-        // Fixed opacity calculation for consistent visibility
-        const opacity = (1 - distance / 180) * (theme === 'light' ? 0.4 : 0.5);
+        // Increased opacity for brighter connections
+        const opacity = (1 - distance / 180) * (theme === 'light' ? 0.6 : 0.7);
         chainCtx.globalAlpha = opacity;
         chainCtx.strokeStyle = lineColor;
         chainCtx.lineWidth = 1;
@@ -208,7 +208,7 @@ class ChainParticle {
 }
 
 const chainParticles = [];
-const maxChainParticles = 80;
+const maxChainParticles = 40; // Reduced from 80 to 40 dots
 
 // Initialize chain particles
 for (let i = 0; i < maxChainParticles; i++) {

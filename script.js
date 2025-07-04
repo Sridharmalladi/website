@@ -151,15 +151,13 @@ class ChainParticle {
     this.vx = (Math.random() - 0.5) * 0.5;
     this.vy = (Math.random() - 0.5) * 0.5;
     this.size = Math.random() * 2 + 1;
-    this.life = 1;
-    this.maxLife = 1;
-    this.connections = [];
+    this.life = 1; // Always at full life
   }
 
   update() {
     this.x += this.vx;
     this.y += this.vy;
-    this.life -= 0.002;
+    // Removed life decay - particles stay at full opacity
 
     // Bounce off edges
     if (this.x <= 0 || this.x >= chainWidth) this.vx *= -1;
@@ -174,7 +172,7 @@ class ChainParticle {
     const theme = document.documentElement.getAttribute('data-theme');
     const color = theme === 'light' ? 'rgba(139, 69, 19, 0.3)' : 'rgba(78, 205, 196, 0.3)';
     
-    chainCtx.globalAlpha = this.life * 0.6;
+    chainCtx.globalAlpha = 0.6; // Fixed opacity
     chainCtx.fillStyle = color;
     chainCtx.beginPath();
     chainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -193,7 +191,7 @@ class ChainParticle {
       const distance = Math.sqrt(dx * dx + dy * dy);
       
       if (distance < 180) {
-        const opacity = (1 - distance / 180) * this.life * other.life * 0.3;
+        const opacity = (1 - distance / 180) * 0.3; // Removed life dependency
         chainCtx.globalAlpha = opacity;
         chainCtx.strokeStyle = lineColor;
         chainCtx.lineWidth = 1;
@@ -218,19 +216,10 @@ for (let i = 0; i < maxChainParticles; i++) {
 }
 
 function updateChainParticles() {
-  for (let i = chainParticles.length - 1; i >= 0; i--) {
-    const particle = chainParticles[i];
+  // Simply update all particles without removing any
+  chainParticles.forEach(particle => {
     particle.update();
-    
-    if (particle.life <= 0) {
-      chainParticles.splice(i, 1);
-      // Add new particle to maintain count
-      chainParticles.push(new ChainParticle(
-        Math.random() * chainWidth,
-        Math.random() * chainHeight
-      ));
-    }
-  }
+  });
 }
 
 function drawChainParticles() {

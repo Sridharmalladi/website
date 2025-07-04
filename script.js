@@ -132,7 +132,7 @@ function animate() {
 
 animate();
 
-// Chain Reaction Background Animation
+// Enhanced Chain Reaction Background Animation
 const chainCanvas = document.getElementById('chain-background');
 const chainCtx = chainCanvas.getContext('2d');
 
@@ -148,22 +148,30 @@ class ChainParticle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = (Math.random() - 0.5) * 0.5;
-    this.size = Math.random() * 2 + 1;
+    this.vx = (Math.random() - 0.5) * 0.6; // Slightly faster movement
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.size = Math.random() * 2.5 + 1.5; // Slightly larger particles
     this.life = 1;
     this.maxLife = 1;
     this.connections = [];
+    this.pulsePhase = Math.random() * Math.PI * 2; // For pulsing effect
   }
 
   update() {
     this.x += this.vx;
     this.y += this.vy;
-    this.life -= 0.002;
+    this.life -= 0.0015; // Slower fade for longer visibility
+    this.pulsePhase += 0.02; // Gentle pulsing
 
-    // Bounce off edges
-    if (this.x <= 0 || this.x >= chainWidth) this.vx *= -1;
-    if (this.y <= 0 || this.y >= chainHeight) this.vy *= -1;
+    // Bounce off edges with slight randomness
+    if (this.x <= 0 || this.x >= chainWidth) {
+      this.vx *= -1;
+      this.vx += (Math.random() - 0.5) * 0.1;
+    }
+    if (this.y <= 0 || this.y >= chainHeight) {
+      this.vy *= -1;
+      this.vy += (Math.random() - 0.5) * 0.1;
+    }
 
     // Keep within bounds
     this.x = Math.max(0, Math.min(chainWidth, this.x));
@@ -172,18 +180,28 @@ class ChainParticle {
 
   draw() {
     const theme = document.documentElement.getAttribute('data-theme');
-    const color = theme === 'light' ? 'rgba(139, 69, 19, 0.3)' : 'rgba(78, 205, 196, 0.3)';
+    const baseColor = theme === 'light' ? 'rgba(139, 69, 19, 0.4)' : 'rgba(78, 205, 196, 0.4)';
     
-    chainCtx.globalAlpha = this.life * 0.6;
-    chainCtx.fillStyle = color;
+    // Add pulsing effect
+    const pulse = Math.sin(this.pulsePhase) * 0.2 + 0.8;
+    const alpha = this.life * 0.7 * pulse; // Increased base opacity
+    
+    chainCtx.globalAlpha = alpha;
+    chainCtx.fillStyle = baseColor;
     chainCtx.beginPath();
-    chainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    chainCtx.arc(this.x, this.y, this.size * pulse, 0, Math.PI * 2);
+    chainCtx.fill();
+    
+    // Add subtle glow effect
+    chainCtx.globalAlpha = alpha * 0.3;
+    chainCtx.beginPath();
+    chainCtx.arc(this.x, this.y, this.size * pulse * 1.8, 0, Math.PI * 2);
     chainCtx.fill();
   }
 
   drawConnections(particles) {
     const theme = document.documentElement.getAttribute('data-theme');
-    const lineColor = theme === 'light' ? 'rgba(139, 69, 19, 0.1)' : 'rgba(78, 205, 196, 0.1)';
+    const lineColor = theme === 'light' ? 'rgba(139, 69, 19, 0.15)' : 'rgba(78, 205, 196, 0.15)';
     
     particles.forEach(other => {
       if (other === this) return;
@@ -192,14 +210,27 @@ class ChainParticle {
       const dy = this.y - other.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 120) {
-        const opacity = (1 - distance / 120) * this.life * other.life * 0.3;
+      if (distance < 140) { // Increased connection distance
+        const opacity = (1 - distance / 140) * this.life * other.life * 0.4; // Increased opacity
+        const lineWidth = (1 - distance / 140) * 1.5; // Variable line width
+        
         chainCtx.globalAlpha = opacity;
         chainCtx.strokeStyle = lineColor;
-        chainCtx.lineWidth = 1;
+        chainCtx.lineWidth = lineWidth;
         chainCtx.beginPath();
         chainCtx.moveTo(this.x, this.y);
         chainCtx.lineTo(other.x, other.y);
+        chainCtx.stroke();
+        
+        // Add subtle gradient effect to connections
+        const gradient = chainCtx.createLinearGradient(this.x, this.y, other.x, other.y);
+        gradient.addColorStop(0, theme === 'light' ? 'rgba(139, 69, 19, 0.2)' : 'rgba(78, 205, 196, 0.2)');
+        gradient.addColorStop(0.5, theme === 'light' ? 'rgba(139, 69, 19, 0.05)' : 'rgba(78, 205, 196, 0.05)');
+        gradient.addColorStop(1, theme === 'light' ? 'rgba(139, 69, 19, 0.2)' : 'rgba(78, 205, 196, 0.2)');
+        
+        chainCtx.globalAlpha = opacity * 0.5;
+        chainCtx.strokeStyle = gradient;
+        chainCtx.lineWidth = lineWidth * 0.5;
         chainCtx.stroke();
       }
     });
@@ -207,7 +238,7 @@ class ChainParticle {
 }
 
 const chainParticles = [];
-const maxChainParticles = 50;
+const maxChainParticles = 65; // Increased particle count
 
 // Initialize chain particles
 for (let i = 0; i < maxChainParticles; i++) {

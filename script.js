@@ -142,30 +142,20 @@ let chainHeight = chainCanvas.height = window.innerHeight;
 window.addEventListener('resize', () => {
   chainWidth = chainCanvas.width = window.innerWidth;
   chainHeight = chainCanvas.height = window.innerHeight;
+  // Regenerate particles with new spacing when window resizes
+  generateStaticParticles();
 });
 
 class ChainParticle {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = (Math.random() - 0.5) * 0.5;
-    this.size = Math.random() * 2 + 1;
+    this.size = Math.random() * 2 + 1.5; // Slightly larger dots
     this.life = 1; // Always at full life
   }
 
   update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    // Removed life decay - particles stay at full opacity
-
-    // Bounce off edges
-    if (this.x <= 0 || this.x >= chainWidth) this.vx *= -1;
-    if (this.y <= 0 || this.y >= chainHeight) this.vy *= -1;
-
-    // Keep within bounds
-    this.x = Math.max(0, Math.min(chainWidth, this.x));
-    this.y = Math.max(0, Math.min(chainHeight, this.y));
+    // Particles are now static - no movement
   }
 
   draw() {
@@ -192,12 +182,12 @@ class ChainParticle {
       const dy = this.y - other.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 180) {
-        // Increased opacity for brighter connections
-        const opacity = (1 - distance / 180) * (theme === 'light' ? 0.6 : 0.7);
+      if (distance < 200) { // Increased connection distance
+        // Fixed opacity for consistent line thickness
+        const opacity = theme === 'light' ? 0.4 : 0.5;
         chainCtx.globalAlpha = opacity;
         chainCtx.strokeStyle = lineColor;
-        chainCtx.lineWidth = 1;
+        chainCtx.lineWidth = 1.5; // Fixed line width
         chainCtx.beginPath();
         chainCtx.moveTo(this.x, this.y);
         chainCtx.lineTo(other.x, other.y);
@@ -208,18 +198,31 @@ class ChainParticle {
 }
 
 const chainParticles = [];
-const maxChainParticles = 40; // Reduced from 80 to 40 dots
+const gridSpacing = 120; // Distance between particles
 
-// Initialize chain particles
-for (let i = 0; i < maxChainParticles; i++) {
-  chainParticles.push(new ChainParticle(
-    Math.random() * chainWidth,
-    Math.random() * chainHeight
-  ));
+function generateStaticParticles() {
+  chainParticles.length = 0; // Clear existing particles
+  
+  // Create a grid of particles with some randomness
+  for (let x = gridSpacing / 2; x < chainWidth; x += gridSpacing) {
+    for (let y = gridSpacing / 2; y < chainHeight; y += gridSpacing) {
+      // Add some randomness to avoid perfect grid
+      const offsetX = (Math.random() - 0.5) * 40;
+      const offsetY = (Math.random() - 0.5) * 40;
+      
+      chainParticles.push(new ChainParticle(
+        Math.max(20, Math.min(chainWidth - 20, x + offsetX)),
+        Math.max(20, Math.min(chainHeight - 20, y + offsetY))
+      ));
+    }
+  }
 }
 
+// Initialize static particles
+generateStaticParticles();
+
 function updateChainParticles() {
-  // Simply update all particles without removing any
+  // Simply update all particles (though they don't move now)
   chainParticles.forEach(particle => {
     particle.update();
   });

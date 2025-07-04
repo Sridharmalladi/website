@@ -11,8 +11,8 @@
   --hover-color: #f0f0f0;
   --highlight-color: #8B4513;
   --tech-stack-color: #c4a484;
-  --chain-particle-color: rgba(139, 69, 19, 0.4);
-  --chain-line-color: rgba(139, 69, 19, 0.15);
+  --chain-particle-color: rgba(139, 69, 19, 0.3);
+  --chain-line-color: rgba(139, 69, 19, 0.1);
 }
 
 [data-theme="dark"] {
@@ -25,8 +25,8 @@
   --hover-color: #2a2a2a;
   --highlight-color: #4ecdc4;
   --tech-stack-color: #4ecdc4;
-  --chain-particle-color: rgba(78, 205, 196, 0.4);
-  --chain-line-color: rgba(78, 205, 196, 0.15);
+  --chain-particle-color: rgba(78, 205, 196, 0.3);
+  --chain-line-color: rgba(78, 205, 196, 0.1);
 }
 
 * {
@@ -48,7 +48,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Enhanced Chain Reaction Background */
+/* Chain Reaction Background */
 #chain-background {
   position: fixed;
   top: 0;
@@ -57,7 +57,7 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.75; /* Increased from 0.6 for better visibility */
+  opacity: 0.6;
 }
 
 .layout-container {

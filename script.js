@@ -192,8 +192,8 @@ class ChainParticle {
       const dy = this.y - other.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 120) {
-        const opacity = (1 - distance / 120) * this.life * other.life * 0.3;
+      if (distance < 180) {
+        const opacity = (1 - distance / 180) * this.life * other.life * 0.3;
         chainCtx.globalAlpha = opacity;
         chainCtx.strokeStyle = lineColor;
         chainCtx.lineWidth = 1;
@@ -207,7 +207,7 @@ class ChainParticle {
 }
 
 const chainParticles = [];
-const maxChainParticles = 50;
+const maxChainParticles = 80;
 
 // Initialize chain particles
 for (let i = 0; i < maxChainParticles; i++) {

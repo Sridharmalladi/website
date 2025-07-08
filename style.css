@@ -286,14 +286,7 @@ section h2::after {
   margin-bottom: 1rem;
   text-align: center;
   font-family: 'Lato', sans-serif;
-  height: 1.5rem;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid var(--highlight-color);
-  animation: typing-position 3s steps(22, end), blink-caret 1s step-end infinite;
-  animation-delay: 0s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
+  min-height: 1.5rem;
 }
 
 .slogan {
@@ -301,58 +294,7 @@ section h2::after {
   font-size: 1.1rem;
   text-align: center;
   font-family: 'Lato', sans-serif;
-  height: 1.4rem;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid var(--highlight-color);
-  animation: typing-slogan 3s steps(30, end), blink-caret 1s step-end infinite;
-  animation-delay: 3.5s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: both;
-  opacity: 0;
-}
-
-@keyframes typing-position {
-  0% { 
-    width: 0;
-    opacity: 1;
-  }
-  25% { 
-    width: 100%;
-    opacity: 1;
-  }
-  75% { 
-    width: 100%;
-    opacity: 1;
-  }
-  100% { 
-    width: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes typing-slogan {
-  0% { 
-    width: 0;
-    opacity: 1;
-  }
-  25% { 
-    width: 100%;
-    opacity: 1;
-  }
-  75% { 
-    width: 100%;
-    opacity: 1;
-  }
-  100% { 
-    width: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent; }
-  50% { border-color: var(--highlight-color); }
+  min-height: 1.4rem;
 }
 
 /* About Section */

@@ -270,58 +270,37 @@ section h2::after {
 .social-links a::before {
   content: attr(title);
   position: absolute;
-  bottom: -45px;
+  bottom: -40px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--card-bg);
   color: var(--text-color);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--highlight-color);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   font-family: 'Lato', sans-serif;
   letter-spacing: 0.02em;
+  backdrop-filter: blur(10px);
 }
 
-.social-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -37px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 8px solid var(--card-bg);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1001;
-}
-
-.social-links a:hover::before,
-.social-links a:hover::after {
+.social-links a:hover::before {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateX(-50%) translateY(-4px);
 }
 
 [data-theme="dark"] .social-links a::before {
-  background: #2a2a2a;
-  border-color: #404040;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="dark"] .social-links a::after {
-  border-bottom-color: #2a2a2a;
+  background: rgba(42, 42, 42, 0.95);
+  border-color: var(--highlight-color);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 /* Header */

@@ -306,26 +306,9 @@ section h2::after {
   text-align: center;
   font-family: 'Lato', sans-serif;
   font-weight: 400;
-  background: linear-gradient(-45deg, var(--highlight-color), var(--accent-color), var(--highlight-color), var(--accent-color));
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradientShift 4s ease-in-out infinite;
   position: relative;
   display: inline-block;
-  animation: gradientShift 4s ease-in-out infinite, floatName 6s ease-in-out infinite;
-  text-shadow: 0 0 20px rgba(var(--highlight-color), 0.3);
-  filter: drop-shadow(0 0 15px rgba(var(--highlight-color), 0.2));
-}
-
-@keyframes gradientShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+  animation: floatName 6s ease-in-out infinite;
 }
 
 @keyframes floatName {
@@ -413,20 +396,20 @@ section h2::after {
   color: var(--highlight-color);
   font-weight: 600;
   font-family: 'Lato', sans-serif;
-  text-shadow: 0 0 12px var(--highlight-color);
-  filter: drop-shadow(0 0 8px var(--highlight-color));
+  text-shadow: 0 0 6px var(--highlight-color);
+  filter: drop-shadow(0 0 4px var(--highlight-color));
   position: relative;
   display: inline-block;
 }
 
 [data-theme="light"] .impacts-list li strong {
-  text-shadow: 0 0 12px #8B4513;
-  filter: drop-shadow(0 0 8px #8B4513);
+  text-shadow: 0 0 6px #8B4513;
+  filter: drop-shadow(0 0 4px #8B4513);
 }
 
 [data-theme="dark"] .impacts-list li strong {
-  text-shadow: 0 0 12px #4ecdc4;
-  filter: drop-shadow(0 0 8px #4ecdc4);
+  text-shadow: 0 0 6px #4ecdc4;
+  filter: drop-shadow(0 0 4px #4ecdc4);
 }
 
 /* App Links */

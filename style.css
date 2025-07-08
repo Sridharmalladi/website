@@ -186,6 +186,38 @@ section h2 {
   position: relative;
   padding-bottom: 1rem;
   font-family: 'Lato', sans-serif;
+  display: inline-block;
+  animation: floatHeading 4s ease-in-out infinite;
+}
+
+@keyframes floatHeading {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Different animation delays for each section */
+#about h2 {
+  animation-delay: 0s;
+}
+
+#tools h2 {
+  animation-delay: 0.5s;
+}
+
+#projects h2 {
+  animation-delay: 1s;
+}
+
+#certifications h2 {
+  animation-delay: 1.5s;
+}
+
+#contact h2 {
+  animation-delay: 2s;
 }
 
 section h2::after {
@@ -396,20 +428,6 @@ section h2::after {
   color: var(--highlight-color);
   font-weight: 600;
   font-family: 'Lato', sans-serif;
-  text-shadow: 0 0 6px var(--highlight-color);
-  filter: drop-shadow(0 0 4px var(--highlight-color));
-  position: relative;
-  display: inline-block;
-}
-
-[data-theme="light"] .impacts-list li strong {
-  text-shadow: 0 0 6px #8B4513;
-  filter: drop-shadow(0 0 4px #8B4513);
-}
-
-[data-theme="dark"] .impacts-list li strong {
-  text-shadow: 0 0 6px #4ecdc4;
-  filter: drop-shadow(0 0 4px #4ecdc4);
 }
 
 /* App Links */

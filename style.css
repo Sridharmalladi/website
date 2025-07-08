@@ -270,37 +270,31 @@ section h2::after {
 .social-links a::before {
   content: attr(title);
   position: absolute;
-  bottom: -50px;
+  bottom: -60px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--card-bg);
+  background: #333;
   color: var(--text-color);
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 400;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid var(--highlight-color);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s ease;
   z-index: 1000;
-  font-family: 'Lato', sans-serif;
-  letter-spacing: 0.02em;
-  backdrop-filter: blur(10px);
+  color: white;
 }
 
 .social-links a:hover::before {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-6px);
 }
 
 [data-theme="dark"] .social-links a::before {
-  background: rgba(42, 42, 42, 0.95);
-  border-color: var(--highlight-color);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  background: #555;
+  color: white;
 }
 
 /* Header */

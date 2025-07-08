@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const slogan = document.querySelector('.slogan');
   
   const positionText = 'Data Scientist | AI & ML';
-  const sloganText = 'Always Learning. Always Building!';
+   const sloganText = 'Always Learning. Always Building.';
   
   let positionIndex = 0;
   let sloganIndex = 0;

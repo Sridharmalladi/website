@@ -270,7 +270,7 @@ section h2::after {
 .social-links a::before {
   content: attr(title);
   position: absolute;
-  bottom: -40px;
+  bottom: -50px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--card-bg);
@@ -294,7 +294,7 @@ section h2::after {
 .social-links a:hover::before {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-4px);
+  transform: translateX(-50%) translateY(-6px);
 }
 
 [data-theme="dark"] .social-links a::before {

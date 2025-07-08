@@ -249,6 +249,11 @@ section h2::after {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: gradientShift 4s ease-in-out infinite;
+  position: relative;
+  display: inline-block;
+  animation: gradientShift 4s ease-in-out infinite, floatName 6s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(var(--highlight-color), 0.3);
+  filter: drop-shadow(0 0 15px rgba(var(--highlight-color), 0.2));
 }
 
 @keyframes gradientShift {
@@ -257,6 +262,21 @@ section h2::after {
   }
   50% {
     background-position: 100% 50%;
+  }
+}
+
+@keyframes floatName {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-8px) translateX(4px);
+  }
+  50% {
+    transform: translateY(-4px) translateX(-6px);
+  }
+  75% {
+    transform: translateY(-12px) translateX(2px);
   }
 }
 

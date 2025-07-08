@@ -243,6 +243,21 @@ section h2::after {
   text-align: center;
   font-family: 'Lato', sans-serif;
   font-weight: 400;
+  background: linear-gradient(-45deg, var(--highlight-color), var(--accent-color), var(--highlight-color), var(--accent-color));
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .position {

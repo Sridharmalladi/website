@@ -246,3 +246,55 @@ function animateChain() {
 }
 
 animateChain();
+
+// Typing effect for position and slogan
+document.addEventListener('DOMContentLoaded', function() {
+  const position = document.querySelector('.position');
+  const slogan = document.querySelector('.slogan');
+  
+  const positionText = 'Data Scientist | AI & ML';
+  const sloganText = 'Always Learning. Always Building!';
+  
+  let positionIndex = 0;
+  let sloganIndex = 0;
+  let isTypingPosition = true;
+  let isTypingSlogan = false;
+  let pauseTime = 0;
+  
+  function typeEffect() {
+    if (isTypingPosition && positionIndex < positionText.length) {
+      position.textContent = positionText.substring(0, positionIndex + 1);
+      positionIndex++;
+      setTimeout(typeEffect, 100);
+    } else if (isTypingPosition && positionIndex >= positionText.length) {
+      isTypingPosition = false;
+      pauseTime = 0;
+      setTimeout(() => {
+        isTypingSlogan = true;
+        typeEffect();
+      }, 500);
+    } else if (isTypingSlogan && sloganIndex < sloganText.length) {
+      slogan.textContent = sloganText.substring(0, sloganIndex + 1);
+      sloganIndex++;
+      setTimeout(typeEffect, 100);
+    } else if (isTypingSlogan && sloganIndex >= sloganText.length) {
+      isTypingSlogan = false;
+      setTimeout(() => {
+        // Wait 5 seconds then restart
+        setTimeout(() => {
+          positionIndex = 0;
+          sloganIndex = 0;
+          position.textContent = '';
+          slogan.textContent = '';
+          isTypingPosition = true;
+          typeEffect();
+        }, 5000);
+      }, 100);
+    }
+  }
+  
+  // Clear initial content and start typing
+  position.textContent = '';
+  slogan.textContent = '';
+  typeEffect();
+});

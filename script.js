@@ -144,104 +144,181 @@ window.addEventListener('resize', () => {
   chainHeight = chainCanvas.height = window.innerHeight;
 });
 
-class ChainParticle {
+class ChainNode {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = (Math.random() - 0.5) * 0.5;
-    this.size = Math.random() * 2 + 1;
-    this.life = 1; // Always at full life
+    this.originalX = x;
+    this.originalY = y;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.size = Math.random() * 3 + 2;
+    this.energy = 0;
+    this.maxEnergy = 100;
+    this.connections = [];
+    this.pulsePhase = Math.random() * Math.PI * 2;
   }
 
   update() {
+    // Gentle floating movement
     this.x += this.vx;
     this.y += this.vy;
-    // Removed life decay - particles stay at full opacity
-
-    // Bounce off edges
-    if (this.x <= 0 || this.x >= chainWidth) this.vx *= -1;
-    if (this.y <= 0 || this.y >= chainHeight) this.vy *= -1;
+    
+    // Bounce off edges with energy transfer
+    if (this.x <= 20 || this.x >= chainWidth - 20) {
+      this.vx *= -0.8;
+      this.triggerReaction();
+    }
+    if (this.y <= 20 || this.y >= chainHeight - 20) {
+      this.vy *= -0.8;
+      this.triggerReaction();
+    }
 
     // Keep within bounds
-    this.x = Math.max(0, Math.min(chainWidth, this.x));
-    this.y = Math.max(0, Math.min(chainHeight, this.y));
+    this.x = Math.max(20, Math.min(chainWidth - 20, this.x));
+    this.y = Math.max(20, Math.min(chainHeight - 20, this.y));
+
+    // Energy decay
+    if (this.energy > 0) {
+      this.energy -= 2;
+    }
+
+    // Update pulse phase
+    this.pulsePhase += 0.05;
+  }
+
+  triggerReaction() {
+    this.energy = this.maxEnergy;
+    // Spread energy to connected nodes
+    this.connections.forEach(node => {
+      if (node.energy < 50) {
+        setTimeout(() => {
+          node.energy = Math.max(node.energy, 70);
+        }, Math.random() * 200);
+      }
+    });
   }
 
   draw() {
     const theme = document.documentElement.getAttribute('data-theme');
-    // Increased brightness significantly for both themes
-    const color = theme === 'light' ? 'rgba(139, 69, 19, 0.7)' : 'rgba(78, 205, 196, 0.8)';
+    const baseColor = theme === 'light' ? [139, 69, 19] : [78, 205, 196];
     
-    chainCtx.globalAlpha = theme === 'light' ? 0.8 : 0.9; // Much brighter
-    chainCtx.fillStyle = color;
+    // Calculate energy-based intensity
+    const energyRatio = this.energy / this.maxEnergy;
+    const pulseIntensity = Math.sin(this.pulsePhase) * 0.3 + 0.7;
+    const intensity = Math.max(0.3, energyRatio * pulseIntensity);
+    
+    // Draw node with energy glow
+    chainCtx.globalAlpha = intensity;
+    chainCtx.fillStyle = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${intensity})`;
+    
+    // Glow effect for high energy nodes
+    if (this.energy > 30) {
+      chainCtx.shadowColor = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, 0.8)`;
+      chainCtx.shadowBlur = this.energy / 10;
+    } else {
+      chainCtx.shadowBlur = 0;
+    }
+    
     chainCtx.beginPath();
-    chainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    chainCtx.arc(this.x, this.y, this.size + (energyRatio * 2), 0, Math.PI * 2);
     chainCtx.fill();
+    
+    // Reset shadow
+    chainCtx.shadowBlur = 0;
   }
 
-  drawConnections(particles) {
+  drawConnections() {
     const theme = document.documentElement.getAttribute('data-theme');
-    // Increased brightness for connection lines
-    const lineColor = theme === 'light' ? 'rgba(139, 69, 19, 0.5)' : 'rgba(78, 205, 196, 0.6)';
+    const baseColor = theme === 'light' ? [139, 69, 19] : [78, 205, 196];
     
-    particles.forEach(other => {
-      if (other === this) return;
-      
+    this.connections.forEach(other => {
       const dx = this.x - other.x;
       const dy = this.y - other.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 180) {
-        // Increased opacity for brighter connections
-        const opacity = (1 - distance / 180) * (theme === 'light' ? 0.6 : 0.7);
-        chainCtx.globalAlpha = opacity;
-        chainCtx.strokeStyle = lineColor;
-        chainCtx.lineWidth = 1;
+      if (distance < 150) {
+        // Energy-based connection intensity
+        const energyFlow = (this.energy + other.energy) / (this.maxEnergy * 2);
+        const baseOpacity = (1 - distance / 150) * 0.4;
+        const opacity = baseOpacity + (energyFlow * 0.6);
+        
+        chainCtx.globalAlpha = Math.min(opacity, 0.8);
+        chainCtx.strokeStyle = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${opacity})`;
+        chainCtx.lineWidth = 1 + (energyFlow * 2);
+        
+        // Animated connection for high energy
+        if (energyFlow > 0.3) {
+          chainCtx.shadowColor = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, 0.5)`;
+          chainCtx.shadowBlur = 3;
+        }
+        
         chainCtx.beginPath();
         chainCtx.moveTo(this.x, this.y);
         chainCtx.lineTo(other.x, other.y);
         chainCtx.stroke();
+        
+        chainCtx.shadowBlur = 0;
       }
     });
   }
 }
 
-const chainParticles = [];
-const maxChainParticles = 40; // Reduced from 80 to 40 dots
+const chainNodes = [];
+const maxChainNodes = 25;
 
-// Initialize chain particles
-for (let i = 0; i < maxChainParticles; i++) {
-  chainParticles.push(new ChainParticle(
+// Initialize chain nodes
+for (let i = 0; i < maxChainNodes; i++) {
+  chainNodes.push(new ChainNode(
     Math.random() * chainWidth,
     Math.random() * chainHeight
   ));
 }
 
-function updateChainParticles() {
-  // Simply update all particles without removing any
-  chainParticles.forEach(particle => {
-    particle.update();
+// Create connections between nearby nodes
+chainNodes.forEach(node => {
+  chainNodes.forEach(other => {
+    if (node !== other) {
+      const dx = node.x - other.x;
+      const dy = node.y - other.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < 200 && node.connections.length < 4) {
+        node.connections.push(other);
+      }
+    }
+  });
+});
+
+// Random energy triggers for chain reactions
+setInterval(() => {
+  const randomNode = chainNodes[Math.floor(Math.random() * chainNodes.length)];
+  randomNode.triggerReaction();
+}, 3000 + Math.random() * 2000);
+
+function updateChainNodes() {
+  chainNodes.forEach(node => {
+    node.update();
   });
 }
 
-function drawChainParticles() {
+function drawChainNodes() {
   chainCtx.clearRect(0, 0, chainWidth, chainHeight);
   
   // Draw connections first
-  chainParticles.forEach(particle => {
-    particle.drawConnections(chainParticles);
+  chainNodes.forEach(node => {
+    node.drawConnections();
   });
   
-  // Draw particles on top
-  chainParticles.forEach(particle => {
-    particle.draw();
+  // Draw nodes on top
+  chainNodes.forEach(node => {
+    node.draw();
   });
 }
 
 function animateChain() {
-  updateChainParticles();
-  drawChainParticles();
+  updateChainNodes();
+  drawChainNodes();
   requestAnimationFrame(animateChain);
 }
 

@@ -144,185 +144,296 @@ window.addEventListener('resize', () => {
   chainHeight = chainCanvas.height = window.innerHeight;
 });
 
-class ChainNode {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.originalX = x;
-    this.originalY = y;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.size = Math.random() * 3 + 2;
-    this.energy = 0;
-    this.maxEnergy = 100;
-    this.connections = [];
-    this.pulsePhase = Math.random() * Math.PI * 2;
+// ===== BACKGROUND ANIMATION OPTIONS =====
+// Uncomment ONE of the following options:
+
+// OPTION 1: Floating Geometric Shapes (Professional & Clean)
+class FloatingShape {
+  constructor() {
+    this.x = Math.random() * chainWidth;
+    this.y = Math.random() * chainHeight;
+    this.size = Math.random() * 40 + 20;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
+    this.rotation = 0;
+    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+    this.opacity = Math.random() * 0.1 + 0.05;
+    this.shape = Math.floor(Math.random() * 3); // 0: circle, 1: square, 2: triangle
   }
 
   update() {
-    // Gentle floating movement
     this.x += this.vx;
     this.y += this.vy;
-    
-    // Bounce off edges with energy transfer
-    if (this.x <= 20 || this.x >= chainWidth - 20) {
-      this.vx *= -0.8;
-      this.triggerReaction();
-    }
-    if (this.y <= 20 || this.y >= chainHeight - 20) {
-      this.vy *= -0.8;
-      this.triggerReaction();
-    }
+    this.rotation += this.rotationSpeed;
 
-    // Keep within bounds
-    this.x = Math.max(20, Math.min(chainWidth - 20, this.x));
-    this.y = Math.max(20, Math.min(chainHeight - 20, this.y));
-
-    // Energy decay
-    if (this.energy > 0) {
-      this.energy -= 2;
-    }
-
-    // Update pulse phase
-    this.pulsePhase += 0.05;
-  }
-
-  triggerReaction() {
-    this.energy = this.maxEnergy;
-    // Spread energy to connected nodes
-    this.connections.forEach(node => {
-      if (node.energy < 50) {
-        setTimeout(() => {
-          node.energy = Math.max(node.energy, 70);
-        }, Math.random() * 200);
-      }
-    });
+    // Wrap around edges
+    if (this.x < -this.size) this.x = chainWidth + this.size;
+    if (this.x > chainWidth + this.size) this.x = -this.size;
+    if (this.y < -this.size) this.y = chainHeight + this.size;
+    if (this.y > chainHeight + this.size) this.y = -this.size;
   }
 
   draw() {
     const theme = document.documentElement.getAttribute('data-theme');
-    const baseColor = theme === 'light' ? [139, 69, 19] : [78, 205, 196];
+    const color = theme === 'light' ? 'rgba(139, 69, 19, ' : 'rgba(78, 205, 196, ';
     
-    // Calculate energy-based intensity
-    const energyRatio = this.energy / this.maxEnergy;
-    const pulseIntensity = Math.sin(this.pulsePhase) * 0.3 + 0.7;
-    const intensity = Math.max(0.3, energyRatio * pulseIntensity);
-    
-    // Draw node with energy glow
-    chainCtx.globalAlpha = intensity;
-    chainCtx.fillStyle = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${intensity})`;
-    
-    // Glow effect for high energy nodes
-    if (this.energy > 30) {
-      chainCtx.shadowColor = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, 0.8)`;
-      chainCtx.shadowBlur = this.energy / 10;
+    chainCtx.save();
+    chainCtx.translate(this.x, this.y);
+    chainCtx.rotate(this.rotation);
+    chainCtx.globalAlpha = this.opacity;
+    chainCtx.strokeStyle = color + this.opacity + ')';
+    chainCtx.lineWidth = 2;
+
+    if (this.shape === 0) {
+      // Circle
+      chainCtx.beginPath();
+      chainCtx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+      chainCtx.stroke();
+    } else if (this.shape === 1) {
+      // Square
+      chainCtx.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size);
     } else {
-      chainCtx.shadowBlur = 0;
+      // Triangle
+      chainCtx.beginPath();
+      chainCtx.moveTo(0, -this.size / 2);
+      chainCtx.lineTo(-this.size / 2, this.size / 2);
+      chainCtx.lineTo(this.size / 2, this.size / 2);
+      chainCtx.closePath();
+      chainCtx.stroke();
     }
     
-    chainCtx.beginPath();
-    chainCtx.arc(this.x, this.y, this.size + (energyRatio * 2), 0, Math.PI * 2);
-    chainCtx.fill();
+    chainCtx.restore();
+  }
+}
+
+const shapes = [];
+for (let i = 0; i < 15; i++) {
+  shapes.push(new FloatingShape());
+}
+
+function animateShapes() {
+  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
+  shapes.forEach(shape => {
+    shape.update();
+    shape.draw();
+  });
+  requestAnimationFrame(animateShapes);
+}
+
+animateShapes();
+
+// OPTION 2: Flowing Lines (Uncomment to use instead)
+/*
+const flowLines = [];
+const maxLines = 8;
+
+class FlowLine {
+  constructor() {
+    this.points = [];
+    this.maxPoints = 50;
+    this.speed = Math.random() * 2 + 1;
+    this.angle = Math.random() * Math.PI * 2;
+    this.x = Math.random() * chainWidth;
+    this.y = Math.random() * chainHeight;
+    this.opacity = Math.random() * 0.3 + 0.1;
+  }
+
+  update() {
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
     
-    // Reset shadow
-    chainCtx.shadowBlur = 0;
+    this.points.push({ x: this.x, y: this.y });
+    if (this.points.length > this.maxPoints) {
+      this.points.shift();
+    }
+
+    // Reset if off screen
+    if (this.x < -100 || this.x > chainWidth + 100 || this.y < -100 || this.y > chainHeight + 100) {
+      this.x = Math.random() * chainWidth;
+      this.y = Math.random() * chainHeight;
+      this.angle = Math.random() * Math.PI * 2;
+      this.points = [];
+    }
+  }
+
+  draw() {
+    if (this.points.length < 2) return;
+    
+    const theme = document.documentElement.getAttribute('data-theme');
+    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
+    
+    chainCtx.beginPath();
+    chainCtx.moveTo(this.points[0].x, this.points[0].y);
+    
+    for (let i = 1; i < this.points.length; i++) {
+      const alpha = (i / this.points.length) * this.opacity;
+      chainCtx.strokeStyle = `rgba(${color}, ${alpha})`;
+      chainCtx.lineWidth = 2;
+      chainCtx.lineTo(this.points[i].x, this.points[i].y);
+      chainCtx.stroke();
+      chainCtx.beginPath();
+      chainCtx.moveTo(this.points[i].x, this.points[i].y);
+    }
+  }
+}
+
+for (let i = 0; i < maxLines; i++) {
+  flowLines.push(new FlowLine());
+}
+
+function animateFlowLines() {
+  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
+  flowLines.forEach(line => {
+    line.update();
+    line.draw();
+  });
+  requestAnimationFrame(animateFlowLines);
+}
+
+animateFlowLines();
+*/
+
+// OPTION 3: Particle Field (Uncomment to use instead)
+/*
+const particles = [];
+const maxParticles = 100;
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * chainWidth;
+    this.y = Math.random() * chainHeight;
+    this.vx = (Math.random() - 0.5) * 0.8;
+    this.vy = (Math.random() - 0.5) * 0.8;
+    this.size = Math.random() * 2 + 1;
+    this.opacity = Math.random() * 0.5 + 0.2;
+    this.connections = [];
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.x < 0 || this.x > chainWidth) this.vx *= -1;
+    if (this.y < 0 || this.y > chainHeight) this.vy *= -1;
+    
+    this.x = Math.max(0, Math.min(chainWidth, this.x));
+    this.y = Math.max(0, Math.min(chainHeight, this.y));
+  }
+
+  draw() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
+    
+    chainCtx.globalAlpha = this.opacity;
+    chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
+    chainCtx.beginPath();
+    chainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    chainCtx.fill();
   }
 
   drawConnections() {
     const theme = document.documentElement.getAttribute('data-theme');
-    const baseColor = theme === 'light' ? [139, 69, 19] : [78, 205, 196];
+    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
     
-    this.connections.forEach(other => {
+    particles.forEach(other => {
+      if (other === this) return;
+      
       const dx = this.x - other.x;
       const dy = this.y - other.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < 150) {
-        // Energy-based connection intensity
-        const energyFlow = (this.energy + other.energy) / (this.maxEnergy * 2);
-        const baseOpacity = (1 - distance / 150) * 0.4;
-        const opacity = baseOpacity + (energyFlow * 0.6);
-        
-        chainCtx.globalAlpha = Math.min(opacity, 0.8);
-        chainCtx.strokeStyle = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${opacity})`;
-        chainCtx.lineWidth = 1 + (energyFlow * 2);
-        
-        // Animated connection for high energy
-        if (energyFlow > 0.3) {
-          chainCtx.shadowColor = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, 0.5)`;
-          chainCtx.shadowBlur = 3;
-        }
-        
+      if (distance < 120) {
+        const opacity = (1 - distance / 120) * 0.2;
+        chainCtx.globalAlpha = opacity;
+        chainCtx.strokeStyle = `rgba(${color}, ${opacity})`;
+        chainCtx.lineWidth = 1;
         chainCtx.beginPath();
         chainCtx.moveTo(this.x, this.y);
         chainCtx.lineTo(other.x, other.y);
         chainCtx.stroke();
-        
-        chainCtx.shadowBlur = 0;
       }
     });
   }
 }
 
-const chainNodes = [];
-const maxChainNodes = 25;
-
-// Initialize chain nodes
-for (let i = 0; i < maxChainNodes; i++) {
-  chainNodes.push(new ChainNode(
-    Math.random() * chainWidth,
-    Math.random() * chainHeight
-  ));
+for (let i = 0; i < maxParticles; i++) {
+  particles.push(new Particle());
 }
 
-// Create connections between nearby nodes
-chainNodes.forEach(node => {
-  chainNodes.forEach(other => {
-    if (node !== other) {
-      const dx = node.x - other.x;
-      const dy = node.y - other.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance < 200 && node.connections.length < 4) {
-        node.connections.push(other);
-      }
-    }
-  });
-});
-
-// Random energy triggers for chain reactions
-setInterval(() => {
-  const randomNode = chainNodes[Math.floor(Math.random() * chainNodes.length)];
-  randomNode.triggerReaction();
-}, 3000 + Math.random() * 2000);
-
-function updateChainNodes() {
-  chainNodes.forEach(node => {
-    node.update();
-  });
-}
-
-function drawChainNodes() {
+function animateParticles() {
   chainCtx.clearRect(0, 0, chainWidth, chainHeight);
   
-  // Draw connections first
-  chainNodes.forEach(node => {
-    node.drawConnections();
+  particles.forEach(particle => {
+    particle.drawConnections();
   });
   
-  // Draw nodes on top
-  chainNodes.forEach(node => {
-    node.draw();
+  particles.forEach(particle => {
+    particle.update();
+    particle.draw();
   });
+  
+  requestAnimationFrame(animateParticles);
 }
 
-function animateChain() {
-  updateChainNodes();
-  drawChainNodes();
-  requestAnimationFrame(animateChain);
+animateParticles();
+*/
+
+// OPTION 4: Minimal Dots (Uncomment to use instead)
+/*
+const dots = [];
+const maxDots = 30;
+
+class MinimalDot {
+  constructor() {
+    this.x = Math.random() * chainWidth;
+    this.y = Math.random() * chainHeight;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.size = Math.random() * 3 + 2;
+    this.opacity = Math.random() * 0.4 + 0.1;
+    this.pulsePhase = Math.random() * Math.PI * 2;
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.pulsePhase += 0.02;
+
+    // Wrap around edges
+    if (this.x < 0) this.x = chainWidth;
+    if (this.x > chainWidth) this.x = 0;
+    if (this.y < 0) this.y = chainHeight;
+    if (this.y > chainHeight) this.y = 0;
+  }
+
+  draw() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
+    const pulse = Math.sin(this.pulsePhase) * 0.3 + 0.7;
+    
+    chainCtx.globalAlpha = this.opacity * pulse;
+    chainCtx.fillStyle = `rgba(${color}, ${this.opacity * pulse})`;
+    chainCtx.beginPath();
+    chainCtx.arc(this.x, this.y, this.size * pulse, 0, Math.PI * 2);
+    chainCtx.fill();
+  }
 }
 
-animateChain();
+for (let i = 0; i < maxDots; i++) {
+  dots.push(new MinimalDot());
+}
+
+function animateDots() {
+  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
+  dots.forEach(dot => {
+    dot.update();
+    dot.draw();
+  });
+  requestAnimationFrame(animateDots);
+}
+
+animateDots();
+*/
 
 // Typing effect for position and slogan
 document.addEventListener('DOMContentLoaded', function() {

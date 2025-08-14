@@ -148,7 +148,7 @@ window.addEventListener('resize', () => {
 class Snowflake {
   constructor() {
     this.reset();
-    this.opacity = Math.random() * 0.6 + 0.2;
+    this.opacity = Math.random() * 0.8 + 0.3;
     this.rotationSpeed = (Math.random() - 0.5) * 0.02;
     this.rotation = 0;
     this.swaySpeed = Math.random() * 0.02 + 0.01;
@@ -159,7 +159,7 @@ class Snowflake {
   reset() {
     this.x = Math.random() * chainWidth;
     this.y = -10;
-    this.size = Math.random() * 4 + 2;
+    this.size = Math.random() * 8 + 4;
     this.speed = Math.random() * 1 + 0.5;
     this.originalX = this.x;
   }
@@ -193,7 +193,7 @@ class Snowflake {
     
     // Draw snowflake as a simple star/cross pattern
     chainCtx.strokeStyle = `rgba(${color}, ${this.opacity})`;
-    chainCtx.lineWidth = 1.5;
+    chainCtx.lineWidth = 2.5;
     chainCtx.lineCap = 'round';
     
     const size = this.size;
@@ -217,7 +217,7 @@ class Snowflake {
     // Add small center dot
     chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
     chainCtx.beginPath();
-    chainCtx.arc(0, 0, 1, 0, Math.PI * 2);
+    chainCtx.arc(0, 0, 2, 0, Math.PI * 2);
     chainCtx.fill();
     
     chainCtx.restore();

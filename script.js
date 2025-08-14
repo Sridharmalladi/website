@@ -340,9 +340,9 @@ for (let i = 0; i < 25; i++) {
 
 // Lightning trigger system
 let lastLightningTime = 0;
-const minLightningInterval = 2000; // Minimum 2 seconds between lightning
-const maxLightningInterval = 6000; // Maximum 6 seconds between lightning
-let nextLightningTime = Date.now() + Math.random() * 4000 + 2000;
+const minLightningInterval = 800; // Minimum 0.8 seconds between lightning
+const maxLightningInterval = 2500; // Maximum 2.5 seconds between lightning
+let nextLightningTime = Date.now() + Math.random() * 1500 + 800;
 
 function triggerRandomLightning() {
   const now = Date.now();
@@ -354,13 +354,13 @@ function triggerRandomLightning() {
       randomBolt.trigger();
       
       // Sometimes trigger multiple bolts for a storm effect
-      if (Math.random() < 0.3 && inactiveBolts.length > 1) {
+      if (Math.random() < 0.5 && inactiveBolts.length > 1) {
         setTimeout(() => {
           const secondBolt = inactiveBolts.filter(b => b !== randomBolt)[0];
           if (secondBolt && !secondBolt.active) {
             secondBolt.trigger();
           }
-        }, Math.random() * 200 + 50);
+        }, Math.random() * 150 + 30);
       }
     }
     

@@ -144,7 +144,7 @@ window.addEventListener('resize', () => {
   chainHeight = chainCanvas.height = window.innerHeight;
 });
 
-// Snowfall Background Animation
+// Snowfall with Accumulation Background Animation
 class Snowflake {
   constructor() {
     this.reset();
@@ -154,6 +154,9 @@ class Snowflake {
     this.swaySpeed = Math.random() * 0.02 + 0.01;
     this.swayAmount = Math.random() * 30 + 10;
     this.swayOffset = Math.random() * Math.PI * 2;
+    this.hasLanded = false;
+    this.landedTime = 0;
+    this.meltDuration = Math.random() * 3000 + 2000; // 2-5 seconds to melt
   }
 
   reset() {
@@ -162,19 +165,38 @@ class Snowflake {
     this.size = Math.random() * 8 + 4;
     this.speed = Math.random() * 1 + 0.5;
     this.originalX = this.x;
+    this.hasLanded = false;
+    this.landedTime = 0;
+    this.meltDuration = Math.random() * 3000 + 2000;
   }
 
   update() {
-    this.y += this.speed;
-    this.rotation += this.rotationSpeed;
-    
-    // Gentle swaying motion
-    this.x = this.originalX + Math.sin(this.y * this.swaySpeed + this.swayOffset) * this.swayAmount;
-    
-    // Reset when snowflake goes off screen
-    if (this.y > chainHeight + 10) {
-      this.reset();
-      this.originalX = this.x;
+    if (!this.hasLanded) {
+      this.y += this.speed;
+      this.rotation += this.rotationSpeed;
+      
+      // Gentle swaying motion
+      this.x = this.originalX + Math.sin(this.y * this.swaySpeed + this.swayOffset) * this.swayAmount;
+      
+      // Check if snowflake has reached the bottom
+      if (this.y >= chainHeight - 20) {
+        this.hasLanded = true;
+        this.landedTime = Date.now();
+        this.y = chainHeight - 20; // Position at bottom
+        this.rotation = 0; // Stop rotating when landed
+      }
+    } else {
+      // Handle melting/disappearing
+      const elapsed = Date.now() - this.landedTime;
+      if (elapsed > this.meltDuration) {
+        this.reset();
+        this.originalX = this.x;
+      } else {
+        // Gradually fade and shrink as it "melts"
+        const meltProgress = elapsed / this.meltDuration;
+        this.opacity = (1 - meltProgress) * (Math.random() * 0.8 + 0.3);
+        this.size = (1 - meltProgress * 0.7) * (Math.random() * 8 + 4);
+      }
     }
     
     // Keep snowflakes within screen bounds
@@ -189,7 +211,10 @@ class Snowflake {
     chainCtx.save();
     chainCtx.globalAlpha = this.opacity;
     chainCtx.translate(this.x, this.y);
-    chainCtx.rotate(this.rotation);
+    
+    if (!this.hasLanded) {
+      chainCtx.rotate(this.rotation);
+    }
     
     // Draw snowflake as a simple star/cross pattern
     chainCtx.strokeStyle = `rgba(${color}, ${this.opacity})`;
@@ -198,27 +223,35 @@ class Snowflake {
     
     const size = this.size;
     
-    // Main cross
-    chainCtx.beginPath();
-    chainCtx.moveTo(-size, 0);
-    chainCtx.lineTo(size, 0);
-    chainCtx.moveTo(0, -size);
-    chainCtx.lineTo(0, size);
-    
-    // Diagonal lines
-    const diagSize = size * 0.7;
-    chainCtx.moveTo(-diagSize, -diagSize);
-    chainCtx.lineTo(diagSize, diagSize);
-    chainCtx.moveTo(-diagSize, diagSize);
-    chainCtx.lineTo(diagSize, -diagSize);
-    
-    chainCtx.stroke();
-    
-    // Add small center dot
-    chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
-    chainCtx.beginPath();
-    chainCtx.arc(0, 0, 2, 0, Math.PI * 2);
-    chainCtx.fill();
+    if (this.hasLanded) {
+      // Draw as a small pile/dot when landed
+      chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
+      chainCtx.beginPath();
+      chainCtx.arc(0, 0, size * 0.8, 0, Math.PI * 2);
+      chainCtx.fill();
+    } else {
+      // Draw normal snowflake pattern when falling
+      chainCtx.beginPath();
+      chainCtx.moveTo(-size, 0);
+      chainCtx.lineTo(size, 0);
+      chainCtx.moveTo(0, -size);
+      chainCtx.lineTo(0, size);
+      
+      // Diagonal lines
+      const diagSize = size * 0.7;
+      chainCtx.moveTo(-diagSize, -diagSize);
+      chainCtx.lineTo(diagSize, diagSize);
+      chainCtx.moveTo(-diagSize, diagSize);
+      chainCtx.lineTo(diagSize, -diagSize);
+      
+      chainCtx.stroke();
+      
+      // Add small center dot
+      chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
+      chainCtx.beginPath();
+      chainCtx.arc(0, 0, 2, 0, Math.PI * 2);
+      chainCtx.fill();
+    }
     
     chainCtx.restore();
   }

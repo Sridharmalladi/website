@@ -1,261 +1,303 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sridhar Malladi | AI & Data</title>
+  <title>Sridhar.exe | AI & Data</title>
   <link rel="icon" type="image/png" sizes="48x48" href="images/tab copy.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="theme-switch-wrapper">
-    <label class="theme-switch">
-      <input type="checkbox" id="theme-toggle">
-      <span class="slider round">
-        <span class="theme-icon">☀️</span>
-        <span class="theme-icon">🌙</span>
-      </span>
-    </label>
+    <div class="pixel-toggle" id="theme-toggle">
+      <div class="toggle-pixel"></div>
+    </div>
   </div>
 
-  <canvas id="sparkles"></canvas>
-  <canvas id="chain-background"></canvas>
+  <canvas id="pixel-stars"></canvas>
   
-  <div class="layout-container">
-    <nav class="nav-container">
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#tools">Tools</a>
-        <a href="#projects">Projects</a>
-        <a href="#certifications">Certifications</a>
-        <a href="#contact">Contact</a>
+  <div class="pixel-container">
+    <!-- Pixel Avatar -->
+    <div class="pixel-avatar">
+      <div class="avatar-pixels">
+        <div class="pixel-row">
+          <div class="pixel"></div><div class="pixel"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel"></div><div class="pixel"></div>
+        </div>
+        <div class="pixel-row">
+          <div class="pixel"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel"></div>
+        </div>
+        <div class="pixel-row">
+          <div class="pixel"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel"></div>
+        </div>
+        <div class="pixel-row">
+          <div class="pixel"></div><div class="pixel skin"></div><div class="pixel eye"></div><div class="pixel skin"></div><div class="pixel eye"></div><div class="pixel skin"></div><div class="pixel"></div>
+        </div>
+        <div class="pixel-row">
+          <div class="pixel"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel mouth"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel"></div>
+        </div>
+        <div class="pixel-row">
+          <div class="pixel"></div><div class="pixel shirt"></div><div class="pixel shirt"></div><div class="pixel shirt"></div><div class="pixel shirt"></div><div class="pixel shirt"></div><div class="pixel"></div>
+        </div>
       </div>
-    </nav>
+    </div>
 
-    <header class="profile-header">
-      <h1>Sridhar Malladi</h1>
-      <p class="position">Data Scientist | AI & ML</p>
-      <p class="slogan">Always Learning. Always Building.</p>
-      <div class="social-links">
-        <a href="https://www.linkedin.com/in/sridhar-malladi/" target="_blank" title="LinkedIn">
-          <img src="images/logos/linkedin.png" alt="LinkedIn">
+    <!-- Header -->
+    <header class="pixel-header">
+      <div class="pixel-title">
+        <span class="glitch-text">SRIDHAR.EXE</span>
+        <div class="cursor-blink">_</div>
+      </div>
+      <div class="pixel-subtitle">AI_ENGINEER | DATA_SCIENTIST</div>
+      
+      <!-- Pixel Social Icons -->
+      <div class="pixel-social">
+        <a href="https://www.linkedin.com/in/sridhar-malladi/" target="_blank" class="pixel-icon linkedin" title="LinkedIn">
+          <div class="icon-pixels">
+            <div class="pixel-row"><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div><div class="p"></div></div>
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+          </div>
         </a>
-        <a href="https://github.com/Sridharmalladi" target="_blank" title="GitHub">
-          <img src="images/logos/github.png" alt="GitHub">
+        
+        <a href="https://github.com/Sridharmalladi" target="_blank" class="pixel-icon github" title="GitHub">
+          <div class="icon-pixels">
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
+            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
+          </div>
         </a>
-        <a href="https://x.com/AIbySridhar" target="_blank" title="X (Twitter)">
-          <img src="images/logos/twitter-x-seeklogo.png" alt="Twitter">
+        
+        <a href="https://x.com/AIbySridhar" target="_blank" class="pixel-icon twitter" title="X">
+          <div class="icon-pixels">
+            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
+            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
+            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
+          </div>
         </a>
-        <a href="https://leetcode.com/u/sridharmalladi/" target="_blank" title="LeetCode">
-          <img src="images/logos/leetcode.png" alt="LeetCode">
-        </a>
-        <a href="https://medium.com/@sridharmalladi" target="_blank" title="Medium">
-          <img src="images/logos/medium.png" alt="Medium">
-        </a>
-        <a href="https://topmate.io/sridharmalladi" target="_blank" title="TopMate">
-          <img src="images/logos/topmate.jpeg" alt="TopMate">
-        </a>
-        <a href="#" class="email-copy" title="Email" data-email="sridhar.malladi05@gmail.com">
-          <img src="images/logos/email.png" alt="Email">
+        
+        <a href="mailto:sridhar.malladi05@gmail.com" class="pixel-icon email" title="Email">
+          <div class="icon-pixels">
+            <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
+            <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+          </div>
         </a>
       </div>
     </header>
 
-    <section id="about">
-      <h2>About Me</h2>
-      <div class="about-content">
-        <p>I'm driven to tackle real-world problems by building solutions that make a tangible difference in people's lives. With four years of hands-on experience in AI, machine learning, and product development, I've delivered tools that simplify daily tasks and help teams make smarter decisions. Always curious and eager to learn, I focus on asking the right questions and ensuring my work truly matters to the people it serves.</p>
+    <!-- Navigation -->
+    <nav class="pixel-nav">
+      <div class="nav-item active" data-section="about">
+        <div class="nav-icon">
+          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+          <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+        </div>
+        <span>ABOUT</span>
+      </div>
+      
+      <div class="nav-item" data-section="skills">
+        <div class="nav-icon">
+          <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div></div>
+          <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+        </div>
+        <span>SKILLS</span>
+      </div>
+      
+      <div class="nav-item" data-section="projects">
+        <div class="nav-icon">
+          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+        </div>
+        <span>PROJECTS</span>
+      </div>
+      
+      <div class="nav-item" data-section="contact">
+        <div class="nav-icon">
+          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+        </div>
+        <span>CONTACT</span>
+      </div>
+    </nav>
+
+    <!-- Content Sections -->
+    <main class="pixel-content">
+      <!-- About Section -->
+      <section id="about" class="content-section active">
+        <div class="pixel-stats">
+          <div class="stat-item">
+            <div class="stat-icon ai">
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+            </div>
+            <div class="stat-text">AI_SYSTEMS</div>
+            <div class="stat-value">4+ YEARS</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-icon data">
+              <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+            </div>
+            <div class="stat-text">DATA_PIPELINES</div>
+            <div class="stat-value">11+ BUILT</div>
+          </div>
+          
+          <div class="stat-item">
+            <div class="stat-icon mentor">
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+            </div>
+            <div class="stat-text">STUDENTS_MENTORED</div>
+            <div class="stat-value">80+</div>
+          </div>
+        </div>
         
-        <div class="impacts-section">
-          <ul class="impacts-list">
-            <li><strong>Co-created PrepWiser:</strong> AI app to practice and improve tech/non-tech interview skills. <a href="https://prepwiser.net/" target="_blank" class="app-link">[Link]🔥</a></li>
-            <li><strong>Built Scroll Miles:</strong> An app that tracks and reduces mindless scrolling. <a href="https://scrollmiles.site/" target="_blank" class="app-link">[Link]🔥</a></li>
-            <li><strong>Built Hungerheals:</strong> An app that connects surplus food to people in need; a social impact hackathon product. <a href="https://healhunger.streamlit.app/" target="_blank" class="app-link">[Link]🔥</a></li>
-            <li><strong>Led the Algo-as-a-Service team:</strong> Tested product and studied market for last-mile delivery.</li>
-            <li><strong>Built and managed 11 data pipelines:</strong> Processed 3M+ records each for reliable analytics.</li>
-            <li><strong>Developed AI agents:</strong> Automated data checks for research and analytics.</li>
-            <li><strong>Built RAG and VLM apps:</strong> Helped users extract insights from complex documents.</li>
-            <li><strong>Mentored 80+ students:</strong> Taught cloud tools, Data Science, and ML concepts.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="tools">
-      <h2>Tools</h2>
-      <div class="tools-container">
-        <div class="tools-category">
-          <h3 class="category-title">Languages</h3>
-          <div class="tools-grid">
-            <span class="tool-item">Python</span>
-            <span class="tool-item">SQL</span>
-            <span class="tool-item">JavaScript</span>
-            <span class="tool-item">HTML</span>
-            <span class="tool-item">CSS</span>
+        <div class="pixel-achievements">
+          <div class="achievement">
+            <div class="achievement-icon">🚀</div>
+            <span>CO-CREATED PREPWISER</span>
+          </div>
+          <div class="achievement">
+            <div class="achievement-icon">📱</div>
+            <span>BUILT SCROLL MILES</span>
+          </div>
+          <div class="achievement">
+            <div class="achievement-icon">🍽️</div>
+            <span>DEVELOPED HUNGERHEALS</span>
           </div>
         </div>
+      </section>
 
-        <div class="tools-category">
-          <h3 class="category-title">AI, ML & Data Science</h3>
-          <div class="tools-grid">
-            <span class="tool-item">LangChain</span>
-            <span class="tool-item">OpenAI API</span>
-            <span class="tool-item">Gemini API</span>
-            <span class="tool-item">ChromaDB</span>
-            <span class="tool-item">RAG</span>
-            <span class="tool-item">AI Agents</span>
-            <span class="tool-item">VLMs</span>
-            <span class="tool-item">CrewAI</span>
-            <span class="tool-item">LangGraph</span>
-            <span class="tool-item">Hugging Face</span>
-            <span class="tool-item">PyTorch</span>
-            <span class="tool-item">Scikit-learn</span>
-            <span class="tool-item">Pandas</span>
-            <span class="tool-item">NumPy</span>
+      <!-- Skills Section -->
+      <section id="skills" class="content-section">
+        <div class="skills-grid">
+          <div class="skill-category">
+            <div class="category-header">AI_&_ML</div>
+            <div class="skill-items">
+              <div class="skill-chip">LANGCHAIN</div>
+              <div class="skill-chip">OPENAI</div>
+              <div class="skill-chip">RAG</div>
+              <div class="skill-chip">PYTORCH</div>
+              <div class="skill-chip">HUGGINGFACE</div>
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <div class="category-header">LANGUAGES</div>
+            <div class="skill-items">
+              <div class="skill-chip">PYTHON</div>
+              <div class="skill-chip">SQL</div>
+              <div class="skill-chip">JAVASCRIPT</div>
+            </div>
+          </div>
+          
+          <div class="skill-category">
+            <div class="category-header">TOOLS</div>
+            <div class="skill-items">
+              <div class="skill-chip">SUPABASE</div>
+              <div class="skill-chip">FIREBASE</div>
+              <div class="skill-chip">STREAMLIT</div>
+              <div class="skill-chip">FASTAPI</div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="tools-category">
-          <h3 class="category-title">Vibe Coding</h3>
-          <div class="tools-grid">
-            <span class="tool-item">CursorAI</span>
-            <span class="tool-item">Firebase Studio</span>
-            <span class="tool-item">bolt.new</span>
-            <span class="tool-item">Loveable.dev</span>
-          </div>
-        </div>
-
-        <div class="tools-category">
-          <h3 class="category-title">Product Dev</h3>
-          <div class="tools-grid">
-            <span class="tool-item">Supabase</span>
-            <span class="tool-item">Firebase</span>
-            <span class="tool-item">FastAPI</span>
-            <span class="tool-item">Streamlit</span>
-            <span class="tool-item">Trello</span>
-            <span class="tool-item">Gradio</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects">
-      <h2>Projects</h2>
-      <div class="projects-container">
+      <!-- Projects Section -->
+      <section id="projects" class="content-section">
         <div class="projects-grid">
           <a href="https://prepwiser.net/" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>PrepWiser</h3>
-              <div class="tech-stack">AI Interview Practice Platform</div>
+            <div class="project-icon">
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
             </div>
+            <div class="project-name">PREPWISER</div>
+            <div class="project-tech">AI_INTERVIEW_PLATFORM</div>
           </a>
-          <a href="https://healhunger.streamlit.app/" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>HealHunger</h3>
-              <div class="tech-stack">Hackathon Participation</div>
-            </div>
-          </a>
-          <a href="https://github.com/Sridharmalladi/RentMate/tree/main/RentMate" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>RentMate</h3>
-              <div class="tech-stack">Claude AI, RAG, Python, Streamlit</div>
-            </div>
-          </a>
+          
           <a href="https://scrollmiles.site/" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>Scroll Miles</h3>
-              <div class="tech-stack">JavaScript, HTML, CSS</div>
+            <div class="project-icon">
+              <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
             </div>
+            <div class="project-name">SCROLL_MILES</div>
+            <div class="project-tech">MINDFUL_BROWSING</div>
+          </a>
+          
+          <a href="https://healhunger.streamlit.app/" target="_blank" class="project-card">
+            <div class="project-icon">
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+            </div>
+            <div class="project-name">HUNGERHEALS</div>
+            <div class="project-tech">SOCIAL_IMPACT</div>
+          </a>
+          
+          <a href="https://github.com/Sridharmalladi/RentMate/tree/main/RentMate" target="_blank" class="project-card">
+            <div class="project-icon">
+              <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
+              <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
+            </div>
+            <div class="project-name">RENTMATE</div>
+            <div class="project-tech">RAG_ASSISTANT</div>
           </a>
         </div>
+      </section>
 
-        <div id="hiddenProjects" class="projects-grid hidden">
-          <a href="https://github.com/Sridharmalladi/Construct_AI/tree/main/Construct_AI" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>Construction AIBot</h3>
-              <div class="tech-stack">RAG, Gemini Pro, Gradio</div>
+      <!-- Contact Section -->
+      <section id="contact" class="content-section">
+        <div class="contact-terminal">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <div class="btn close"></div>
+              <div class="btn minimize"></div>
+              <div class="btn maximize"></div>
             </div>
-          </a>
-          <a href="https://aioptimizer.streamlit.app/" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>AI Inventory Optimizer</h3>
-              <div class="tech-stack">XGBoost, Streamlit, Inventory Optimization</div>
+            <div class="terminal-title">CONTACT.EXE</div>
+          </div>
+          <div class="terminal-content">
+            <div class="terminal-line">
+              <span class="prompt">$</span>
+              <span class="command">connect --to sridhar</span>
             </div>
-          </a>
-          <a href="https://public.tableau.com/app/profile/shridhar.malladi/viz/WalmartSaleAnalysisDashboard_17374927096300/WalmartProfitAnalysisDashboard2" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>Walmart Analysis</h3>
-              <div class="tech-stack">ETL, Tableau, Airflow</div>
+            <div class="terminal-line">
+              <span class="output">ESTABLISHING CONNECTION...</span>
             </div>
-          </a>
-          <a href="https://github.com/Sridharmalladi/BatteryDegradationAnalysis" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>Battery Degradation Analysis</h3>
-              <div class="tech-stack">Python, Data Analysis, Machine Learning</div>
+            <div class="terminal-line">
+              <span class="output">EMAIL: sridhar.malladi05@gmail.com</span>
             </div>
-          </a>
-          <a href="https://github.com/Sridharmalladi/DrowsyAlert_Tesla" target="_blank" class="project-card">
-            <div class="project-content">
-              <h3>Tesla Drowsy Alert</h3>
-              <div class="tech-stack">DeepLearning, OCR, Tensorflow</div>
+            <div class="terminal-line">
+              <span class="output">LINKEDIN: /in/sridhar-malladi</span>
             </div>
-          </a>
-        </div>
-        
-        <div class="show-more">
-          <button id="showMoreBtn" class="show-more-btn">Show More</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="certifications">
-      <h2>Certifications</h2>
-      <div class="certifications-container">
-        <div class="certifications-grid">
-          <a href="https://www.coursera.org/account/accomplishments/professional-cert/certificate/1LLHQTNGHPIN" target="_blank" class="cert-item">IBM AI Engineering</a>
-          <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/SS2Z9R2R84YL" target="_blank" class="cert-item">Google AI Essentials</a>
-          <a href="https://www.coursera.org/account/accomplishments/professional-cert/certificate/NW1X2D32JLVN" target="_blank" class="cert-item">Google Project Management</a>
-        </div>
-        
-        <div id="hiddenCerts" class="hidden">
-          <div class="certifications-grid">
-            <a href="https://www.coursera.org/account/accomplishments/professional-cert/certificate/L397XILFSXES" target="_blank" class="cert-item">IBM AI Product Manager</a>
-            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/JQK6I5QWAIK1" target="_blank" class="cert-item">IBM Gen AI for Product Managers</a>
-            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/DIKT4OEPJ6TA" target="_blank" class="cert-item">Google Prompting Essentials</a>
-            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/E4K6HVQ661GI" target="_blank" class="cert-item">Gen AI Data Analyst Specialization</a>
-            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/7H8HVANRGCHT" target="_blank" class="cert-item">Google Advanced Data Analytics</a>
-            <a href="https://www.coursera.org/account/accomplishments/specialization/certificate/MCW54TJUSVLG" target="_blank" class="cert-item">Data Science Professional Certificate</a>
+            <div class="terminal-line">
+              <span class="output">STATUS: AVAILABLE_FOR_OPPORTUNITIES</span>
+            </div>
+            <div class="terminal-line">
+              <span class="prompt">$</span>
+              <span class="cursor-blink">_</span>
+            </div>
           </div>
         </div>
-        
-        <div class="show-more">
-          <button id="showMoreCertBtn" class="show-more-btn">Show More</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact">
-      <h2>Contact</h2>
-      <form class="contact-form" action="https://formspree.io/f/xldbdrlv" method="POST">
-        <div class="form-group">
-          <input type="text" id="name" name="name" placeholder="Name" required>
-        </div>
-        <div class="form-group">
-          <input type="email" id="email" name="_replyto" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <textarea id="message" name="message" rows="4" placeholder="Message" required></textarea>
-        </div>
-        <button type="submit">Send Message</button>
-      </form>
-    </section>
+      </section>
+    </main>
   </div>
 
-  <footer>
-    <p>© 2025 Sridhar Malladi. All rights reserved.</p>
-  </footer>
-
-  <div id="toast" class="toast"></div>
   <script src="script.js"></script>
 </body>
 </html>

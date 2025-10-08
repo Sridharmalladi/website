@@ -1,70 +1,46 @@
-// Theme initialization
+// Theme toggle functionality
 document.addEventListener('DOMContentLoaded', function() {
   const themeToggle = document.getElementById('theme-toggle');
   
-  // Set default theme to light
-  document.documentElement.setAttribute('data-theme', 'light');
-  localStorage.setItem('theme', 'light');
-  themeToggle.checked = false;
+  // Set default theme to dark for pixel aesthetic
+  document.documentElement.setAttribute('data-theme', 'dark');
+  localStorage.setItem('theme', 'dark');
   
-  themeToggle.addEventListener('change', function(e) {
-    if (!e.target.checked) {
-      document.documentElement.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    }
+  themeToggle.addEventListener('click', function() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+  
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+});
+
+// Navigation functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const navItems = document.querySelectorAll('.nav-item');
+  const contentSections = document.querySelectorAll('.content-section');
+  
+  navItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const targetSection = this.getAttribute('data-section');
+      
+      // Remove active class from all nav items and sections
+      navItems.forEach(nav => nav.classList.remove('active'));
+      contentSections.forEach(section => section.classList.remove('active'));
+      
+      // Add active class to clicked nav item and corresponding section
+      this.classList.add('active');
+      document.getElementById(targetSection).classList.add('active');
+    });
   });
 });
 
-// Email copy functionality
-document.addEventListener('DOMContentLoaded', function() {
-  const emailButton = document.querySelector('.email-copy');
-  const toast = document.getElementById('toast');
-  
-  emailButton.addEventListener('click', function(e) {
-    e.preventDefault();
-    const email = this.getAttribute('data-email');
-    navigator.clipboard.writeText(email).then(() => {
-      showToast('Email copied!');
-    });
-  });
-  
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3000);
-  }
-});
-
-// Show More functionality for projects and certifications
-document.addEventListener('DOMContentLoaded', function() {
-  const showMoreBtn = document.getElementById('showMoreBtn');
-  const hiddenProjects = document.getElementById('hiddenProjects');
-  
-  if (showMoreBtn && hiddenProjects) {
-    showMoreBtn.addEventListener('click', function() {
-      hiddenProjects.classList.toggle('hidden');
-      this.textContent = hiddenProjects.classList.contains('hidden') ? 'Show More' : 'Show Less';
-    });
-  }
-  
-  const showMoreCertBtn = document.getElementById('showMoreCertBtn');
-  const hiddenCerts = document.getElementById('hiddenCerts');
-  
-  if (showMoreCertBtn && hiddenCerts) {
-    showMoreCertBtn.addEventListener('click', function() {
-      hiddenCerts.classList.toggle('hidden');
-      this.textContent = hiddenCerts.classList.contains('hidden') ? 'Show More' : 'Show Less';
-    });
-  }
-});
-
-// Mouse trail effect with sparkles
-const canvas = document.getElementById('sparkles');
+// Pixel Stars Background Animation
+const canvas = document.getElementById('pixel-stars');
 const ctx = canvas.getContext('2d');
 
 let width = canvas.width = window.innerWidth;
@@ -75,475 +51,257 @@ window.addEventListener('resize', () => {
   height = canvas.height = window.innerHeight;
 });
 
-const particles = [];
-const mousePos = { x: width / 2, y: height / 2 };
-
-document.addEventListener('mousemove', (e) => {
-  mousePos.x = e.clientX;
-  mousePos.y = e.clientY;
-  addParticles(3, mousePos.x, mousePos.y);
-});
-
-function addParticles(count, x, y) {
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x,
-      y,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
-      size: Math.random() * 3 + 1,
-      life: 1,
-      color: document.documentElement.getAttribute('data-theme') === 'light' ? '#8B4513' : '#4ecdc4'
-    });
+class PixelStar {
+  constructor() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.size = Math.random() * 3 + 1;
+    this.speed = Math.random() * 0.5 + 0.1;
+    this.opacity = Math.random() * 0.8 + 0.2;
+    this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+    this.twinklePhase = Math.random() * Math.PI * 2;
+    this.color = this.getThemeColor();
   }
-}
-
-function updateParticles() {
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
-    p.x += p.vx;
-    p.y += p.vy;
-    p.life -= 0.015;
+  
+  getThemeColor() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    const colors = theme === 'light' 
+      ? ['#8b4513', '#a0522d', '#654321']
+      : ['#00ffff', '#ff00ff', '#00ff41', '#ffff00'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+  
+  update() {
+    this.y += this.speed;
+    this.twinklePhase += this.twinkleSpeed;
     
-    if (p.life <= 0) {
-      particles.splice(i, 1);
-      continue;
+    if (this.y > height + 10) {
+      this.y = -10;
+      this.x = Math.random() * width;
+      this.color = this.getThemeColor();
     }
   }
+  
+  draw() {
+    const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
+    ctx.globalAlpha = this.opacity * twinkle;
+    ctx.fillStyle = this.color;
+    
+    // Draw pixel star as small square
+    ctx.fillRect(
+      Math.floor(this.x), 
+      Math.floor(this.y), 
+      Math.floor(this.size), 
+      Math.floor(this.size)
+    );
+    
+    // Add glow effect
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 5;
+    ctx.fillRect(
+      Math.floor(this.x), 
+      Math.floor(this.y), 
+      Math.floor(this.size), 
+      Math.floor(this.size)
+    );
+    ctx.shadowBlur = 0;
+  }
 }
 
-function drawParticles() {
+// Create pixel stars
+const pixelStars = [];
+const maxStars = 50;
+
+for (let i = 0; i < maxStars; i++) {
+  pixelStars.push(new PixelStar());
+}
+
+// Stagger initial positions
+pixelStars.forEach((star, index) => {
+  star.y = -Math.random() * height;
+});
+
+function animatePixelStars() {
   ctx.clearRect(0, 0, width, height);
   
-  particles.forEach(p => {
-    ctx.globalAlpha = p.life * 0.8;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-function animate() {
-  updateParticles();
-  drawParticles();
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-// Chain Reaction Background Animation
-const chainCanvas = document.getElementById('chain-background');
-const chainCtx = chainCanvas.getContext('2d');
-
-let chainWidth = chainCanvas.width = window.innerWidth;
-let chainHeight = chainCanvas.height = window.innerHeight;
-
-window.addEventListener('resize', () => {
-  chainWidth = chainCanvas.width = window.innerWidth;
-  chainHeight = chainCanvas.height = window.innerHeight;
-});
-
-// Snowfall with Accumulation Background Animation
-class Snowflake {
-  constructor() {
-    this.reset();
-    this.opacity = Math.random() * 0.8 + 0.3;
-    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
-    this.rotation = 0;
-    this.swaySpeed = Math.random() * 0.02 + 0.01;
-    this.swayAmount = Math.random() * 30 + 10;
-    this.swayOffset = Math.random() * Math.PI * 2;
-    this.hasLanded = false;
-    this.landedTime = 0;
-    this.meltDuration = Math.random() * 3000 + 2000; // 2-5 seconds to melt
-  }
-
-  reset() {
-    this.x = Math.random() * chainWidth;
-    this.y = -10;
-    this.size = Math.random() * 8 + 4;
-    this.speed = Math.random() * 1 + 0.5;
-    this.originalX = this.x;
-    this.hasLanded = false;
-    this.landedTime = 0;
-    this.meltDuration = Math.random() * 3000 + 2000;
-  }
-
-  update() {
-    if (!this.hasLanded) {
-      this.y += this.speed;
-      this.rotation += this.rotationSpeed;
-      
-      // Gentle swaying motion
-      this.x = this.originalX + Math.sin(this.y * this.swaySpeed + this.swayOffset) * this.swayAmount;
-      
-      // Check if snowflake has reached the bottom
-      if (this.y >= chainHeight - 20) {
-        this.hasLanded = true;
-        this.landedTime = Date.now();
-        this.y = chainHeight - 20; // Position at bottom
-        this.rotation = 0; // Stop rotating when landed
-      }
-    } else {
-      // Handle melting/disappearing
-      const elapsed = Date.now() - this.landedTime;
-      if (elapsed > this.meltDuration) {
-        this.reset();
-        this.originalX = this.x;
-      } else {
-        // Gradually fade and shrink as it "melts"
-        const meltProgress = elapsed / this.meltDuration;
-        this.opacity = (1 - meltProgress) * (Math.random() * 0.8 + 0.3);
-        this.size = (1 - meltProgress * 0.7) * (Math.random() * 8 + 4);
-      }
-    }
-    
-    // Keep snowflakes within screen bounds
-    if (this.x < -10) this.x = chainWidth + 10;
-    if (this.x > chainWidth + 10) this.x = -10;
-  }
-
-  draw() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196'; // Brown for light, teal for dark
-    
-    chainCtx.save();
-    chainCtx.globalAlpha = this.opacity;
-    chainCtx.translate(this.x, this.y);
-    
-    if (!this.hasLanded) {
-      chainCtx.rotate(this.rotation);
-    }
-    
-    // Draw snowflake as a simple star/cross pattern
-    chainCtx.strokeStyle = `rgba(${color}, ${this.opacity})`;
-    chainCtx.lineWidth = 2.5;
-    chainCtx.lineCap = 'round';
-    
-    const size = this.size;
-    
-    if (this.hasLanded) {
-      // Draw as a small pile/dot when landed
-      chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
-      chainCtx.beginPath();
-      chainCtx.arc(0, 0, size * 0.8, 0, Math.PI * 2);
-      chainCtx.fill();
-    } else {
-      // Draw normal snowflake pattern when falling
-      chainCtx.beginPath();
-      chainCtx.moveTo(-size, 0);
-      chainCtx.lineTo(size, 0);
-      chainCtx.moveTo(0, -size);
-      chainCtx.lineTo(0, size);
-      
-      // Diagonal lines
-      const diagSize = size * 0.7;
-      chainCtx.moveTo(-diagSize, -diagSize);
-      chainCtx.lineTo(diagSize, diagSize);
-      chainCtx.moveTo(-diagSize, diagSize);
-      chainCtx.lineTo(diagSize, -diagSize);
-      
-      chainCtx.stroke();
-      
-      // Add small center dot
-      chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
-      chainCtx.beginPath();
-      chainCtx.arc(0, 0, 2, 0, Math.PI * 2);
-      chainCtx.fill();
-    }
-    
-    chainCtx.restore();
-  }
-}
-
-// Create snowflakes
-const snowflakes = [];
-const maxSnowflakes = 80;
-
-for (let i = 0; i < maxSnowflakes; i++) {
-  snowflakes.push(new Snowflake());
-}
-
-// Stagger initial positions for natural effect
-snowflakes.forEach((flake, index) => {
-  flake.y = -Math.random() * chainHeight;
-});
-
-function animateSnowfall() {
-  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
-  
-  snowflakes.forEach(flake => {
-    flake.update();
-    flake.draw();
+  pixelStars.forEach(star => {
+    star.update();
+    star.draw();
   });
   
-  requestAnimationFrame(animateSnowfall);
+  requestAnimationFrame(animatePixelStars);
 }
 
-animateSnowfall();
+animatePixelStars();
 
-// OPTION 2: Flowing Lines (Uncomment to use instead)
-/*
-const flowLines = [];
-const maxLines = 8;
-
-class FlowLine {
-  constructor() {
-    this.points = [];
-    this.maxPoints = 50;
-    this.speed = Math.random() * 2 + 1;
-    this.angle = Math.random() * Math.PI * 2;
-    this.x = Math.random() * chainWidth;
-    this.y = Math.random() * chainHeight;
-    this.opacity = Math.random() * 0.3 + 0.1;
-  }
-
-  update() {
-    this.x += Math.cos(this.angle) * this.speed;
-    this.y += Math.sin(this.angle) * this.speed;
-    
-    this.points.push({ x: this.x, y: this.y });
-    if (this.points.length > this.maxPoints) {
-      this.points.shift();
-    }
-
-    // Reset if off screen
-    if (this.x < -100 || this.x > chainWidth + 100 || this.y < -100 || this.y > chainHeight + 100) {
-      this.x = Math.random() * chainWidth;
-      this.y = Math.random() * chainHeight;
-      this.angle = Math.random() * Math.PI * 2;
-      this.points = [];
-    }
-  }
-
-  draw() {
-    if (this.points.length < 2) return;
-    
-    const theme = document.documentElement.getAttribute('data-theme');
-    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
-    
-    chainCtx.beginPath();
-    chainCtx.moveTo(this.points[0].x, this.points[0].y);
-    
-    for (let i = 1; i < this.points.length; i++) {
-      const alpha = (i / this.points.length) * this.opacity;
-      chainCtx.strokeStyle = `rgba(${color}, ${alpha})`;
-      chainCtx.lineWidth = 2;
-      chainCtx.lineTo(this.points[i].x, this.points[i].y);
-      chainCtx.stroke();
-      chainCtx.beginPath();
-      chainCtx.moveTo(this.points[i].x, this.points[i].y);
-    }
-  }
-}
-
-for (let i = 0; i < maxLines; i++) {
-  flowLines.push(new FlowLine());
-}
-
-function animateFlowLines() {
-  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
-  flowLines.forEach(line => {
-    line.update();
-    line.draw();
-  });
-  requestAnimationFrame(animateFlowLines);
-}
-
-animateFlowLines();
-*/
-
-// OPTION 3: Particle Field (Uncomment to use instead)
-/*
-const particles = [];
-const maxParticles = 100;
-
-class Particle {
-  constructor() {
-    this.x = Math.random() * chainWidth;
-    this.y = Math.random() * chainHeight;
-    this.vx = (Math.random() - 0.5) * 0.8;
-    this.vy = (Math.random() - 0.5) * 0.8;
-    this.size = Math.random() * 2 + 1;
-    this.opacity = Math.random() * 0.5 + 0.2;
-    this.connections = [];
-  }
-
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-
-    if (this.x < 0 || this.x > chainWidth) this.vx *= -1;
-    if (this.y < 0 || this.y > chainHeight) this.vy *= -1;
-    
-    this.x = Math.max(0, Math.min(chainWidth, this.x));
-    this.y = Math.max(0, Math.min(chainHeight, this.y));
-  }
-
-  draw() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
-    
-    chainCtx.globalAlpha = this.opacity;
-    chainCtx.fillStyle = `rgba(${color}, ${this.opacity})`;
-    chainCtx.beginPath();
-    chainCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    chainCtx.fill();
-  }
-
-  drawConnections() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
-    
-    particles.forEach(other => {
-      if (other === this) return;
-      
-      const dx = this.x - other.x;
-      const dy = this.y - other.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance < 120) {
-        const opacity = (1 - distance / 120) * 0.2;
-        chainCtx.globalAlpha = opacity;
-        chainCtx.strokeStyle = `rgba(${color}, ${opacity})`;
-        chainCtx.lineWidth = 1;
-        chainCtx.beginPath();
-        chainCtx.moveTo(this.x, this.y);
-        chainCtx.lineTo(other.x, other.y);
-        chainCtx.stroke();
-      }
-    });
-  }
-}
-
-for (let i = 0; i < maxParticles; i++) {
-  particles.push(new Particle());
-}
-
-function animateParticles() {
-  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
+// Glitch effect for text
+function addGlitchEffect() {
+  const glitchElements = document.querySelectorAll('.glitch-text');
   
-  particles.forEach(particle => {
-    particle.drawConnections();
-  });
-  
-  particles.forEach(particle => {
-    particle.update();
-    particle.draw();
-  });
-  
-  requestAnimationFrame(animateParticles);
-}
-
-animateParticles();
-*/
-
-// OPTION 4: Minimal Dots (Uncomment to use instead)
-/*
-const dots = [];
-const maxDots = 30;
-
-class MinimalDot {
-  constructor() {
-    this.x = Math.random() * chainWidth;
-    this.y = Math.random() * chainHeight;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.size = Math.random() * 3 + 2;
-    this.opacity = Math.random() * 0.4 + 0.1;
-    this.pulsePhase = Math.random() * Math.PI * 2;
-  }
-
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.pulsePhase += 0.02;
-
-    // Wrap around edges
-    if (this.x < 0) this.x = chainWidth;
-    if (this.x > chainWidth) this.x = 0;
-    if (this.y < 0) this.y = chainHeight;
-    if (this.y > chainHeight) this.y = 0;
-  }
-
-  draw() {
-    const theme = document.documentElement.getAttribute('data-theme');
-    const color = theme === 'light' ? '139, 69, 19' : '78, 205, 196';
-    const pulse = Math.sin(this.pulsePhase) * 0.3 + 0.7;
-    
-    chainCtx.globalAlpha = this.opacity * pulse;
-    chainCtx.fillStyle = `rgba(${color}, ${this.opacity * pulse})`;
-    chainCtx.beginPath();
-    chainCtx.arc(this.x, this.y, this.size * pulse, 0, Math.PI * 2);
-    chainCtx.fill();
-  }
-}
-
-for (let i = 0; i < maxDots; i++) {
-  dots.push(new MinimalDot());
-}
-
-function animateDots() {
-  chainCtx.clearRect(0, 0, chainWidth, chainHeight);
-  dots.forEach(dot => {
-    dot.update();
-    dot.draw();
-  });
-  requestAnimationFrame(animateDots);
-}
-
-animateDots();
-*/
-
-// Typing effect for position and slogan
-document.addEventListener('DOMContentLoaded', function() {
-  const position = document.querySelector('.position');
-  const slogan = document.querySelector('.slogan');
-  
-  const positionText = 'Data Scientist | AI & ML';
-   const sloganText = 'Always Learning. Always Building.';
-  
-  let positionIndex = 0;
-  let sloganIndex = 0;
-  let isTypingPosition = true;
-  let isTypingSlogan = false;
-  let pauseTime = 0;
-  
-  function typeEffect() {
-    if (isTypingPosition && positionIndex < positionText.length) {
-      position.textContent = positionText.substring(0, positionIndex + 1);
-      positionIndex++;
-      setTimeout(typeEffect, 100);
-    } else if (isTypingPosition && positionIndex >= positionText.length) {
-      isTypingPosition = false;
-      pauseTime = 0;
-      setTimeout(() => {
-        isTypingSlogan = true;
-        typeEffect();
-      }, 500);
-    } else if (isTypingSlogan && sloganIndex < sloganText.length) {
-      slogan.textContent = sloganText.substring(0, sloganIndex + 1);
-      sloganIndex++;
-      setTimeout(typeEffect, 100);
-    } else if (isTypingSlogan && sloganIndex >= sloganText.length) {
-      isTypingSlogan = false;
-      setTimeout(() => {
-        // Wait 5 seconds then restart
+  glitchElements.forEach(element => {
+    setInterval(() => {
+      if (Math.random() < 0.1) {
+        element.style.textShadow = `
+          ${Math.random() * 4 - 2}px ${Math.random() * 4 - 2}px 0 #ff00ff,
+          ${Math.random() * 4 - 2}px ${Math.random() * 4 - 2}px 0 #00ffff,
+          ${Math.random() * 4 - 2}px ${Math.random() * 4 - 2}px 0 #ffff00
+        `;
+        
         setTimeout(() => {
-          positionIndex = 0;
-          sloganIndex = 0;
-          position.textContent = '';
-          slogan.textContent = '';
-          isTypingPosition = true;
-          typeEffect();
-        }, 5000);
-      }, 100);
+          element.style.textShadow = 'var(--shadow-glow)';
+        }, 100);
+      }
+    }, 200);
+  });
+}
+
+// Initialize glitch effect
+document.addEventListener('DOMContentLoaded', addGlitchEffect);
+
+// Pixel icon hover effects
+document.addEventListener('DOMContentLoaded', function() {
+  const pixelIcons = document.querySelectorAll('.pixel-icon');
+  
+  pixelIcons.forEach(icon => {
+    icon.addEventListener('mouseenter', function() {
+      const pixels = this.querySelectorAll('.p.active');
+      pixels.forEach((pixel, index) => {
+        setTimeout(() => {
+          pixel.style.boxShadow = '0 0 10px var(--pixel-active)';
+        }, index * 50);
+      });
+    });
+    
+    icon.addEventListener('mouseleave', function() {
+      const pixels = this.querySelectorAll('.p.active');
+      pixels.forEach(pixel => {
+        pixel.style.boxShadow = '0 0 5px var(--pixel-active)';
+      });
+    });
+  });
+});
+
+// Terminal typing effect
+document.addEventListener('DOMContentLoaded', function() {
+  const terminalLines = document.querySelectorAll('.terminal-line');
+  let delay = 0;
+  
+  terminalLines.forEach((line, index) => {
+    if (index < terminalLines.length - 1) { // Don't animate the cursor line
+      setTimeout(() => {
+        line.style.opacity = '0';
+        line.style.transform = 'translateX(-20px)';
+        line.style.transition = 'all 0.5s ease';
+        
+        setTimeout(() => {
+          line.style.opacity = '1';
+          line.style.transform = 'translateX(0)';
+        }, 100);
+      }, delay);
+      delay += 500;
     }
+  });
+});
+
+// Skill chip animation
+document.addEventListener('DOMContentLoaded', function() {
+  const skillChips = document.querySelectorAll('.skill-chip');
+  
+  skillChips.forEach((chip, index) => {
+    chip.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.1) rotate(2deg)';
+    });
+    
+    chip.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1) rotate(0deg)';
+    });
+    
+    // Random pulse animation
+    setInterval(() => {
+      if (Math.random() < 0.05) {
+        chip.style.animation = 'pulse 0.5s ease';
+        setTimeout(() => {
+          chip.style.animation = '';
+        }, 500);
+      }
+    }, 1000);
+  });
+});
+
+// Add pulse animation to CSS dynamically
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+`;
+document.head.appendChild(style);
+
+// Project card 3D effect
+document.addEventListener('DOMContentLoaded', function() {
+  const projectCards = document.querySelectorAll('.project-card');
+  
+  projectCards.forEach(card => {
+    card.addEventListener('mousemove', function(e) {
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+      
+      this.style.transform = `
+        translateY(-10px) 
+        scale(1.05) 
+        rotateX(${rotateX}deg) 
+        rotateY(${rotateY}deg)
+      `;
+    });
+    
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1) rotateX(0) rotateY(0)';
+    });
+  });
+});
+
+// Easter egg: Konami code
+let konamiCode = [];
+const konamiSequence = [
+  'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+  'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+  'KeyB', 'KeyA'
+];
+
+document.addEventListener('keydown', function(e) {
+  konamiCode.push(e.code);
+  
+  if (konamiCode.length > konamiSequence.length) {
+    konamiCode.shift();
   }
   
-  // Clear initial content and start typing
-  position.textContent = '';
-  slogan.textContent = '';
-  typeEffect();
+  if (konamiCode.join(',') === konamiSequence.join(',')) {
+    // Easter egg activated!
+    document.body.style.animation = 'rainbow 2s infinite';
+    
+    setTimeout(() => {
+      document.body.style.animation = '';
+    }, 10000);
+    
+    konamiCode = [];
+  }
 });
+
+// Add rainbow animation
+const rainbowStyle = document.createElement('style');
+rainbowStyle.textContent = `
+  @keyframes rainbow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+`;
+document.head.appendChild(rainbowStyle);

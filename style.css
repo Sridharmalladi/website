@@ -97,8 +97,8 @@ body {
   transform: translateX(30px);
 }
 
-/* Music Controls */
-.music-controls {
+/* Sound Controls */
+.sound-controls {
   position: fixed;
   top: 20px;
   right: 100px;
@@ -108,7 +108,7 @@ body {
   gap: 10px;
 }
 
-.music-toggle {
+.sound-toggle {
   width: 50px;
   height: 50px;
   background: var(--bg-secondary);
@@ -121,38 +121,29 @@ body {
   justify-content: center;
 }
 
-.music-toggle:hover {
+.sound-toggle:hover {
   box-shadow: var(--shadow-glow);
   transform: scale(1.05);
 }
 
-.music-toggle.playing {
+.sound-toggle.enabled {
   background: var(--bg-tertiary);
-  animation: musicPulse 2s ease-in-out infinite;
+  animation: soundPulse 2s ease-in-out infinite;
 }
 
-@keyframes musicPulse {
+@keyframes soundPulse {
   0%, 100% { box-shadow: var(--shadow-glow); }
   50% { box-shadow: 0 0 30px var(--glow-color); }
 }
 
-.music-icon {
+.sound-icon {
   display: flex;
   flex-direction: column;
   gap: 1px;
   transform: scale(1.5);
 }
 
-.music-toggle.playing .music-icon {
-  animation: bounce 0.5s ease-in-out infinite alternate;
-}
-
-@keyframes bounce {
-  0% { transform: scale(1.5) translateY(0); }
-  100% { transform: scale(1.5) translateY(-2px); }
-}
-
-.track-info {
+.sound-info {
   font-size: 0.7rem;
   color: var(--text-secondary);
   font-weight: 700;
@@ -162,14 +153,8 @@ body {
   white-space: nowrap;
 }
 
-.music-toggle.playing + .track-info {
+.sound-toggle.enabled + .sound-info {
   opacity: 1;
-  animation: textGlow 2s ease-in-out infinite;
-}
-
-@keyframes textGlow {
-  0%, 100% { text-shadow: none; }
-  50% { text-shadow: 0 0 10px var(--text-accent); }
 }
 
 /* Main Container */
@@ -622,18 +607,19 @@ body {
   }
   
   .music-controls {
+  .sound-controls {
     top: 10px;
     right: 80px;
     flex-direction: column;
     gap: 5px;
   }
   
-  .music-toggle {
+  .sound-toggle {
     width: 40px;
     height: 40px;
   }
   
-  .track-info {
+  .sound-info {
     font-size: 0.6rem;
     text-align: center;
   }
@@ -660,16 +646,17 @@ body {
   }
   
   .music-controls {
+  .sound-controls {
     right: 10px;
     top: 60px;
   }
   
-  .music-toggle {
+  .sound-toggle {
     width: 35px;
     height: 35px;
   }
   
-  .music-icon {
+  .sound-icon {
     transform: scale(1.2);
   }
 }

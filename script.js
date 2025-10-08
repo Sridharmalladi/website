@@ -158,143 +158,119 @@ function addGlitchEffect() {
 // Initialize glitch effect
 document.addEventListener('DOMContentLoaded', addGlitchEffect);
 
-// Music Control System
+// Sound Effects System
 document.addEventListener('DOMContentLoaded', function() {
-  const musicToggle = document.getElementById('music-toggle');
-  const trackInfo = document.getElementById('track-info');
-  const bgMusic = document.getElementById('bgMusic');
+  const soundToggle = document.getElementById('sound-toggle');
+  const soundInfo = document.getElementById('sound-info');
   
-  // Create 8-bit style audio context for better control
-  let isPlaying = false;
-  let currentTrack = 0;
-  
-  // 8-bit style tracks (using Web Audio API to create retro sounds)
-  const tracks = [
-    { name: '8-BIT BEATS', frequency: 440 },
-    { name: 'PIXEL PULSE', frequency: 523 },
-    { name: 'RETRO WAVE', frequency: 659 },
-    { name: 'CYBER LOOP', frequency: 784 }
-  ];
-  
-  // Create simple 8-bit style audio using Web Audio API
+  let soundEnabled = localStorage.getItem('soundEnabled') !== 'false'; // Default enabled
   let audioContext;
-  let oscillator;
-  let gainNode;
   
-  function createRetroAudio() {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    
-    // Create oscillator for 8-bit sound
-    oscillator = audioContext.createOscillator();
-    gainNode = audioContext.createGain();
-    
-    // Connect nodes
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    // Set 8-bit style parameters
-    oscillator.type = 'square'; // Classic 8-bit square wave
-    oscillator.frequency.setValueAtTime(tracks[currentTrack].frequency, audioContext.currentTime);
-    
-    // Create a simple melody pattern
-    const melody = [1, 1.25, 1.5, 1.25, 1, 0.75, 1, 1.25];
-    let noteIndex = 0;
-    
-    function playMelody() {
-      if (isPlaying && oscillator) {
-        const baseFreq = tracks[currentTrack].frequency;
-        oscillator.frequency.setValueAtTime(
-          baseFreq * melody[noteIndex], 
-          audioContext.currentTime
-        );
-        noteIndex = (noteIndex + 1) % melody.length;
-      }
-    }
-    
-    // Set volume (very low for background)
-    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
-    
-    // Start the oscillator
-    oscillator.start();
-    
-    // Create melody rhythm
-    setInterval(playMelody, 400);
-    
-    return oscillator;
+  // Initialize sound toggle state
+  if (soundEnabled) {
+    soundToggle.classList.add('enabled');
+    soundInfo.textContent = 'SFX ON';
+  } else {
+    soundInfo.textContent = 'SFX OFF';
   }
   
-  function startMusic() {
+  // Create 8-bit sound effects
+  function createSoundEffect(frequency, duration = 0.1, type = 'square') {
+    if (!soundEnabled) return;
+    
     try {
-      createRetroAudio();
-      isPlaying = true;
-      musicToggle.classList.add('playing');
-      trackInfo.textContent = tracks[currentTrack].name;
-      localStorage.setItem('musicEnabled', 'true');
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      
+      // Volume envelope for crisp 8-bit sound
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + duration);
     } catch (error) {
       console.log('Audio not supported');
     }
   }
   
-  function stopMusic() {
-    if (oscillator) {
-      oscillator.stop();
-      oscillator = null;
+  // Different sound effects
+  const sounds = {
+    click: () => createSoundEffect(800, 0.1),
+    hover: () => createSoundEffect(600, 0.05),
+    nav: () => createSoundEffect(1000, 0.08),
+    success: () => {
+      createSoundEffect(523, 0.1);
+      setTimeout(() => createSoundEffect(659, 0.1), 100);
+      setTimeout(() => createSoundEffect(784, 0.15), 200);
     }
-    isPlaying = false;
-    musicToggle.classList.remove('playing');
-    trackInfo.textContent = '8-BIT BEATS';
-    localStorage.setItem('musicEnabled', 'false');
-  }
+  };
   
-  function nextTrack() {
-    if (isPlaying) {
-      stopMusic();
-      currentTrack = (currentTrack + 1) % tracks.length;
-      setTimeout(startMusic, 100);
-    }
-  }
-  
-  // Music toggle click
-  musicToggle.addEventListener('click', function() {
-    if (isPlaying) {
-      stopMusic();
+  // Sound toggle functionality
+  soundToggle.addEventListener('click', function() {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem('soundEnabled', soundEnabled);
+    
+    if (soundEnabled) {
+      this.classList.add('enabled');
+      soundInfo.textContent = 'SFX ON';
+      sounds.success(); // Play success sound
     } else {
-      startMusic();
+      this.classList.remove('enabled');
+      soundInfo.textContent = 'SFX OFF';
     }
   });
   
-  // Double click to change track
-  musicToggle.addEventListener('dblclick', function() {
-    nextTrack();
+  // Add sound effects to navigation
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    item.addEventListener('mouseenter', sounds.hover);
+    item.addEventListener('click', sounds.nav);
   });
   
-  // Load saved music preference
-  const musicEnabled = localStorage.getItem('musicEnabled');
-  if (musicEnabled === 'true') {
-    // Delay auto-start to respect browser policies
-    setTimeout(() => {
-      startMusic();
-    }, 1000);
+  // Add sound effects to social links
+  const socialLinks = document.querySelectorAll('.pixel-icon');
+  socialLinks.forEach(link => {
+    link.addEventListener('mouseenter', sounds.hover);
+    link.addEventListener('click', sounds.click);
+  });
+  
+  // Add sound effects to project cards
+  const projectCards = document.querySelectorAll('.project-card');
+  projectCards.forEach(card => {
+    card.addEventListener('mouseenter', sounds.hover);
+    card.addEventListener('click', sounds.click);
+  });
+  
+  // Add sound effects to contact cards
+  const contactCards = document.querySelectorAll('.contact-card');
+  contactCards.forEach(card => {
+    card.addEventListener('mouseenter', sounds.hover);
+    card.addEventListener('click', sounds.click);
+  });
+  
+  // Add sound effects to theme toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', sounds.nav);
   }
   
-  // Update track info on hover
-  musicToggle.addEventListener('mouseenter', function() {
-    if (!isPlaying) {
-      trackInfo.style.opacity = '0.7';
-      trackInfo.textContent = 'CLICK TO PLAY';
-    }
-  });
-  
-  musicToggle.addEventListener('mouseleave', function() {
-    if (!isPlaying) {
-      trackInfo.style.opacity = '0';
-      trackInfo.textContent = '8-BIT BEATS';
-    }
+  // Add sound effects to skill chips
+  const skillChips = document.querySelectorAll('.skill-chip');
+  skillChips.forEach(chip => {
+    chip.addEventListener('mouseenter', sounds.hover);
   });
 });
-
+    
 // Pixel icon hover effects
 document.addEventListener('DOMContentLoaded', function() {
   const pixelIcons = document.querySelectorAll('.pixel-icon');

@@ -66,8 +66,8 @@ class PixelStar {
   getThemeColor() {
     const theme = document.documentElement.getAttribute('data-theme');
     const colors = theme === 'light' 
-      ? ['#8b4513', '#a0522d', '#654321']
-      : ['#00ffff', '#ff00ff', '#00ff41', '#ffff00'];
+      ? ['#2c5530', '#8b4513', '#1e6091']
+      : ['#e94560', '#f39c12', '#00d2d3'];
     return colors[Math.floor(Math.random() * colors.length)];
   }
   

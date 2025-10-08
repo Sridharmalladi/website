@@ -270,7 +270,139 @@ document.addEventListener('DOMContentLoaded', function() {
     chip.addEventListener('mouseenter', sounds.hover);
   });
 });
+
+// 8-bit Music System
+document.addEventListener('DOMContentLoaded', function() {
+  const musicToggle = document.getElementById('music-toggle');
+  const trackInfo = document.getElementById('track-info');
+  
+  let isPlaying = false;
+  let oscillator = null;
+  let currentTrack = 0;
+  
+  // 8-bit style tracks (frequencies for different "songs")
+  const tracks = [
+    { name: 'PIXEL DREAMS', frequency: 440 },
+    { name: 'CYBER NIGHTS', frequency: 523 },
+    { name: 'NEON WAVES', frequency: 659 },
+    { name: 'RETRO VIBES', frequency: 392 }
+  ];
+  
+  function createRetroAudio() {
+    if (!window.AudioContext && !window.webkitAudioContext) {
+      console.log('Web Audio API not supported');
+      return;
+    }
     
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    // Connect nodes
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // Set 8-bit style parameters
+    oscillator.type = 'square'; // Classic 8-bit square wave
+    oscillator.frequency.setValueAtTime(tracks[currentTrack].frequency, audioContext.currentTime);
+    
+    // Create a simple melody pattern
+    const melody = [1, 1.25, 1.5, 1.25, 1, 0.75, 1, 1.25];
+    let noteIndex = 0;
+    
+    function playMelody() {
+      if (isPlaying && oscillator) {
+        const baseFreq = tracks[currentTrack].frequency;
+        oscillator.frequency.setValueAtTime(
+          baseFreq * melody[noteIndex], 
+          audioContext.currentTime
+        );
+        noteIndex = (noteIndex + 1) % melody.length;
+      }
+    }
+    
+    // Set volume (very low for background)
+    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+    
+    // Start the oscillator
+    oscillator.start();
+    
+    // Create melody rhythm
+    setInterval(playMelody, 400);
+    
+    return oscillator;
+  }
+  
+  function startMusic() {
+    try {
+      createRetroAudio();
+      isPlaying = true;
+      musicToggle.classList.add('playing');
+      trackInfo.textContent = tracks[currentTrack].name;
+      localStorage.setItem('musicEnabled', 'true');
+    } catch (error) {
+      console.log('Audio not supported');
+    }
+  }
+  
+  function stopMusic() {
+    if (oscillator) {
+      oscillator.stop();
+      oscillator = null;
+    }
+    isPlaying = false;
+    musicToggle.classList.remove('playing');
+    trackInfo.textContent = '8-BIT BEATS';
+    localStorage.setItem('musicEnabled', 'false');
+  }
+  
+  function nextTrack() {
+    if (isPlaying) {
+      stopMusic();
+      currentTrack = (currentTrack + 1) % tracks.length;
+      setTimeout(startMusic, 100);
+    }
+  }
+  
+  // Music toggle click
+  musicToggle.addEventListener('click', function() {
+    if (isPlaying) {
+      stopMusic();
+    } else {
+      startMusic();
+    }
+  });
+  
+  // Double click to change track
+  musicToggle.addEventListener('dblclick', function() {
+    nextTrack();
+  });
+  
+  // Load saved music preference
+  const musicEnabled = localStorage.getItem('musicEnabled');
+  if (musicEnabled === 'true') {
+    // Delay auto-start to respect browser policies
+    setTimeout(() => {
+      startMusic();
+    }, 1000);
+  }
+  
+  // Update track info on hover
+  musicToggle.addEventListener('mouseenter', function() {
+    if (!isPlaying) {
+      trackInfo.style.opacity = '0.7';
+      trackInfo.textContent = 'CLICK TO PLAY';
+    }
+  });
+  
+  musicToggle.addEventListener('mouseleave', function() {
+    if (!isPlaying) {
+      trackInfo.style.opacity = '0';
+      trackInfo.textContent = '8-BIT BEATS';
+    }
+  });
+});
+
 // Pixel icon hover effects
 document.addEventListener('DOMContentLoaded', function() {
   const pixelIcons = document.querySelectorAll('.pixel-icon');

@@ -1,359 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sridhar.exe | AI & Data</title>
-  <link rel="icon" type="image/png" sizes="48x48" href="images/tab copy.png">
+  <title>Sridhar Malladi</title>
+  <meta name="description" content="Sridhar Malladi — AI engineer building LLM systems and the tools around them.">
+  <meta property="og:title" content="Sridhar Malladi">
+  <meta property="og:description" content="AI engineer building LLM systems and the tools around them.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sridharmalladi.online">
+  <link rel="icon" type="image/png" href="images/tab.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="mobile.css">
 </head>
 <body>
-  <!-- HUD -->
-  <div class="hud-bar">
-    <span>LOCATION: SAN ANTONIO, TX</span>
-    <span class="hud-sep">|</span>
-    <span>STATUS: OPEN TO OPPORTUNITIES</span>
-    <span class="hud-sep">|</span>
-    <span id="hud-deploy">LAST DEPLOY: --</span>
-  </div>
+  <div class="wrap">
+    <!-- portrait side column added in a follow-up once images/portrait.jpg is in the repo -->
 
-  <!-- Parallax background -->
-  <div id="bg-sky"></div>
-  <canvas id="bg-mountains"></canvas>
-  <canvas id="pixel-stars"></canvas>
-  <div id="bg-scanlines"></div>
+    <div class="content">
+      <header>
+        <h1>Sridhar Malladi</h1>
+        <p class="lede">I build LLM systems and the tools around them.</p>
+      </header>
 
-  <div class="theme-switch-wrapper">
-    <div class="pixel-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle theme">
-      <div class="toggle-pixel"></div>
+      <main>
+        <section>
+          <h2>What I'm looking for next</h2>
+          <!-- TODO(sridhar): replace with your own 1–3 sentences -->
+          <p>My next role is building LLM-powered products with a small, senior team
+          that ships fast and sweats the details people actually feel. I care most
+          about applied AI &mdash; retrieval, agents, and the evaluation and
+          infrastructure that make them dependable in production.</p>
+        </section>
+
+        <section>
+          <h2>Selected work</h2>
+          <p class="muted">More soon.</p>
+        </section>
+
+        <section>
+          <h2>Toolbox</h2>
+          <p>Python &middot; LangChain &middot; MCP &middot; RAG &middot; PyTorch &middot; SQL &middot; FastAPI &middot; Supabase &middot; Streamlit</p>
+        </section>
+
+        <section>
+          <h2>Writing &amp; notes</h2>
+          <p class="muted">Coming soon.</p>
+        </section>
+      </main>
+
+      <footer>
+        <h2>Connect</h2>
+        <ul class="links">
+          <li>
+            <a href="mailto:sridhar.malladi05@gmail.com">
+              <svg class="ico ico--stroke" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+              sridhar.malladi05@gmail.com
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/sridhar-malladi/">
+              <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+              linkedin.com/in/sridhar-malladi
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/Sridharmalladi">
+              <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.5 11.5 0 013-.405c1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+              github.com/Sridharmalladi
+            </a>
+          </li>
+        </ul>
+      </footer>
     </div>
   </div>
-
-  <!-- Sound Effects Toggle -->
-  <div class="sound-controls">
-    <div class="sound-toggle" id="sound-toggle" role="button" tabindex="0" aria-label="Toggle sound effects">
-      <div class="sound-icon">
-        <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-        <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
-        <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-      </div>
-    </div>
-    <div class="sound-info" id="sound-info">SFX</div>
-  </div>
-
-  <div class="pixel-container">
-    <!-- Pixel Avatar (multi-tone) -->
-    <div class="pixel-avatar">
-      <div class="avatar-pixels">
-        <div class="pixel-row">
-          <div class="pixel"></div><div class="pixel"></div><div class="pixel hair"></div><div class="pixel hair-hl"></div><div class="pixel hair"></div><div class="pixel"></div><div class="pixel"></div>
-        </div>
-        <div class="pixel-row">
-          <div class="pixel"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel hair-hl"></div><div class="pixel hair"></div><div class="pixel hair"></div><div class="pixel"></div>
-        </div>
-        <div class="pixel-row">
-          <div class="pixel"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel skin-sh"></div><div class="pixel skin"></div><div class="pixel skin"></div><div class="pixel"></div>
-        </div>
-        <div class="pixel-row">
-          <div class="pixel"></div><div class="pixel skin"></div><div class="pixel eye"></div><div class="pixel skin"></div><div class="pixel eye"></div><div class="pixel skin"></div><div class="pixel"></div>
-        </div>
-        <div class="pixel-row">
-          <div class="pixel"></div><div class="pixel skin-sh"></div><div class="pixel skin"></div><div class="pixel mouth"></div><div class="pixel skin"></div><div class="pixel skin-sh"></div><div class="pixel"></div>
-        </div>
-        <div class="pixel-row">
-          <div class="pixel"></div><div class="pixel shirt"></div><div class="pixel shirt-sh"></div><div class="pixel shirt"></div><div class="pixel shirt-sh"></div><div class="pixel shirt"></div><div class="pixel"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Header -->
-    <header class="pixel-header">
-      <div class="pixel-title">
-        <span class="glitch-text">SRIDHAR.EXE</span>
-        <div class="cursor-blink">_</div>
-      </div>
-      <div class="pixel-subtitle">AI_ENGINEER | DATA_SCIENTIST</div>
-      <div class="pixel-tagline" id="pixel-tagline" aria-live="polite"></div>
-
-      <!-- Pixel Social Icons -->
-      <div class="pixel-social">
-        <a href="https://www.linkedin.com/in/sridhar-malladi/" target="_blank" rel="noopener" class="pixel-icon linkedin" title="LinkedIn">
-          <div class="icon-pixels">
-            <div class="pixel-row"><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div><div class="p"></div></div>
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
-          </div>
-        </a>
-
-        <a href="https://github.com/Sridharmalladi" target="_blank" rel="noopener" class="pixel-icon github" title="GitHub">
-          <div class="icon-pixels">
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
-            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
-          </div>
-        </a>
-
-        <a href="https://x.com/AIbySridhar" target="_blank" rel="noopener" class="pixel-icon twitter" title="X">
-          <div class="icon-pixels">
-            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
-            <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p active"></div><div class="p"></div></div>
-            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
-          </div>
-        </a>
-
-        <a href="mailto:sridhar.malladi05@gmail.com" class="pixel-icon email" title="Email">
-          <div class="icon-pixels">
-            <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div><div class="p active"></div></div>
-            <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-          </div>
-        </a>
-      </div>
-    </header>
-
-    <!-- Navigation -->
-    <nav class="pixel-nav">
-      <div class="nav-item active" data-section="about" role="button" tabindex="0">
-        <div class="nav-icon">
-          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
-          <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
-        </div>
-        <span>ABOUT</span>
-      </div>
-
-      <div class="nav-item" data-section="skills" role="button" tabindex="0">
-        <div class="nav-icon">
-          <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p"></div></div>
-          <div class="pixel-row"><div class="p active"></div><div class="p active"></div><div class="p active"></div></div>
-        </div>
-        <span>SKILLS</span>
-      </div>
-
-      <div class="nav-item" data-section="projects" role="button" tabindex="0">
-        <div class="nav-icon">
-          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
-          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
-          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
-        </div>
-        <span>PROJECTS</span>
-      </div>
-
-      <div class="nav-item" data-section="contact" role="button" tabindex="0">
-        <div class="nav-icon">
-          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
-          <div class="pixel-row"><div class="p active"></div><div class="p"></div><div class="p active"></div></div>
-          <div class="pixel-row"><div class="p"></div><div class="p active"></div><div class="p"></div></div>
-        </div>
-        <span>CONTACT</span>
-      </div>
-    </nav>
-
-    <!-- Content Sections -->
-    <main class="pixel-content">
-      <!-- About Section -->
-      <section id="about" class="content-section active">
-        <div class="terminal-panel">
-          <div class="terminal-titlebar">
-            <span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span>
-          </div>
-          <div class="terminal-body">
-            <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-label">SYSTEM:</span><span class="terminal-value">sridhar.exe</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-label">ROLE:</span><span class="terminal-value">AI Engineer / Data Scientist</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-label">AI_SYSTEMS:</span><span class="terminal-value">4+ years</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-label">PIPELINES:</span><span class="terminal-value">11+ built</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-label">MENTORED:</span><span class="terminal-value">80+ students</span></div>
-            <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-label">STATUS:</span><span class="terminal-value">building things that think</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Skills Section -->
-      <section id="skills" class="content-section">
-        <div class="skills-grid">
-          <div class="skill-category">
-            <div class="category-header">AI_&amp;_ML</div>
-            <div class="skill-bar-row" data-tier="daily">
-              <div class="skill-bar-label"><span>LANGCHAIN</span><span class="skill-bar-tier">DAILY DRIVER</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-daily"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="daily">
-              <div class="skill-bar-label"><span>OPENAI</span><span class="skill-bar-tier">DAILY DRIVER</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-daily"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="daily">
-              <div class="skill-bar-label"><span>RAG</span><span class="skill-bar-tier">DAILY DRIVER</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-daily"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="working">
-              <div class="skill-bar-label"><span>PYTORCH</span><span class="skill-bar-tier">WORKING KNOWLEDGE</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-working"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="working">
-              <div class="skill-bar-label"><span>HUGGINGFACE</span><span class="skill-bar-tier">WORKING KNOWLEDGE</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-working"></div></div>
-            </div>
-          </div>
-
-          <div class="skill-category">
-            <div class="category-header">LANGUAGES</div>
-            <div class="skill-bar-row" data-tier="daily">
-              <div class="skill-bar-label"><span>PYTHON</span><span class="skill-bar-tier">DAILY DRIVER</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-daily"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="daily">
-              <div class="skill-bar-label"><span>SQL</span><span class="skill-bar-tier">DAILY DRIVER</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-daily"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="working">
-              <div class="skill-bar-label"><span>JAVASCRIPT</span><span class="skill-bar-tier">WORKING KNOWLEDGE</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-working"></div></div>
-            </div>
-          </div>
-
-          <div class="skill-category">
-            <div class="category-header">TOOLS</div>
-            <div class="skill-bar-row" data-tier="daily">
-              <div class="skill-bar-label"><span>SUPABASE</span><span class="skill-bar-tier">DAILY DRIVER</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-daily"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="working">
-              <div class="skill-bar-label"><span>FASTAPI</span><span class="skill-bar-tier">WORKING KNOWLEDGE</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-working"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="working">
-              <div class="skill-bar-label"><span>STREAMLIT</span><span class="skill-bar-tier">WORKING KNOWLEDGE</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-working"></div></div>
-            </div>
-            <div class="skill-bar-row" data-tier="learning">
-              <div class="skill-bar-label"><span>FIREBASE</span><span class="skill-bar-tier">LEARNING</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill tier-learning"></div></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Projects Section -->
-      <section id="projects" class="content-section">
-        <div class="projects-grid">
-          <a href="https://prepwiser.net/" target="_blank" rel="noopener" class="project-card">
-            <div class="project-icon">
-              <div class="pixel-row"><div class="p p1"></div><div class="p p2"></div><div class="p p1"></div></div>
-              <div class="pixel-row"><div class="p p2"></div><div class="p p0"></div><div class="p p2"></div></div>
-              <div class="pixel-row"><div class="p p1"></div><div class="p p2"></div><div class="p p1"></div></div>
-            </div>
-            <div class="project-name">PREPWISER</div>
-            <div class="project-tech">AI_INTERVIEW_PLATFORM</div>
-            <div class="project-desc">CO-CREATED AI INTERVIEW PREP</div>
-          </a>
-
-          <a href="https://scrollmiles.site/" target="_blank" rel="noopener" class="project-card">
-            <div class="project-icon">
-              <div class="pixel-row"><div class="p p0"></div><div class="p p3"></div><div class="p p0"></div></div>
-              <div class="pixel-row"><div class="p p3"></div><div class="p p4"></div><div class="p p3"></div></div>
-              <div class="pixel-row"><div class="p p0"></div><div class="p p3"></div><div class="p p0"></div></div>
-            </div>
-            <div class="project-name">SCROLL_MILES</div>
-            <div class="project-tech">MINDFUL_BROWSING</div>
-            <div class="project-desc">BUILT PRODUCTIVITY APP</div>
-          </a>
-
-          <a href="https://healhunger.streamlit.app/" target="_blank" rel="noopener" class="project-card">
-            <div class="project-icon">
-              <div class="pixel-row"><div class="p p4"></div><div class="p p0"></div><div class="p p4"></div></div>
-              <div class="pixel-row"><div class="p p0"></div><div class="p p2"></div><div class="p p0"></div></div>
-              <div class="pixel-row"><div class="p p4"></div><div class="p p0"></div><div class="p p4"></div></div>
-            </div>
-            <div class="project-name">HUNGERHEALS</div>
-            <div class="project-tech">SOCIAL_IMPACT</div>
-            <div class="project-desc">DEVELOPED FOOD DONATION</div>
-          </a>
-
-          <a href="https://github.com/Sridharmalladi/RentMate/tree/main/RentMate" target="_blank" rel="noopener" class="project-card">
-            <div class="project-icon">
-              <div class="pixel-row"><div class="p p0"></div><div class="p p5"></div><div class="p p5"></div></div>
-              <div class="pixel-row"><div class="p p5"></div><div class="p p0"></div><div class="p p5"></div></div>
-              <div class="pixel-row"><div class="p p5"></div><div class="p p5"></div><div class="p p0"></div></div>
-            </div>
-            <div class="project-name">RENTMATE</div>
-            <div class="project-tech">RAG_ASSISTANT</div>
-            <div class="project-desc">AI RENTAL ASSISTANT</div>
-          </a>
-
-          <a href="https://github.com/Sridharmalladi" target="_blank" rel="noopener" class="project-card">
-            <div class="project-icon">
-              <div class="pixel-row"><div class="p p3"></div><div class="p p3"></div><div class="p p0"></div></div>
-              <div class="pixel-row"><div class="p p0"></div><div class="p p3"></div><div class="p p3"></div></div>
-              <div class="pixel-row"><div class="p p3"></div><div class="p p0"></div><div class="p p3"></div></div>
-            </div>
-            <div class="project-name">MORE_PROJECTS</div>
-            <div class="project-tech">GITHUB_REPO</div>
-            <div class="project-desc">VIEW ALL PROJECTS</div>
-          </a>
-        </div>
-      </section>
-
-      <!-- Contact Section -->
-      <section id="contact" class="content-section">
-        <div class="contact-row">
-          <a href="mailto:sridhar.malladi05@gmail.com" class="contact-btn email">
-            <div class="contact-btn-icon">
-              <div class="contact-icon">
-                <div class="pixel-row"><div class="p active c-email"></div><div class="p active c-email"></div><div class="p active c-email"></div><div class="p active c-email"></div></div>
-                <div class="pixel-row"><div class="p active c-email"></div><div class="p"></div><div class="p"></div><div class="p active c-email"></div></div>
-                <div class="pixel-row"><div class="p active c-email"></div><div class="p"></div><div class="p"></div><div class="p active c-email"></div></div>
-                <div class="pixel-row"><div class="p active c-email"></div><div class="p active c-email"></div><div class="p active c-email"></div><div class="p active c-email"></div></div>
-              </div>
-            </div>
-            <div class="contact-label">EMAIL</div>
-          </a>
-
-          <a href="https://www.linkedin.com/in/sridhar-malladi/" target="_blank" rel="noopener" class="contact-btn linkedin">
-            <div class="contact-btn-icon">
-              <div class="contact-icon">
-                <div class="pixel-row"><div class="p"></div><div class="p"></div><div class="p"></div><div class="p"></div></div>
-                <div class="pixel-row"><div class="p"></div><div class="p active c-linkedin"></div><div class="p"></div><div class="p"></div></div>
-                <div class="pixel-row"><div class="p"></div><div class="p active c-linkedin"></div><div class="p active c-linkedin"></div><div class="p active c-linkedin"></div></div>
-                <div class="pixel-row"><div class="p"></div><div class="p active c-linkedin"></div><div class="p"></div><div class="p active c-linkedin"></div></div>
-              </div>
-            </div>
-            <div class="contact-label">LINKEDIN</div>
-          </a>
-
-          <a href="https://github.com/Sridharmalladi" target="_blank" rel="noopener" class="contact-btn github">
-            <div class="contact-btn-icon">
-              <div class="contact-icon">
-                <div class="pixel-row"><div class="p"></div><div class="p active c-github"></div><div class="p active c-github"></div><div class="p"></div></div>
-                <div class="pixel-row"><div class="p active c-github"></div><div class="p"></div><div class="p"></div><div class="p active c-github"></div></div>
-                <div class="pixel-row"><div class="p active c-github"></div><div class="p active c-github"></div><div class="p active c-github"></div><div class="p active c-github"></div></div>
-                <div class="pixel-row"><div class="p"></div><div class="p active c-github"></div><div class="p active c-github"></div><div class="p"></div></div>
-              </div>
-            </div>
-            <div class="contact-label">GITHUB</div>
-          </a>
-
-          <a href="https://x.com/AIbySridhar" target="_blank" rel="noopener" class="contact-btn twitter">
-            <div class="contact-btn-icon">
-              <div class="contact-icon">
-                <div class="pixel-row"><div class="p active c-twitter"></div><div class="p"></div><div class="p"></div><div class="p active c-twitter"></div></div>
-                <div class="pixel-row"><div class="p"></div><div class="p active c-twitter"></div><div class="p active c-twitter"></div><div class="p"></div></div>
-                <div class="pixel-row"><div class="p"></div><div class="p active c-twitter"></div><div class="p active c-twitter"></div><div class="p"></div></div>
-                <div class="pixel-row"><div class="p active c-twitter"></div><div class="p"></div><div class="p"></div><div class="p active c-twitter"></div></div>
-              </div>
-            </div>
-            <div class="contact-label">TWITTER</div>
-          </a>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>

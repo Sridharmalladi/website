@@ -38,9 +38,12 @@ body {
 }
 
 .wrap {
-  max-width: 38rem;
+  max-width: 58rem;
   margin: 0 auto;
   padding: 12vh 1.5rem 16vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
   animation: rise 0.5s ease both;
 }
 
@@ -147,8 +150,22 @@ a:focus-visible {
   border-radius: 1px;
 }
 
-/* Desktop */
+/* Desktop: portrait becomes a sticky side column */
 @media (min-width: 900px) {
+  .wrap {
+    grid-template-columns: minmax(0, 34rem) 1fr;
+    gap: 4.5rem;
+    align-items: start;
+  }
+
+  .aside {
+    order: 0;
+    position: sticky;
+    top: 12vh;
+  }
+
+  .portrait { width: 100%; max-width: 17rem; }
+
   header { margin-bottom: 3.5rem; }
 }
 

@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Archivo", ui-sans-serif, system-ui, sans-serif;
+
+  --bg: #05060a;
+  --panel: rgba(17, 20, 31, 0.55);
+  --panel-solid: #11141f;
+  --stroke: rgba(255, 255, 255, 0.10);
+  --stroke-strong: rgba(255, 255, 255, 0.22);
+  --text: #e7e9f3;
+  --text-dim: #9aa0b4;
+  --glow-color: rgba(96, 165, 250, 0.55);
+
+  --blur: 18px;
+  --panel-alpha: 0.55;
+}
+
+/* THEME STATE ENGINE ------------------------------------------------------- */
+:root[data-theme="OBSIDIAN"] {
+  --panel: rgba(10, 12, 20, 0.9);
+  --stroke: rgba(255, 255, 255, 0.06);
+  --blur: 0px;
+  --panel-alpha: 0.9;
+}
+:root[data-theme="FROSTED GLASS"] {
+  --panel: rgba(17, 20, 31, 0.5);
+  --stroke: rgba(255, 255, 255, 0.14);
+  --blur: 20px;
+  --panel-alpha: 0.5;
+}
+:root[data-theme="WIREFRAME"] {
+  --bg: #04040a;
+  --panel: rgba(4, 6, 12, 0.35);
+  --stroke: rgba(120, 200, 255, 0.55);
+  --stroke-strong: rgba(160, 220, 255, 0.9);
+  --blur: 0px;
+  --panel-alpha: 0.2;
+  --text-dim: #7fb8ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overscroll-behavior: none;
+}
+
+body {
+  min-height: 100vh;
+  overflow: hidden; /* single-stage spatial layout, no page scroll on desktop */
+}
+
+@media (max-width: 900px) {
+  body {
+    overflow-y: auto;
+  }
+}
+
+::selection {
+  background: rgba(96, 165, 250, 0.35);
+}
+
+/* Ambient animated grid backdrop --------------------------------------------- */
+.spatial-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(120, 160, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 160, 255, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 90%);
+  animation: grid-drift 14s linear infinite;
+}
+:root[data-theme="WIREFRAME"] .spatial-grid {
+  background-image:
+    linear-gradient(rgba(120, 200, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 200, 255, 0.18) 1px, transparent 1px);
+}
+
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 60px 60px;
+  }
+}
+
+/* Frosted glass surface + cursor-tracked light reflection ------------------- */
+.glass {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 20px;
+  backdrop-filter: blur(var(--blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  box-shadow:
+    0 8px 40px -12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* the moving specular highlight; --mx/--my set in px by GlassPanel */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 0%),
+    var(--glow-color),
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.9;
+  transition: opacity 0.4s var(--tw-ease, ease);
+}
+
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(255, 255, 255, 0.08),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+:root[data-theme="OBSIDIAN"] .glass::after {
+  opacity: 0.4;
+}
+:root[data-theme="WIREFRAME"] .glass {
+  box-shadow: none;
+}
+:root[data-theme="WIREFRAME"] .glass::after {
+  display: none;
+}
+
+.text-dim {
+  color: var(--text-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spatial-grid,
+  .animate-grid-drift,
+  .animate-pulse-slow {
+    animation: none !important;
+  }
+}

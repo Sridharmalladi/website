@@ -1,5 +1,5 @@
-import Scene from "@/components/Scene";
+import GameStage from "@/components/GameStage";
 
 export default function Page() {
-  return <Scene />;
+  return <GameStage />;
 }

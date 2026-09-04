@@ -1,36 +1,38 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Archivo } from "next/font/google";
+import { Pixelify_Sans, Nunito_Sans } from "next/font/google";
 import { site } from "@/config/site";
 import "./globals.css";
 
-const display = Space_Grotesk({
+const pixel = Pixelify_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-display",
+  variable: "--font-pixel",
   display: "swap",
 });
 
-const body = Archivo({
+const body = Nunito_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "600", "700", "900"],
   variable: "--font-body",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: `${site.name} — ${site.role}`,
-  description: site.bioLines[0],
+  title: `${site.name} — Portfolio`,
+  description: site.tagline,
   metadataBase: new URL("https://sridharmalladi.online"),
   openGraph: {
-    title: `${site.name} — Spatial Portfolio`,
-    description: site.bioLines[0],
+    title: `${site.name} — a tiny sleek platformer`,
+    description: site.tagline,
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05060a",
-  colorScheme: "dark",
+  themeColor: "#7b2ff7",
+  colorScheme: "light dark",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -39,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="FROSTED GLASS" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" data-world="DAY" className={`${pixel.variable} ${body.variable}`}>
       <body>{children}</body>
     </html>
   );

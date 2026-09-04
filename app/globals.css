@@ -2,168 +2,286 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================= TOKENS ==== */
 :root {
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-pixel: "Pixelify Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --bg: #05060a;
-  --panel: rgba(17, 20, 31, 0.55);
-  --panel-solid: #11141f;
-  --stroke: rgba(255, 255, 255, 0.10);
-  --stroke-strong: rgba(255, 255, 255, 0.22);
-  --text: #e7e9f3;
-  --text-dim: #9aa0b4;
-  --glow-color: rgba(96, 165, 250, 0.55);
-
-  --blur: 18px;
-  --panel-alpha: 0.55;
+  --world-fade: 420ms;
 }
 
-/* THEME STATE ENGINE ------------------------------------------------------- */
-:root[data-theme="OBSIDIAN"] {
-  --panel: rgba(10, 12, 20, 0.9);
-  --stroke: rgba(255, 255, 255, 0.06);
-  --blur: 0px;
-  --panel-alpha: 0.9;
-}
-:root[data-theme="FROSTED GLASS"] {
-  --panel: rgba(17, 20, 31, 0.5);
-  --stroke: rgba(255, 255, 255, 0.14);
-  --blur: 20px;
-  --panel-alpha: 0.5;
-}
-:root[data-theme="WIREFRAME"] {
-  --bg: #04040a;
-  --panel: rgba(4, 6, 12, 0.35);
-  --stroke: rgba(120, 200, 255, 0.55);
-  --stroke-strong: rgba(160, 220, 255, 0.9);
-  --blur: 0px;
-  --panel-alpha: 0.2;
-  --text-dim: #7fb8ff;
+/* DAY -------------------------------------------------------------------- */
+:root,
+:root[data-world="DAY"] {
+  --sky-top: #a9e2ff;
+  --sky-bot: #eaf8ff;
+  --celestial: #ffd66b;
+  --celestial-glow: #fff2c4;
+  --hill-far: #bfe6a6;
+  --hill-near: #8bd177;
+  --ground: #6c4a30;
+  --ground-top: #8a5e3c;
+  --platform: #d7b078;
+  --platform-edge: #9c6b3c;
+  --panel: rgba(255, 255, 255, 0.82);
+  --panel-border: rgba(28, 36, 51, 0.16);
+  --text: #1b2333;
+  --text-dim: #566074;
+  --accent: #1f6feb;
+  --accent-2: #ff4d8d;
+  --accent-ink: #ffffff;
+  --glow: rgba(31, 111, 235, 0.45);
 }
 
+/* DUSK — the loud one -------------------------------------------------- */
+:root[data-world="DUSK"] {
+  --sky-top: #ff5aa0;
+  --sky-bot: #7b2ff7;
+  --celestial: #ffe27a;
+  --celestial-glow: #ffd1e6;
+  --hill-far: #6b39b3;
+  --hill-near: #3d1f78;
+  --ground: #241042;
+  --ground-top: #3a1c63;
+  --platform: #b45cff;
+  --platform-edge: #ff6fc7;
+  --panel: rgba(30, 10, 46, 0.66);
+  --panel-border: rgba(255, 111, 199, 0.4);
+  --text: #fff0fb;
+  --text-dim: #e7b8dd;
+  --accent: #ff2d95;
+  --accent-2: #ffd166;
+  --accent-ink: #1a0620;
+  --glow: rgba(255, 95, 160, 0.55);
+}
+
+/* NIGHT — arcade after dark ------------------------------------------- */
+:root[data-world="NIGHT"] {
+  --sky-top: #0a0f2c;
+  --sky-bot: #141c44;
+  --celestial: #cdd6ff;
+  --celestial-glow: #6b7bd6;
+  --hill-far: #182150;
+  --hill-near: #0d1334;
+  --ground: #080d24;
+  --ground-top: #131b45;
+  --platform: #1b2452;
+  --platform-edge: #37e6d5;
+  --panel: rgba(9, 13, 34, 0.74);
+  --panel-border: rgba(55, 230, 213, 0.36);
+  --text: #eaf0ff;
+  --text-dim: #8ea0d6;
+  --accent: #37e6d5;
+  --accent-2: #ff5fb0;
+  --accent-ink: #04121a;
+  --glow: rgba(55, 230, 213, 0.5);
+}
+
+/* ============================================================= BASE ===== */
 * {
   box-sizing: border-box;
 }
 
 html,
 body {
-  padding: 0;
   margin: 0;
-  background: var(--bg);
+  padding: 0;
+  height: 100%;
+  background: var(--sky-bot);
   color: var(--text);
   font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
 }
 
 body {
-  min-height: 100vh;
-  overflow: hidden; /* single-stage spatial layout, no page scroll on desktop */
+  overflow: hidden;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 780px) {
   body {
     overflow-y: auto;
   }
 }
 
 ::selection {
-  background: rgba(96, 165, 250, 0.35);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
-/* Ambient animated grid backdrop --------------------------------------------- */
-.spatial-grid {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(120, 160, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120, 160, 255, 0.06) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 90%);
-  animation: grid-drift 14s linear infinite;
-}
-:root[data-theme="WIREFRAME"] .spatial-grid {
-  background-image:
-    linear-gradient(rgba(120, 200, 255, 0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120, 200, 255, 0.18) 1px, transparent 1px);
+button {
+  font-family: inherit;
 }
 
-@keyframes grid-drift {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 60px 60px;
-  }
+.font-pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
 }
 
-/* Frosted glass surface + cursor-tracked light reflection ------------------- */
-.glass {
+/* Smooth palette transition when the world changes */
+.world-fade,
+.world-fade * {
+  transition:
+    background-color var(--world-fade) ease,
+    border-color var(--world-fade) ease,
+    color var(--world-fade) ease,
+    box-shadow var(--world-fade) ease,
+    fill var(--world-fade) ease,
+    stroke var(--world-fade) ease;
+}
+
+/* ======================================================= COMPONENTS ==== */
+/* Sleek pixel panel: crisp 2px border + stepped corner notches */
+.pixel-panel {
   position: relative;
   background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 20px;
-  backdrop-filter: blur(var(--blur)) saturate(140%);
-  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+  border: 2px solid var(--panel-border);
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
-    0 8px 40px -12px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+    0 10px 30px -12px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.04);
+}
+.pixel-panel::before,
+.pixel-panel::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+.pixel-panel::before {
+  top: -2px;
+  left: -2px;
+  box-shadow: calc(100% + 2px) 0 0 var(--accent);
+}
+.pixel-panel::after {
+  bottom: -2px;
+  left: -2px;
+  box-shadow: calc(100% + 2px) 0 0 var(--accent);
 }
 
-/* the moving specular highlight; --mx/--my set in px by GlassPanel */
-.glass::before {
+/* Arcade button: sits on a hard shadow, presses down on :active */
+.arcade-btn {
+  --lift: 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  min-height: 44px;
+  font-family: var(--font-pixel);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--panel-border);
+  border-radius: 4px;
+  box-shadow: 0 var(--lift) 0 0 var(--accent);
+  transform: translateY(0);
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease,
+    background-color 160ms ease;
+  cursor: pointer;
+}
+.arcade-btn:hover {
+  background: color-mix(in srgb, var(--panel) 70%, var(--accent) 30%);
+}
+.arcade-btn:active {
+  transform: translateY(var(--lift));
+  box-shadow: 0 0 0 0 var(--accent);
+}
+.arcade-btn:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+/* Cursor glow — the hover light the user liked, retro-tuned + cheap */
+.cursor-glow {
+  position: relative;
+  overflow: hidden;
+}
+.cursor-glow::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  padding: 1px;
   background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 0%),
-    var(--glow-color),
+    260px circle at var(--mx, -100px) var(--my, -100px),
+    var(--glow),
     transparent 60%
   );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.9;
-  transition: opacity 0.4s var(--tw-ease, ease);
-}
-
-.glass::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    340px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(255, 255, 255, 0.08),
-    transparent 55%
-  );
+  opacity: 0;
+  transition: opacity 240ms ease;
   pointer-events: none;
 }
-
-:root[data-theme="OBSIDIAN"] .glass::after {
-  opacity: 0.4;
-}
-:root[data-theme="WIREFRAME"] .glass {
-  box-shadow: none;
-}
-:root[data-theme="WIREFRAME"] .glass::after {
-  display: none;
+.cursor-glow:hover::after {
+  opacity: 1;
 }
 
-.text-dim {
-  color: var(--text-dim);
+/* ========================================================== PLAYER ===== */
+.player {
+  transition: none;
+}
+.player .player-leg {
+  transform-origin: top center;
+}
+/* idle sway */
+.player[data-moving="false"] {
+  animation: bob 2.2s ease-in-out infinite;
+}
+.player[data-moving="false"] .player-leg--l,
+.player[data-moving="false"] .player-leg--r {
+  animation: none;
+}
+/* walk cycle */
+.player[data-moving="true"] .player-leg--l {
+  animation: step 260ms steps(2) infinite;
+}
+.player[data-moving="true"] .player-leg--r {
+  animation: step 260ms steps(2) infinite;
+  animation-delay: -130ms;
+}
+.player[data-air="true"] .player-leg--l {
+  transform: rotate(-16deg);
+}
+.player[data-air="true"] .player-leg--r {
+  transform: rotate(16deg);
+}
+@keyframes step {
+  0% {
+    transform: rotate(-22deg);
+  }
+  100% {
+    transform: rotate(22deg);
+  }
+}
+@keyframes blink-eye {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.1);
+  }
+}
+.player-eye {
+  animation: blink-eye 4s steps(1) infinite;
 }
 
+/* ==================================================== REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
-  .spatial-grid,
-  .animate-grid-drift,
-  .animate-pulse-slow {
+  .world-fade,
+  .world-fade * {
+    transition: none !important;
+  }
+  .parallax-layer {
+    transform: none !important;
+  }
+  .player,
+  .player * {
     animation: none !important;
   }
 }

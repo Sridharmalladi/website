@@ -18,6 +18,14 @@ import { cn } from "@/lib/cn";
 const W = STRIP_W;
 const H = STRIP_H;
 
+/**
+ * Scale: 20 strip units = 1 metre. Every object below is sized from its real
+ * dimensions against that, so a person, a car, a lamp post, a train carriage
+ * and the dinosaur are all in believable proportion to each other.
+ */
+const M = 20;
+const PERSON_H = 1.75 * M; // 35
+
 const GROUND = 3400; // street level
 const ROAD_BOTTOM = 3540;
 const RAIL_Y = 4230;
@@ -242,6 +250,7 @@ interface Building {
 
 const FAR: Building[] = [
   { x: -20, w: 120, h: 300, rows: 8, cols: 3 },
+  { x: 96, w: 78, h: 470, rows: 12, cols: 2, cap: "mast" },
   { x: 120, w: 90, h: 220, rows: 6, cols: 2 },
   { x: 230, w: 140, h: 380, rows: 9, cols: 3, cap: "mast" },
   { x: 390, w: 100, h: 250, rows: 7, cols: 2 },
@@ -250,6 +259,9 @@ const FAR: Building[] = [
   { x: 810, w: 145, h: 360, rows: 9, cols: 3 },
   { x: 975, w: 100, h: 240, rows: 6, cols: 2, cap: "mast" },
   { x: 1095, w: 135, h: 330, rows: 8, cols: 3 },
+  { x: 452, w: 84, h: 520, rows: 13, cols: 2, cap: "mast" },
+  { x: 762, w: 92, h: 486, rows: 12, cols: 2 },
+  { x: 1180, w: 96, h: 400, rows: 10, cols: 2, cap: "step" },
 ];
 
 const NEAR: Building[] = [
@@ -260,6 +272,7 @@ const NEAR: Building[] = [
   { x: 665, w: 185, h: 290, rows: 6, cols: 4, cap: "stack" },
   { x: 870, w: 145, h: 200, rows: 5, cols: 3 },
   { x: 1035, w: 180, h: 300, rows: 7, cols: 4, cap: "mast" },
+  { x: 1225, w: 150, h: 360, rows: 8, cols: 3, cap: "stack" },
 ];
 
 /** A lit window with someone at a desk: monitor glow, head and shoulders. */
@@ -378,10 +391,10 @@ function cap(b: Building, stroke: string): ReactNode {
 }
 
 const CARS = [
-  { lane: GROUND + 34, dur: 3.7, delay: -1.9, rev: false, body: "#ff5a8a", roof: "#3a1030" },
-  { lane: GROUND + 34, dur: 4.9, delay: -3.4, rev: false, body: "#ffd166", roof: "#4a3510" },
-  { lane: GROUND + 76, dur: 4.3, delay: -2.6, rev: true, body: "#7c5cff", roof: "#241a3a" },
-  { lane: GROUND + 76, dur: 5.6, delay: -4.8, rev: true, body: "#59e0d0", roof: "#0f3b38" },
+  { lane: GROUND + 30, dur: 3.7, delay: -1.9, rev: false, body: "#ff5a8a", roof: "#3a1030" },
+  { lane: GROUND + 30, dur: 4.9, delay: -3.4, rev: false, body: "#ffd166", roof: "#4a3510" },
+  { lane: GROUND + 84, dur: 4.3, delay: -2.6, rev: true, body: "#7c5cff", roof: "#241a3a" },
+  { lane: GROUND + 84, dur: 5.6, delay: -4.8, rev: true, body: "#59e0d0", roof: "#0f3b38" },
 ];
 
 function Walker({ tint, step, phase }: { tint: string; step: number; phase: number }) {
@@ -419,6 +432,101 @@ const PEOPLE = [
   { dur: 34, delay: -27.5, rev: true, s: 1, tint: "var(--person)", step: 0.66 },
 ];
 
+/** A gull silhouette; wings held mid-beat. */
+function Bird({ s = 1 }: { s?: number }) {
+  return (
+    <path
+      d="M-13 0 C -8 -7, -4 -8, 0 -2 C 4 -8, 8 -7, 13 0 C 8 -3, 4 -3, 0 2 C -4 -3, -8 -3, -13 0 Z"
+      fill="#2f2140"
+      transform={`scale(${s})`}
+    />
+  );
+}
+
+const BIRDS = [
+  { y: 2320, s: 1, dur: 26, delay: -6.2 },
+  { y: 2352, s: 0.8, dur: 26, delay: -4.1 },
+  { y: 2298, s: 0.7, dur: 26, delay: -8.7 },
+  { y: 2610, s: 0.9, dur: 34, delay: -19.3 },
+  { y: 2648, s: 0.65, dur: 34, delay: -16.8 },
+];
+
+/** Someone flying a kite, string running up into the sky band. */
+function KiteFlyer({ x }: { x: number }) {
+  const y = GROUND - 2;
+  return (
+    <g>
+      <path
+        d={`M ${x + 6} ${y - PERSON_H * 0.75} C ${x + 70} ${y - 300}, ${x + 40} ${y - 560}, ${x + 96} ${y - 690}`}
+        fill="none"
+        stroke="#ffe9b0"
+        strokeWidth="1.2"
+        opacity="0.45"
+      />
+      <g transform={`translate(${x + 96} ${y - 700})`}>
+        <g className="anim" style={{ animation: "kite-sway 7s ease-in-out -2.3s infinite" }}>
+          <path d="M0 -20 L17 0 L0 26 L-17 0 Z" fill="#ff5a8a" />
+          <path d="M0 -20 L0 26 M-17 0 L17 0" stroke="#2b1020" strokeWidth="1.4" />
+          <path d="M0 26 q 10 14 -4 24 q 12 10 0 22" fill="none" stroke="#ffd166" strokeWidth="2" />
+        </g>
+      </g>
+      <g transform={`translate(${x} ${y})`} fill="var(--person)">
+        <circle cx="0" cy={-PERSON_H} r="5.2" />
+        <rect x="-4.4" y={-PERSON_H + 6} width="9" height="15" rx="3.5" />
+        {/* arm raised to the string */}
+        <path d={`M4 ${-PERSON_H + 9} L12 ${-PERSON_H + 1}`} stroke="var(--person)" strokeWidth="3.4" strokeLinecap="round" />
+        <rect x="-4.4" y={-PERSON_H + 20} width="3.6" height="15" rx="1.6" />
+        <rect x="0.8" y={-PERSON_H + 20} width="3.6" height="15" rx="1.6" />
+      </g>
+    </g>
+  );
+}
+
+/** Dog walker: handler, lead, and a small dog trotting ahead. */
+function DogWalker({ tint }: { tint: string }) {
+  return (
+    <g fill={tint}>
+      <circle cx="0" cy={-PERSON_H} r="5.2" />
+      <rect x="-4.4" y={-PERSON_H + 6} width="9" height="15" rx="3.5" />
+      <rect
+        className="anim leg"
+        x="-4.2"
+        y={-PERSON_H + 20}
+        width="3.6"
+        height="15"
+        rx="1.6"
+        style={{ animation: "leg-a 0.68s ease-in-out -0.2s infinite" }}
+      />
+      <rect
+        className="anim leg"
+        x="0.8"
+        y={-PERSON_H + 20}
+        width="3.6"
+        height="15"
+        rx="1.6"
+        style={{ animation: "leg-b 0.68s ease-in-out -0.2s infinite" }}
+      />
+      {/* lead */}
+      <path
+        d={`M6 ${-PERSON_H + 11} Q 20 ${-PERSON_H + 20}, 30 -13`}
+        fill="none"
+        stroke={tint}
+        strokeWidth="1.4"
+        opacity="0.8"
+      />
+      {/* dog: 0.55 m at the shoulder */}
+      <g transform="translate(30 0)">
+        <rect x="-9" y="-13" width="19" height="7" rx="3.4" />
+        <circle cx="12" cy="-15" r="4.2" />
+        <path d="M13 -19 l4 -5 l1 5 Z" />
+        <path d="M-9 -12 q -6 -3 -7 -9" fill="none" stroke={tint} strokeWidth="2" strokeLinecap="round" />
+        <rect x="-7" y="-7" width="2.6" height="7" rx="1.2" />
+        <rect x="6" y="-7" width="2.6" height="7" rx="1.2" />
+      </g>
+    </g>
+  );
+}
+
 function Surface() {
   return (
     <>
@@ -448,12 +556,23 @@ function Surface() {
         <rect key={i} x={i * 78 + 8} y={GROUND + 56} width="40" height="3" fill="#ffe6a8" opacity="0.26" />
       ))}
 
-      {[110, 430, 750, 1070].map((x, i) => (
-        <g key={i}>
-          <rect x={x} y={GROUND - 74} width="4" height="74" fill="#3a2a52" />
-          <rect x={x - 15} y={GROUND - 78} width="34" height="5" rx="2" fill="#3a2a52" />
-        </g>
-      ))}
+      {[95, 385, 675, 965, 1155].map((x, i) => {
+        const postH = 8 * M; // 8 m lamp standard
+        const head = GROUND - postH;
+        return (
+          <g key={i}>
+            {/* light thrown down onto the pavement, so the people read */}
+            <path
+              d={`M ${x - 6} ${head + 8} L ${x - 96} ${GROUND} L ${x + 96} ${GROUND} L ${x + 10} ${head + 8} Z`}
+              fill="url(#lampcone)"
+            />
+            <ellipse cx={x + 2} cy={GROUND} rx="98" ry="13" fill="url(#lamppool)" />
+            <rect x={x} y={head} width="5" height={postH} fill="#3a2a52" />
+            <path d={`M ${x + 2} ${head} q 0 -14 22 -14`} fill="none" stroke="#3a2a52" strokeWidth="5" />
+            <ellipse cx={x + 26} cy={head - 12} rx="13" ry="6" fill="#ffe9b0" />
+          </g>
+        );
+      })}
 
       {PEOPLE.map((p, i) => (
         <g key={i} transform={`translate(0 ${GROUND - 2})`}>
@@ -470,18 +589,42 @@ function Surface() {
         </g>
       ))}
 
+      {/* birds riding the air above the rooftops */}
+      {BIRDS.map((b, i) => (
+        <g key={`bird${i}`} transform={`translate(0 ${b.y})`}>
+          <g className="anim" style={{ animation: `fly-x ${b.dur}s linear ${b.delay}s infinite` }}>
+            <g transform={`translate(${i * 46} 0)`}>
+              <Bird s={b.s} />
+            </g>
+          </g>
+        </g>
+      ))}
+
+      <KiteFlyer x={252} />
+
+      {/* dog walker, crossing slower than the rest */}
+      <g transform={`translate(0 ${GROUND - 2})`}>
+        <g className="anim" style={{ animation: "walk-x 38s linear -12.4s infinite" }}>
+          <DogWalker tint="#241640" />
+        </g>
+      </g>
+
       {CARS.map((c, i) => (
         <g key={i} transform={`translate(0 ${c.lane})`}>
           <g
             className="anim"
             style={{ animation: `${c.rev ? "car-x-rev" : "car-x"} ${c.dur}s linear ${c.delay}s infinite` }}
           >
-            <g transform={c.rev ? "scale(-1,1) translate(-44 0)" : undefined}>
-              <rect x="0" y="0" width="44" height="12" rx="5" fill={c.body} />
-              <path d="M10 0 L14 -8 L30 -8 L35 0 Z" fill={c.roof} />
-              <circle cx="11" cy="13" r="4" fill="#0d0716" />
-              <circle cx="33" cy="13" r="4" fill="#0d0716" />
-              <circle cx="43" cy="6" r="2.4" fill="#fff4c4" />
+            <g transform={c.rev ? "scale(-1,1) translate(-88 0)" : undefined}>
+              <rect x="0" y="-2" width="88" height="19" rx="8" fill={c.body} />
+              <path d="M20 -2 L28 -19 L60 -19 L72 -2 Z" fill={c.roof} />
+              <rect x="30" y="-16" width="16" height="12" rx="2" fill="#9fd8ff" opacity="0.45" />
+              <rect x="50" y="-16" width="16" height="12" rx="2" fill="#9fd8ff" opacity="0.35" />
+              <circle cx="22" cy="18" r="8" fill="#0d0716" />
+              <circle cx="22" cy="18" r="3.4" fill="#3a2f4a" />
+              <circle cx="68" cy="18" r="8" fill="#0d0716" />
+              <circle cx="68" cy="18" r="3.4" fill="#3a2f4a" />
+              <circle cx="86" cy="8" r="3.6" fill="#fff4c4" />
             </g>
           </g>
         </g>
@@ -492,37 +635,42 @@ function Surface() {
 
 /* ------------------------------------------------------------ underground -- */
 
-const TRAIN_TOP = 3970;
-const TRAIN_H = 165;
+const TRAIN_TOP = 4138;
+const TRAIN_H = 3.6 * M; // 72
 
+const CAR_L = 18 * M; // 18 m carriage
+
+/** One 18 m x 3.6 m carriage, wheels riding the rail. */
 function Carriage({ x, seed }: { x: number; seed: number }) {
-  const CW = 250;
+  const bottom = TRAIN_TOP + TRAIN_H;
+  const wheelY = RAIL_Y - 5;
   return (
     <g transform={`translate(${x} 0)`}>
-      <rect x="0" y={TRAIN_TOP} width={CW} height={TRAIN_H} rx="13" fill="url(#train)" />
-      <rect x="6" y={TRAIN_TOP - 7} width={CW - 12} height="14" rx="6" fill="var(--train-roof)" />
-      <rect x="0" y={TRAIN_TOP + TRAIN_H - 18} width={CW} height="18" rx="5" fill="#2a1020" opacity="0.85" />
-      {Array.from({ length: 4 }, (_, i) => {
-        const wx = 20 + i * 57;
+      <rect x="0" y={TRAIN_TOP} width={CAR_L} height={TRAIN_H} rx="10" fill="url(#train)" />
+      <rect x="5" y={TRAIN_TOP - 5} width={CAR_L - 10} height="10" rx="5" fill="var(--train-roof)" />
+      <rect x="0" y={bottom - 9} width={CAR_L} height="9" rx="3" fill="#2a1020" opacity="0.85" />
+      {Array.from({ length: 6 }, (_, i) => {
+        const wx = 26 + i * 52;
         return (
           <g key={i}>
-            <rect x={wx} y={TRAIN_TOP + 26} width="44" height="46" rx="6" fill="var(--train-window)" opacity="0.92" />
+            <rect x={wx} y={TRAIN_TOP + 14} width="30" height="26" rx="4" fill="var(--train-window)" opacity="0.92" />
             {(i + seed) % 3 !== 0 && (
               <g fill="#5a3520" opacity="0.75">
-                <circle cx={wx + 22} cy={TRAIN_TOP + 47} r="8" />
-                <path d={`M${wx + 11} ${TRAIN_TOP + 72} a11 13 0 0 1 22 0 Z`} />
+                <circle cx={wx + 15} cy={TRAIN_TOP + 25} r="5" />
+                <path d={`M${wx + 7} ${TRAIN_TOP + 40} a8 9 0 0 1 16 0 Z`} />
               </g>
             )}
           </g>
         );
       })}
-      {[44, CW - 78].map((bx, i) => (
+      <rect x={CAR_L - 26} y={TRAIN_TOP + 12} width="16" height={TRAIN_H - 26} rx="3" fill="#3a1526" opacity="0.6" />
+      {[34, CAR_L - 66].map((bx, i) => (
         <g key={i}>
-          <rect x={bx} y={TRAIN_TOP + TRAIN_H} width="34" height="12" rx="4" fill="#1a0d14" />
-          <circle cx={bx + 8} cy={RAIL_Y - 7} r="13" fill="#241119" />
-          <circle cx={bx + 8} cy={RAIL_Y - 7} r="5" fill="#4a2b38" />
-          <circle cx={bx + 26} cy={RAIL_Y - 7} r="13" fill="#241119" />
-          <circle cx={bx + 26} cy={RAIL_Y - 7} r="5" fill="#4a2b38" />
+          <rect x={bx} y={bottom} width="32" height="8" rx="3" fill="#1a0d14" />
+          <circle cx={bx + 8} cy={wheelY} r="9" fill="#241119" />
+          <circle cx={bx + 8} cy={wheelY} r="3.4" fill="#4a2b38" />
+          <circle cx={bx + 24} cy={wheelY} r="9" fill="#241119" />
+          <circle cx={bx + 24} cy={wheelY} r="3.4" fill="#4a2b38" />
         </g>
       ))}
     </g>
@@ -542,8 +690,12 @@ function Underground() {
       <rect x="640" y="3570" width="420" height="14" rx="7" fill="#3a2b1e" opacity="0.7" />
       <rect x="200" y="3640" width="320" height="12" rx="6" fill="#3a2b1e" opacity="0.6" />
 
-      <path d="M -40 4560 L -40 3960 A 640 150 0 0 1 1240 3960 L 1240 4560 Z" fill="#31201a" opacity="0.6" />
-      <path d="M 40 4560 L 40 3995 A 560 130 0 0 1 1160 3995 L 1160 4560 Z" fill="var(--tunnel-deep)" />
+      <rect x="-40" y="3958" width="1280" height="602" fill="#31201a" opacity="0.6" />
+      <rect x="20" y="3996" width="1160" height="564" fill="var(--tunnel-deep)" />
+      {/* flat station ceiling: a straight slab with a service duct under it */}
+      <rect x="20" y="3982" width="1160" height="16" fill="#3d2820" />
+      <rect x="20" y="4004" width="1160" height="6" fill="#241812" opacity="0.8" />
+      <rect x="150" y="4016" width="900" height="9" rx="4" fill="#33241b" opacity="0.7" />
 
       {Array.from({ length: 6 }, (_, i) => {
         const x = 130 + i * 190;
@@ -576,35 +728,37 @@ function Underground() {
 
       <g className="anim" style={{ animation: "train-x 5.2s linear -3.1s infinite" }}>
         <Carriage x={0} seed={2} />
-        <Carriage x={262} seed={1} />
-        <Carriage x={524} seed={3} />
-        <g transform="translate(786 0)">
+        <Carriage x={CAR_L + 8} seed={1} />
+        <Carriage x={(CAR_L + 8) * 2} seed={3} />
+        <g transform={`translate(${CAR_L * 3 + 24} 0)`}>
           <path
-            d={`M0 ${TRAIN_TOP} L196 ${TRAIN_TOP} C 228 ${TRAIN_TOP}, 252 ${TRAIN_TOP + 30}, 256 ${TRAIN_TOP + 64}
-                L256 ${TRAIN_TOP + TRAIN_H - 12} A 12 12 0 0 1 244 ${TRAIN_TOP + TRAIN_H} L0 ${TRAIN_TOP + TRAIN_H} Z`}
+            d={`M0 ${TRAIN_TOP} L${CAR_L - 90} ${TRAIN_TOP} C ${CAR_L - 44} ${TRAIN_TOP}, ${CAR_L - 8} ${TRAIN_TOP + 20}, ${CAR_L} ${TRAIN_TOP + 40}
+                L${CAR_L} ${TRAIN_TOP + TRAIN_H - 8} A 8 8 0 0 1 ${CAR_L - 8} ${TRAIN_TOP + TRAIN_H} L0 ${TRAIN_TOP + TRAIN_H} Z`}
             fill="url(#train)"
           />
-          <rect x="6" y={TRAIN_TOP - 7} width="212" height="14" rx="6" fill="var(--train-roof)" />
+          <rect x="5" y={TRAIN_TOP - 5} width={CAR_L - 96} height="10" rx="5" fill="var(--train-roof)" />
           <path
-            d={`M196 ${TRAIN_TOP + 20} C 220 ${TRAIN_TOP + 22}, 235 ${TRAIN_TOP + 40}, 239 ${TRAIN_TOP + 66} L196 ${TRAIN_TOP + 66} Z`}
+            d={`M${CAR_L - 86} ${TRAIN_TOP + 12} C ${CAR_L - 48} ${TRAIN_TOP + 14}, ${CAR_L - 20} ${TRAIN_TOP + 26}, ${CAR_L - 10} ${TRAIN_TOP + 42} L${CAR_L - 86} ${TRAIN_TOP + 42} Z`}
             fill="var(--train-window)"
             opacity="0.95"
           />
-          <circle cx="213" cy={TRAIN_TOP + 50} r="8" fill="#5a3520" opacity="0.8" />
-          {[0, 1, 2].map((i) => (
-            <rect key={i} x={24 + i * 56} y={TRAIN_TOP + 26} width="42" height="46" rx="6" fill="var(--train-window)" opacity="0.9" />
+          <circle cx={CAR_L - 52} cy={TRAIN_TOP + 30} r="5" fill="#5a3520" opacity="0.8" />
+          {[0, 1, 2, 3].map((i) => (
+            <rect key={i} x={26 + i * 52} y={TRAIN_TOP + 14} width="30" height="26" rx="4" fill="var(--train-window)" opacity="0.9" />
           ))}
-          <circle cx="246" cy={TRAIN_TOP + 104} r="8" fill="#fff6cf" />
-          <circle cx="246" cy={TRAIN_TOP + 130} r="5" fill="#fff6cf" opacity="0.8" />
-          <path d={`M250 ${TRAIN_TOP + 90} L470 ${TRAIN_TOP + 52} L470 ${TRAIN_TOP + 160} L250 ${TRAIN_TOP + 120} Z`} fill="url(#headlamp)" />
-          <rect x="0" y={TRAIN_TOP + TRAIN_H - 18} width="248" height="18" rx="5" fill="#2a1020" opacity="0.85" />
-          {[46, 176].map((bx, i) => (
+          <circle cx={CAR_L - 14} cy={TRAIN_TOP + 56} r="5" fill="#fff6cf" />
+          <path
+            d={`M${CAR_L - 10} ${TRAIN_TOP + 46} L${CAR_L + 200} ${TRAIN_TOP + 20} L${CAR_L + 200} ${TRAIN_TOP + 92} L${CAR_L - 10} ${TRAIN_TOP + 66} Z`}
+            fill="url(#headlamp)"
+          />
+          <rect x="0" y={TRAIN_TOP + TRAIN_H - 9} width={CAR_L - 8} height="9" rx="3" fill="#2a1020" opacity="0.85" />
+          {[34, CAR_L - 76].map((bx, i) => (
             <g key={i}>
-              <rect x={bx} y={TRAIN_TOP + TRAIN_H} width="38" height="12" rx="4" fill="#1a0d14" />
-              <circle cx={bx + 9} cy={RAIL_Y - 7} r="14" fill="#241119" />
-              <circle cx={bx + 9} cy={RAIL_Y - 7} r="5" fill="#4a2b38" />
-              <circle cx={bx + 29} cy={RAIL_Y - 7} r="14" fill="#241119" />
-              <circle cx={bx + 29} cy={RAIL_Y - 7} r="5" fill="#4a2b38" />
+              <rect x={bx} y={TRAIN_TOP + TRAIN_H} width="34" height="8" rx="3" fill="#1a0d14" />
+              <circle cx={bx + 9} cy={RAIL_Y - 5} r="10" fill="#241119" />
+              <circle cx={bx + 9} cy={RAIL_Y - 5} r="3.6" fill="#4a2b38" />
+              <circle cx={bx + 25} cy={RAIL_Y - 5} r="10" fill="#241119" />
+              <circle cx={bx + 25} cy={RAIL_Y - 5} r="3.6" fill="#4a2b38" />
             </g>
           ))}
         </g>
@@ -710,6 +864,26 @@ function TRex() {
       {beads(back as [number, number][], () => 14, "bk")}
       {beads(neck as [number, number][], (t) => 12 - t * 2, "nk")}
 
+      {/* age: hairline cracks across the larger bones */}
+      <g stroke="#4a3a22" strokeWidth="1.2" opacity="0.55" fill="none" strokeLinecap="round">
+        <path d="M30 20 l7 9 l-4 8" />
+        <path d="M40 108 l8 6" />
+        <path d="M22 176 l-7 8" />
+        <path d="M-70 26 l6 7" />
+        <path d="M-186 48 l7 5" />
+        <path d="M120 -22 l5 8" />
+      </g>
+
+      {/* pieces that have worked loose over time */}
+      <g opacity="0.9">
+        <g transform="translate(-268 96) rotate(28)">
+          <rect x="-9" y="-5" width="18" height="10" rx="4.5" fill="url(#bone)" stroke="var(--bone-line)" strokeWidth="1.4" />
+        </g>
+        <g transform="translate(-140 112) rotate(-14)">
+          <rect x="-7" y="-4" width="14" height="8" rx="3.6" fill="url(#bone)" stroke="var(--bone-line)" strokeWidth="1.4" />
+        </g>
+      </g>
+
       {/* skull, jaw open, facing right */}
       <g transform="translate(178 -140) rotate(-12)">
         {/* cranium + upper jaw */}
@@ -741,6 +915,9 @@ function TRex() {
           ))}
         </g>
       </g>
+
+      {/* sediment lying over the lower half — it is still half in the rock */}
+      <rect x="-430" y="118" width="720" height="190" fill="url(#burial)" />
     </g>
   );
 }
@@ -817,25 +994,26 @@ function Fossils() {
       ))}
 
       {/* the main specimen */}
-      <g transform="translate(470 5075) scale(0.62)">
+      {/* the specimen sits alone in its own bed, nothing crossing it */}
+      <g transform="translate(620 5230) scale(0.55)">
         <TRex />
       </g>
 
       {/* ammonite with septa */}
       <g transform="translate(0 0)">
-        <path d={spiral(168, 4645, 2.5, 4, 36, 80)} fill="none" stroke="url(#bone-stroke)" strokeWidth="7" strokeLinecap="round" />
+        <path d={spiral(150, 4676, 2.5, 4, 34, 80)} fill="none" stroke="url(#bone-stroke)" strokeWidth="7" strokeLinecap="round" />
         {Array.from({ length: 11 }, (_, i) => {
           const t = 0.3 + (i / 11) * 0.7;
           const a = t * 2.5 * Math.PI * 2;
-          const ro = 4 + (36 - 4) * t;
+          const ro = 4 + (34 - 4) * t;
           const ri = ro * 0.58;
           return (
             <line
               key={i}
-              x1={168 + ri * Math.cos(a)}
-              y1={4640 + ri * Math.sin(a)}
-              x2={168 + ro * Math.cos(a)}
-              y2={4640 + ro * Math.sin(a)}
+              x1={150 + ri * Math.cos(a)}
+              y1={4676 + ri * Math.sin(a)}
+              x2={150 + ro * Math.cos(a)}
+              y2={4676 + ro * Math.sin(a)}
               stroke="var(--bone-shade)"
               strokeWidth="2"
               opacity="0.75"
@@ -846,9 +1024,9 @@ function Fossils() {
 
       {/* bivalves */}
       {[
-        [430, 4706, 0.7],
-        [700, 4668, 0.56],
-        [1010, 5492, 0.75],
+        [340, 4690, 0.62],
+        [880, 4700, 0.5],
+        [1010, 5810, 0.62],
       ].map(([x, y, s], i) => (
         <g key={`bv${i}`} transform={`translate(${x} ${y}) scale(${s})`}>
           <path
@@ -865,7 +1043,7 @@ function Fossils() {
       ))}
 
       {/* fern frond */}
-      <g transform="translate(950 5745) rotate(-12) scale(0.68)" stroke="var(--bone-shade)" fill="none" strokeLinecap="round">
+      <g transform="translate(300 5840) rotate(-12) scale(0.6)" stroke="var(--bone-shade)" fill="none" strokeLinecap="round">
         <path d="M0 0 C 40 -30, 96 -46, 150 -50" strokeWidth="4" />
         {Array.from({ length: 12 }, (_, i) => {
           const t = i / 11;
@@ -882,7 +1060,7 @@ function Fossils() {
       </g>
 
       {/* fish with vertebral column */}
-      <g transform="translate(215 5330) rotate(6) scale(0.62)" stroke="var(--bone-line)" fill="none" strokeLinecap="round">
+      <g transform="translate(880 5620) rotate(6) scale(0.55)" stroke="var(--bone-line)" fill="none" strokeLinecap="round">
         <path d="M0 0 C 24 -26, 96 -30, 150 0 C 96 30, 24 26, 0 0 Z" strokeWidth="2.4" fill="url(#bone)" opacity="0.75" />
         <line x1="14" y1="0" x2="146" y2="0" strokeWidth="3" />
         {Array.from({ length: 12 }, (_, i) => {
@@ -899,69 +1077,58 @@ function Fossils() {
         <path d="M150 0 L176 -18 L170 0 L176 18 Z" strokeWidth="2.2" />
       </g>
 
-      {/* gold seams and nuggets */}
-      {[
-        "M60 5060 C 130 5040, 180 5090, 250 5062 C 300 5042, 340 5072, 392 5052",
-        "M690 5610 C 760 5586, 812 5628, 884 5600 C 930 5582, 966 5606, 1010 5590",
-        "M180 5820 C 250 5798, 300 5836, 372 5812",
-      ].map((d, i) => (
-        <g key={`au${i}`}>
-          <path d={d} fill="none" stroke="#6b4f14" strokeWidth="9" opacity="0.5" strokeLinecap="round" />
-          <path d={d} fill="none" stroke="url(#gold)" strokeWidth="4" strokeLinecap="round" />
-        </g>
-      ))}
-      {[
-        [128, 5052],
-        [268, 5060],
-        [742, 5602],
-        [906, 5596],
-        [236, 5806],
-      ].map(([x, y], i) => (
-        <g key={`nug${i}`}>
-          <ellipse cx={x} cy={y} rx={9 + (i % 3) * 3} ry={6 + (i % 2) * 3} fill="url(#gold)" />
-          <ellipse cx={x - 2} cy={y - 2} rx={3} ry={2} fill="#fff6cf" opacity="0.75" />
-        </g>
-      ))}
-
-      {/* diamonds in their pockets */}
-      {[
-        { x: 880, y: 5040, s: 1.15, d: -2.4 },
-        { x: 330, y: 5480, s: 0.85, d: -6.1 },
-        { x: 1092, y: 5250, s: 0.7, d: -9.4 },
-        { x: 560, y: 5860, s: 1, d: -4.2 },
-      ].map((g, i) => (
-        <g key={`dia${i}`} transform={`translate(${g.x} ${g.y}) scale(${g.s})`}>
-          <circle r="34" fill="url(#gem-halo)" />
-          <path d="M-16 -6 L0 -22 L16 -6 L0 22 Z" fill="url(#diamond)" stroke="#dff6ff" strokeWidth="1.4" />
-          <path d="M-16 -6 L16 -6" stroke="#eafaff" strokeWidth="1.2" opacity="0.9" />
-          <path d="M0 -22 L-6 -6 L0 22 L6 -6 Z" fill="#ffffff" opacity="0.35" />
-          <circle
-            cx="7"
-            cy="-11"
-            r="2.6"
-            fill="#fff"
-            className="anim"
-            style={{ animation: `twinkle ${3.4 + i}s ease-in-out ${g.d}s infinite` }}
-          />
-        </g>
-      ))}
-
-      {/* a small amethyst cluster */}
-      <g transform="translate(760 5320) scale(0.9)">
-        <circle r="26" fill="url(#gem-halo)" opacity="0.7" />
-        {[-14, 0, 13].map((dx, i) => (
-          <path
-            key={i}
-            d={`M${dx - 7} 8 L${dx} ${-14 - i * 4} L${dx + 7} 8 Z`}
-            fill="url(#amethyst)"
-            stroke="#e6d2ff"
-            strokeWidth="1"
-          />
+      {/* a limestone cave pocket — stalactites above, stalagmites below,
+          with a shallow pool catching the drip */}
+      <g>
+        <path
+          d="M760 4880 C 810 4826, 940 4812, 1030 4844 C 1104 4870, 1126 4936, 1096 4990
+             C 1060 5054, 900 5070, 820 5030 C 762 5000, 736 4930, 760 4880 Z"
+          fill="#120c08"
+        />
+        <path
+          d="M760 4880 C 810 4826, 940 4812, 1030 4844 C 1104 4870, 1126 4936, 1096 4990
+             C 1060 5054, 900 5070, 820 5030 C 762 5000, 736 4930, 760 4880 Z"
+          fill="none"
+          stroke="#6a4f31"
+          strokeWidth="4"
+          opacity="0.5"
+        />
+        {/* stalactites */}
+        {[
+          [806, 4866, 34],
+          [846, 4850, 52],
+          [890, 4842, 38],
+          [934, 4844, 60],
+          [980, 4854, 30],
+          [1024, 4872, 44],
+        ].map(([x, y, len], i) => (
+          <path key={`sc${i}`} d={`M${x - 7} ${y} L${x + 7} ${y} L${x} ${y + len} Z`} fill="#8a6c47" opacity="0.9" />
         ))}
+        {/* stalagmites */}
+        {[
+          [828, 5030, 30],
+          [880, 5044, 44],
+          [938, 5048, 34],
+          [1000, 5034, 26],
+        ].map(([x, y, len], i) => (
+          <path key={`sg${i}`} d={`M${x - 8} ${y} L${x + 8} ${y} L${x} ${y - len} Z`} fill="#8a6c47" opacity="0.85" />
+        ))}
+        {/* pool */}
+        <ellipse cx="920" cy="5040" rx="96" ry="11" fill="#3e6b76" opacity="0.55" />
+        <ellipse cx="900" cy="5038" rx="34" ry="4" fill="#9fd8e4" opacity="0.35" />
+        {/* a drip falling from the longest stalactite */}
+        <circle
+          cx="934"
+          cy="4906"
+          r="3"
+          fill="#9fd8e4"
+          className="anim"
+          style={{ animation: "drip 4.6s ease-in -1.7s infinite" }}
+        />
       </g>
 
       {/* trilobite */}
-      <g transform="translate(1010 4870) scale(0.72)" stroke="var(--bone-line)" fill="url(#bone)" strokeWidth="2.2">
+      <g transform="translate(240 5640) scale(0.62)" stroke="var(--bone-line)" fill="url(#bone)" strokeWidth="2.2">
         <path d="M-58 0 C -50 -34, 52 -34, 64 0 C 52 34, -50 34, -58 0 Z" />
         <path d="M-58 0 C -52 -20, -20 -22, -14 0 C -20 22, -52 20, -58 0 Z" />
         <line x1="-14" y1="-26" x2="-14" y2="26" />
@@ -972,8 +1139,8 @@ function Fossils() {
 
       {/* burrow trace fossils */}
       {[
-        "M300 5180 C 340 5210, 300 5250, 350 5286",
-        "M820 5220 C 860 5250, 820 5288, 866 5320",
+        "M120 4820 C 160 4850, 120 4890, 170 4926",
+        "M1040 5000 C 1080 5030, 1040 5068, 1086 5100",
       ].map((d, i) => (
         <path key={`bu${i}`} d={d} fill="none" stroke="#6a4f31" strokeWidth="7" opacity="0.35" strokeLinecap="round" />
       ))}
@@ -982,7 +1149,7 @@ function Fossils() {
       {[0, 1, 2, 3].map((i) => (
         <path
           key={`fp${i}`}
-          d={`M${150 + i * 96} ${5860 + (i % 2) * 26} l14 -22 l14 22 l-8 5 l-6 -9 l-6 9 Z`}
+          d={`M${640 + i * 92} ${5880 + (i % 2) * 24} l14 -22 l14 22 l-8 5 l-6 -9 l-6 9 Z`}
           fill="var(--fossil-mark)"
           opacity="0.32"
         />
@@ -1067,7 +1234,7 @@ export default function Descent() {
       viewBox={`0 0 ${W} ${H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
-      aria-label="A cross-section descending from the outer planets, through the sky and a city street, down past a subway tunnel and fossil beds, to the Earth's molten core."
+      aria-label="A cross-section descending from Mars, Jupiter and Saturn, through a sky of birds, clouds and airliners, down to a lit city street where people walk dogs and fly kites, then underground past a subway train, a limestone cave and a half-buried dinosaur skeleton, ending at the Earth's molten core."
     >
       <defs>
         {/* ONE gradient for the whole descent — this is what removes the seams */}
@@ -1164,6 +1331,14 @@ export default function Descent() {
           <stop offset="100%" stopColor="#ff9dc4" stopOpacity="0.15" />
         </linearGradient>
 
+        <linearGradient id="lampcone" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffe9b0" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#ffe9b0" stopOpacity="0" />
+        </linearGradient>
+        <radialGradient id="lamppool" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ffe9b0" stopOpacity="0.34" />
+          <stop offset="100%" stopColor="#ffe9b0" stopOpacity="0" />
+        </radialGradient>
         <linearGradient id="train" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ff5f80" />
           <stop offset="45%" stopColor="var(--train-body)" />
@@ -1178,28 +1353,16 @@ export default function Descent() {
           <stop offset="100%" stopColor="#fff3c0" stopOpacity="0" />
         </linearGradient>
 
-        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#c8912b" />
-          <stop offset="45%" stopColor="#ffd75e" />
-          <stop offset="100%" stopColor="#b8801f" />
-        </linearGradient>
-        <linearGradient id="diamond" x1="0" y1="0" x2="0.4" y2="1">
-          <stop offset="0%" stopColor="#eafcff" />
-          <stop offset="55%" stopColor="#9fe0f5" />
-          <stop offset="100%" stopColor="#4fa6c9" />
-        </linearGradient>
-        <linearGradient id="amethyst" x1="0" y1="0" x2="0.3" y2="1">
-          <stop offset="0%" stopColor="#e9d4ff" />
-          <stop offset="60%" stopColor="#a06fe0" />
-          <stop offset="100%" stopColor="#6d3fb0" />
-        </linearGradient>
-        <radialGradient id="gem-halo" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#bfefff" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#bfefff" stopOpacity="0" />
-        </radialGradient>
         <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--bone)" />
-          <stop offset="100%" stopColor="var(--bone-shade)" />
+          <stop offset="0%" stopColor="#cfc3a4" />
+          <stop offset="55%" stopColor="#a9986f" />
+          <stop offset="100%" stopColor="#7d6c48" />
+        </linearGradient>
+        {/* the deeper the bone sits, the more the rock takes it back */}
+        <linearGradient id="burial" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3b2817" stopOpacity="0" />
+          <stop offset="60%" stopColor="#3b2817" stopOpacity="0.72" />
+          <stop offset="100%" stopColor="#3b2817" stopOpacity="0.95" />
         </linearGradient>
         <linearGradient id="bone-stroke" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--bone)" />

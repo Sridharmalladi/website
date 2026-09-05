@@ -202,6 +202,14 @@ button {
   transform-box: fill-box;
   transform-origin: top center;
 }
+/* wings pivot at the shoulder, not their own centre */
+.wing {
+  transform-box: fill-box;
+  transform-origin: 100% 50%;
+}
+.wing--r {
+  transform-origin: 0% 50%;
+}
 
 /* ============================================================ MOTION ==== */
 /* Strip is 1200 units wide; cross-strip travel ranges are tuned to that. */
@@ -261,6 +269,34 @@ button {
   12% { opacity: 0.55; }
   88% { opacity: 0.55; }
   100% { transform: translateX(1360px); opacity: 0; }
+}
+@keyframes flap-a {
+  0%, 100% { transform: rotate(-30deg); }
+  50% { transform: rotate(24deg); }
+}
+@keyframes flap-b {
+  0%, 100% { transform: rotate(30deg); }
+  50% { transform: rotate(-24deg); }
+}
+@keyframes glide-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+@keyframes bank {
+  0%, 100% { transform: rotate(-1.4deg) translateY(0); }
+  50% { transform: rotate(1.4deg) translateY(-5px); }
+}
+@keyframes puff {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5px, -4px) scale(1.04); }
+}
+@keyframes beacon-a {
+  0%, 44% { opacity: 1; }
+  46%, 100% { opacity: 0.12; }
+}
+@keyframes beacon-b {
+  0%, 48% { opacity: 0.12; }
+  52%, 100% { opacity: 1; }
 }
 @keyframes drip {
   0% { transform: translateY(0); opacity: 0; }

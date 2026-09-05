@@ -215,7 +215,9 @@ function Sky() {
         <g key={i} transform={`translate(0 ${p.y})`}>
           <g className="anim" style={{ animation: `fly-x ${p.dur}s linear ${p.delay}s infinite` }}>
             <g transform={`scale(${p.s})`}>
-              <Airliner tint={p.tint} />
+              <g className="anim" style={{ animation: `bank ${11 + i * 3}s ease-in-out ${-(i * 2.9 + 1.3)}s infinite` }}>
+                <Airliner tint={p.tint} />
+              </g>
             </g>
           </g>
         </g>
@@ -224,11 +226,29 @@ function Sky() {
       {CLOUDS.map((c, i) => (
         <g key={i} transform={`translate(0 ${c.y})`}>
           <g className="anim" style={{ animation: `cloud-drift ${c.dur}s linear ${-((i * 4.3 + 1.7) % c.dur).toFixed(2)}s infinite` }}>
-            <g transform={`translate(${c.x} 0) scale(${c.s})`} fill="url(#cloud)" opacity={c.o}>
-              <ellipse cx="0" cy="6" rx="92" ry="23" />
-              <ellipse cx="-42" cy="0" rx="44" ry="23" />
-              <ellipse cx="6" cy="-14" rx="54" ry="29" />
-              <ellipse cx="52" cy="-2" rx="42" ry="21" />
+            <g
+              transform={`translate(${c.x} 0) scale(${c.s})`}
+              fill="url(#cloud)"
+              opacity={c.o}
+              filter="url(#soft)"
+            >
+              {[
+                { cx: 0, cy: 6, rx: 92, ry: 23, d: 13 },
+                { cx: -42, cy: 0, rx: 44, ry: 23, d: 17 },
+                { cx: 6, cy: -14, rx: 54, ry: 29, d: 21 },
+                { cx: 52, cy: -2, rx: 42, ry: 21, d: 15 },
+                { cx: -14, cy: 11, rx: 62, ry: 18, d: 19 },
+              ].map((e, k) => (
+                <ellipse
+                  key={k}
+                  cx={e.cx}
+                  cy={e.cy}
+                  rx={e.rx}
+                  ry={e.ry}
+                  className="anim"
+                  style={{ animation: `puff ${e.d}s ease-in-out ${-(k * 3.1 + i * 1.7).toFixed(2)}s infinite` }}
+                />
+              ))}
             </g>
           </g>
         </g>
@@ -275,41 +295,6 @@ const NEAR: Building[] = [
   { x: 1225, w: 150, h: 360, rows: 8, cols: 3, cap: "stack" },
 ];
 
-/** A lit window with someone at a desk: monitor glow, head and shoulders. */
-function DeskWindow({
-  x,
-  y,
-  w,
-  h,
-  seed,
-}: {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  seed: number;
-}) {
-  const flip = seed % 2 === 0;
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      <rect width={w} height={h} rx="1.5" fill="var(--city-window)" opacity="0.9" />
-      <g transform={flip ? `translate(${w} 0) scale(-1 1)` : undefined}>
-        {/* desk */}
-        <rect x={w * 0.12} y={h * 0.72} width={w * 0.76} height={h * 0.1} fill="#6b4a1e" opacity="0.75" />
-        {/* monitor, back of the panel to us */}
-        <rect x={w * 0.5} y={h * 0.34} width={w * 0.34} height={h * 0.34} rx="1" fill="#2b1c3a" />
-        <rect x={w * 0.53} y={h * 0.38} width={w * 0.28} height={h * 0.24} fill="#9fe8ff" opacity="0.85" />
-        {/* person */}
-        <circle cx={w * 0.3} cy={h * 0.42} r={Math.max(1.4, w * 0.11)} fill="#2b1c3a" />
-        <path
-          d={`M ${w * 0.16} ${h * 0.74} a ${w * 0.14} ${h * 0.2} 0 0 1 ${w * 0.28} 0 Z`}
-          fill="#2b1c3a"
-        />
-      </g>
-    </g>
-  );
-}
-
 function windows(b: Building, seed: number, dim: boolean): ReactNode[] {
   const pad = 10;
   const gx = (b.w - pad * 2) / b.cols;
@@ -318,30 +303,20 @@ function windows(b: Building, seed: number, dim: boolean): ReactNode[] {
   for (let r = 0; r < b.rows; r++) {
     for (let c = 0; c < b.cols; c++) {
       const i = r * b.cols + c;
-      if ((i * 7 + seed * 5) % 4 === 0) continue; // dark window
-      const x = b.x + pad + c * gx;
-      const y = GROUND - b.h + pad + r * gy;
-      const w = Math.max(3, gx * (dim ? 0.5 : 0.62));
-      const h = Math.max(3, gy * (dim ? 0.44 : 0.56));
-
-      // near buildings are big enough to show the room; far ones stay lit panes
-      if (!dim && w >= 12 && (i * 3 + seed) % 5 !== 0) {
-        out.push(<DeskWindow key={i} x={x} y={y} w={w} h={h} seed={i + seed} />);
-        continue;
-      }
-
-      // only some panes flicker — the rest are static, which is cheaper and calmer
+      if ((i * 7 + seed * 5) % 4 === 0) continue; // unlit
+      // rooms aren't all the same bulb: mostly warm, a few cooler
+      const cool = (i * 5 + seed * 3) % 7 === 0;
       const animated = (i * 5 + seed * 3) % 3 === 0;
       out.push(
         <rect
           key={i}
-          x={x}
-          y={y}
-          width={w}
-          height={h}
+          x={b.x + pad + c * gx}
+          y={GROUND - b.h + pad + r * gy}
+          width={Math.max(3, gx * 0.52)}
+          height={Math.max(3, gy * 0.46)}
           rx="1"
-          fill="var(--city-window)"
-          opacity={dim ? 0.4 : 0.85}
+          fill={cool ? "#bcd8f0" : "var(--city-window)"}
+          opacity={dim ? 0.4 : 0.82}
           className={animated ? "anim" : undefined}
           style={
             animated
@@ -390,11 +365,136 @@ function cap(b: Building, stroke: string): ReactNode {
   return null;
 }
 
-const CARS = [
-  { lane: GROUND + 30, dur: 3.7, delay: -1.9, rev: false, body: "#ff5a8a", roof: "#3a1030" },
-  { lane: GROUND + 30, dur: 4.9, delay: -3.4, rev: false, body: "#ffd166", roof: "#4a3510" },
-  { lane: GROUND + 84, dur: 4.3, delay: -2.6, rev: true, body: "#7c5cff", roof: "#241a3a" },
-  { lane: GROUND + 84, dur: 5.6, delay: -4.8, rev: true, body: "#59e0d0", roof: "#0f3b38" },
+type VehicleKind = "sedan" | "taxi" | "van" | "police" | "ambulance";
+
+/** Wheels sit on the same baseline for every body, so the fleet lines up. */
+function Wheels({ a, b }: { a: number; b: number }) {
+  return (
+    <>
+      {[a, b].map((wx, i) => (
+        <g key={i}>
+          <circle cx={wx} cy="18" r="8.5" fill="#0d0716" />
+          <circle cx={wx} cy="18" r="3.6" fill="#4a4058" />
+        </g>
+      ))}
+    </>
+  );
+}
+
+function Vehicle({ kind, body, roof }: { kind: VehicleKind; body: string; roof: string }) {
+  const glass = "#9fd8ff";
+
+  if (kind === "van" || kind === "ambulance") {
+    const amb = kind === "ambulance";
+    const L = amb ? 112 : 102;
+    return (
+      <g>
+        {/* box body with a stepped-down cab */}
+        <path
+          d={`M0 -22 L${L - 34} -22 L${L - 34} -8 L${L - 6} 6 L${L} 6 L${L} 17 L0 17 Z`}
+          fill={amb ? "#f2f4f8" : body}
+        />
+        <rect x={L - 32} y="-6" width="20" height="13" rx="2.5" fill={glass} opacity="0.5" />
+        <rect x="6" y="-16" width="14" height="11" rx="2" fill={glass} opacity="0.28" />
+        {amb ? (
+          <>
+            <rect x="20" y="-14" width="46" height="9" rx="2" fill="#e23a3a" />
+            <g fill="#e23a3a">
+              <rect x="36" y="-6" width="16" height="5" rx="1" />
+              <rect x="41.5" y="-11.5" width="5" height="16" rx="1" />
+            </g>
+            {/* twin beacons, alternating */}
+            <rect
+              className="anim"
+              x={L - 40}
+              y="-27"
+              width="9"
+              height="5"
+              rx="2"
+              fill="#ff4d4d"
+              style={{ animation: "beacon-a 0.9s steps(1) infinite" }}
+            />
+            <rect
+              className="anim"
+              x={L - 29}
+              y="-27"
+              width="9"
+              height="5"
+              rx="2"
+              fill="#4db4ff"
+              style={{ animation: "beacon-b 0.9s steps(1) infinite" }}
+            />
+          </>
+        ) : (
+          <rect x="18" y="-12" width="52" height="7" rx="2" fill={roof} opacity="0.6" />
+        )}
+        <Wheels a={24} b={L - 24} />
+        <circle cx={L - 2} cy="9" r="3.4" fill="#fff4c4" />
+        <rect x="0" y="6" width="4" height="5" rx="1.5" fill="#ff6060" />
+      </g>
+    );
+  }
+
+  // saloon shell shared by sedan, taxi and the patrol car
+  return (
+    <g>
+      <rect x="0" y="-2" width="88" height="19" rx="8" fill={body} />
+      <path d="M20 -2 L28 -19 L60 -19 L72 -2 Z" fill={roof} />
+      <rect x="30" y="-16" width="15" height="12" rx="2" fill={glass} opacity="0.45" />
+      <rect x="49" y="-16" width="16" height="12" rx="2" fill={glass} opacity="0.35" />
+      {kind === "taxi" && (
+        <>
+          <rect x="36" y="-25" width="18" height="7" rx="2" fill="#ffd166" />
+          <rect x="0" y="4" width="88" height="4" fill="#1c1626" opacity="0.35" />
+        </>
+      )}
+      {kind === "police" && (
+        <>
+          <rect x="30" y="2" width="34" height="9" rx="2" fill="#f2f4f8" opacity="0.9" />
+          <rect
+            className="anim"
+            x="32"
+            y="-25"
+            width="11"
+            height="6"
+            rx="2"
+            fill="#4db4ff"
+            style={{ animation: "beacon-a 0.8s steps(1) infinite" }}
+          />
+          <rect
+            className="anim"
+            x="45"
+            y="-25"
+            width="11"
+            height="6"
+            rx="2"
+            fill="#ff4d4d"
+            style={{ animation: "beacon-b 0.8s steps(1) infinite" }}
+          />
+        </>
+      )}
+      <Wheels a={22} b={68} />
+      <circle cx="86" cy="8" r="3.6" fill="#fff4c4" />
+      <rect x="0" y="5" width="4" height="5" rx="1.5" fill="#ff6060" />
+    </g>
+  );
+}
+
+/** Same traffic density as before — just a more varied fleet. */
+const CARS: {
+  lane: number;
+  dur: number;
+  delay: number;
+  rev: boolean;
+  kind: VehicleKind;
+  body: string;
+  roof: string;
+}[] = [
+  { lane: GROUND + 30, dur: 4.4, delay: -1.9, rev: false, kind: "sedan", body: "#ff5a8a", roof: "#3a1030" },
+  { lane: GROUND + 30, dur: 5.6, delay: -3.4, rev: false, kind: "van", body: "#5f8ad8", roof: "#24365c" },
+  { lane: GROUND + 30, dur: 6.4, delay: -5.2, rev: false, kind: "ambulance", body: "#f2f4f8", roof: "#f2f4f8" },
+  { lane: GROUND + 84, dur: 4.9, delay: -2.6, rev: true, kind: "taxi", body: "#ffd166", roof: "#4a3510" },
+  { lane: GROUND + 84, dur: 5.9, delay: -4.8, rev: true, kind: "police", body: "#25304a", roof: "#101725" },
 ];
 
 function Walker({ tint, step, phase }: { tint: string; step: number; phase: number }) {
@@ -432,23 +532,36 @@ const PEOPLE = [
   { dur: 34, delay: -27.5, rev: true, s: 1, tint: "var(--person)", step: 0.66 },
 ];
 
-/** A gull silhouette; wings held mid-beat. */
-function Bird({ s = 1 }: { s?: number }) {
+/** A gull: wings beat on their own cycle, body rides a shallow glide. */
+function Bird({ s = 1, beat, phase }: { s?: number; beat: number; phase: number }) {
   return (
-    <path
-      d="M-13 0 C -8 -7, -4 -8, 0 -2 C 4 -8, 8 -7, 13 0 C 8 -3, 4 -3, 0 2 C -4 -3, -8 -3, -13 0 Z"
-      fill="#2f2140"
-      transform={`scale(${s})`}
-    />
+    <g transform={`scale(${s})`}>
+      <g className="anim" style={{ animation: `glide-y ${beat * 3.4}s ease-in-out ${phase}s infinite` }}>
+        <path
+          className="anim wing"
+          d="M-1 0 C -6 -4, -11 -6, -15 -3 C -11 -1, -5 0, -1 1 Z"
+          fill="#2f2140"
+          style={{ animation: `flap-a ${beat}s ease-in-out ${phase}s infinite` }}
+        />
+        <path
+          className="anim wing wing--r"
+          d="M1 0 C 6 -4, 11 -6, 15 -3 C 11 -1, 5 0, 1 1 Z"
+          fill="#2f2140"
+          style={{ animation: `flap-b ${beat}s ease-in-out ${phase}s infinite` }}
+        />
+        <ellipse cx="0" cy="0" rx="3.4" ry="1.7" fill="#2f2140" />
+        <path d="M3 -0.4 l3.4 0.6 l-3.4 0.8 Z" fill="#2f2140" />
+      </g>
+    </g>
   );
 }
 
 const BIRDS = [
-  { y: 2320, s: 1, dur: 26, delay: -6.2 },
-  { y: 2352, s: 0.8, dur: 26, delay: -4.1 },
-  { y: 2298, s: 0.7, dur: 26, delay: -8.7 },
-  { y: 2610, s: 0.9, dur: 34, delay: -19.3 },
-  { y: 2648, s: 0.65, dur: 34, delay: -16.8 },
+  { y: 2320, s: 1, dur: 26, delay: -6.2, beat: 0.52, phase: -0.11 },
+  { y: 2352, s: 0.8, dur: 26, delay: -4.1, beat: 0.58, phase: -0.34 },
+  { y: 2298, s: 0.7, dur: 26, delay: -8.7, beat: 0.47, phase: -0.62 },
+  { y: 2610, s: 0.9, dur: 34, delay: -19.3, beat: 0.55, phase: -0.2 },
+  { y: 2648, s: 0.65, dur: 34, delay: -16.8, beat: 0.62, phase: -0.48 },
 ];
 
 /** Someone flying a kite, string running up into the sky band. */
@@ -561,12 +674,11 @@ function Surface() {
         const head = GROUND - postH;
         return (
           <g key={i}>
-            {/* light thrown down onto the pavement, so the people read */}
-            <path
-              d={`M ${x - 6} ${head + 8} L ${x - 96} ${GROUND} L ${x + 96} ${GROUND} L ${x + 10} ${head + 8} Z`}
-              fill="url(#lampcone)"
-            />
-            <ellipse cx={x + 2} cy={GROUND} rx="98" ry="13" fill="url(#lamppool)" />
+            {/* a lamp glows around itself and pools on the pavement — no hard
+                cone sheet, which read as a solid triangle rather than light */}
+            <ellipse cx={x + 26} cy={head - 10} rx="70" ry="54" fill="url(#lampglow)" />
+            <ellipse cx={x + 22} cy={GROUND - 2} rx="104" ry="15" fill="url(#lamppool)" />
+            <ellipse cx={x + 22} cy={GROUND - 2} rx="52" ry="8" fill="url(#lamppool)" />
             <rect x={x} y={head} width="5" height={postH} fill="#3a2a52" />
             <path d={`M ${x + 2} ${head} q 0 -14 22 -14`} fill="none" stroke="#3a2a52" strokeWidth="5" />
             <ellipse cx={x + 26} cy={head - 12} rx="13" ry="6" fill="#ffe9b0" />
@@ -594,7 +706,7 @@ function Surface() {
         <g key={`bird${i}`} transform={`translate(0 ${b.y})`}>
           <g className="anim" style={{ animation: `fly-x ${b.dur}s linear ${b.delay}s infinite` }}>
             <g transform={`translate(${i * 46} 0)`}>
-              <Bird s={b.s} />
+              <Bird s={b.s} beat={b.beat} phase={b.phase} />
             </g>
           </g>
         </g>
@@ -615,16 +727,8 @@ function Surface() {
             className="anim"
             style={{ animation: `${c.rev ? "car-x-rev" : "car-x"} ${c.dur}s linear ${c.delay}s infinite` }}
           >
-            <g transform={c.rev ? "scale(-1,1) translate(-88 0)" : undefined}>
-              <rect x="0" y="-2" width="88" height="19" rx="8" fill={c.body} />
-              <path d="M20 -2 L28 -19 L60 -19 L72 -2 Z" fill={c.roof} />
-              <rect x="30" y="-16" width="16" height="12" rx="2" fill="#9fd8ff" opacity="0.45" />
-              <rect x="50" y="-16" width="16" height="12" rx="2" fill="#9fd8ff" opacity="0.35" />
-              <circle cx="22" cy="18" r="8" fill="#0d0716" />
-              <circle cx="22" cy="18" r="3.4" fill="#3a2f4a" />
-              <circle cx="68" cy="18" r="8" fill="#0d0716" />
-              <circle cx="68" cy="18" r="3.4" fill="#3a2f4a" />
-              <circle cx="86" cy="8" r="3.6" fill="#fff4c4" />
+            <g transform={c.rev ? "scale(-1,1) translate(-112 0)" : undefined}>
+              <Vehicle kind={c.kind} body={c.body} roof={c.roof} />
             </g>
           </g>
         </g>
@@ -1331,13 +1435,18 @@ export default function Descent() {
           <stop offset="100%" stopColor="#ff9dc4" stopOpacity="0.15" />
         </linearGradient>
 
-        <linearGradient id="lampcone" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffe9b0" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#ffe9b0" stopOpacity="0" />
-        </linearGradient>
+        <radialGradient id="lampglow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ffe9b0" stopOpacity="0.42" />
+          <stop offset="45%" stopColor="#ffd98a" stopOpacity="0.13" />
+          <stop offset="100%" stopColor="#ffd98a" stopOpacity="0" />
+        </radialGradient>
+        <filter id="soft" x="-40%" y="-80%" width="180%" height="260%">
+          <feGaussianBlur stdDeviation="4.5" />
+        </filter>
         <radialGradient id="lamppool" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ffe9b0" stopOpacity="0.34" />
-          <stop offset="100%" stopColor="#ffe9b0" stopOpacity="0" />
+          <stop offset="0%" stopColor="#ffe4a0" stopOpacity="0.26" />
+          <stop offset="55%" stopColor="#ffe4a0" stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#ffe4a0" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="train" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ff5f80" />

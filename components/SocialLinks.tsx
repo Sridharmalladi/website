@@ -2,7 +2,7 @@
 
 import { Github, Linkedin, Mail } from "lucide-react";
 import { site } from "@/config/site";
-import ArcadeButton from "@/components/ui/ArcadeButton";
+import Button from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 export default function SocialLinks({
@@ -12,18 +12,17 @@ export default function SocialLinks({
   solid?: boolean;
   className?: string;
 }) {
-  const variant = solid ? "arcade-btn arcade-btn--solid" : "arcade-btn";
   return (
     <div className={cn("flex flex-wrap gap-3", className)}>
-      <ArcadeButton href={site.socials.github} external className={variant}>
-        <Github size={16} aria-hidden /> GITHUB
-      </ArcadeButton>
-      <ArcadeButton href={site.socials.linkedin} external className={variant}>
-        <Linkedin size={16} aria-hidden /> LINKEDIN
-      </ArcadeButton>
-      <ArcadeButton href={`mailto:${site.socials.email}`} className={variant}>
-        <Mail size={16} aria-hidden /> EMAIL
-      </ArcadeButton>
+      <Button href={site.socials.github} external solid={solid}>
+        <Github size={17} aria-hidden /> GitHub
+      </Button>
+      <Button href={site.socials.linkedin} external>
+        <Linkedin size={17} aria-hidden /> LinkedIn
+      </Button>
+      <Button href={`mailto:${site.socials.email}`}>
+        <Mail size={17} aria-hidden /> Email
+      </Button>
     </div>
   );
 }

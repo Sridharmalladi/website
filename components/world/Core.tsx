@@ -3,35 +3,99 @@
 import Contact from "@/components/Contact";
 
 const CRACKS = [
-  "M800 350 L760 280 L790 220 L750 150",
-  "M800 350 L860 260 L830 190 L870 120",
-  "M800 350 L720 380 L680 330 L630 360",
-  "M800 350 L900 400 L940 350 L1000 390",
-  "M800 350 L780 440 L810 500 L780 560",
+  "M1120 450 L1060 360 L1096 286 L1042 190",
+  "M1120 450 L1204 340 L1168 258 L1220 160",
+  "M1120 450 L1000 486 L946 428 L872 470",
+  "M1120 450 L1248 510 L1300 448 L1392 496",
+  "M1120 450 L1088 566 L1132 640 L1090 726",
+  "M1120 450 L1236 620 L1206 700",
 ];
+
+const EMBERS = Array.from({ length: 18 }, (_, i) => ({
+  x: 820 + ((i * 137) % 620),
+  y: 640 + ((i * 53) % 200),
+  r: 1.6 + ((i * 11) % 4) * 0.7,
+  delay: (i * 0.7) % 9,
+  dur: 7 + (i % 5) * 2,
+}));
 
 /** Zone 7: the Earth's core. The finale — holds the contact content. */
 export default function Core() {
   return (
-    <section
-      className="relative min-h-[115vh] overflow-hidden"
-      style={{ background: "linear-gradient(to bottom, var(--fossil-3), var(--core-outer) 30%, var(--core-outer) 100%)" }}
-    >
-      <span className="zone-label">CORE</span>
+    <section className="relative min-h-[110svh] overflow-hidden">
+      <span className="zone-label">Core</span>
 
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 1600 900"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden
+      >
+        <defs>
+          <linearGradient id="cr-bg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--fossil-3)" />
+            <stop offset="22%" stopColor="#5c2410" />
+            <stop offset="55%" stopColor="var(--core-outer)" />
+            <stop offset="100%" stopColor="#170401" />
+          </linearGradient>
+          <radialGradient id="cr-halo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="var(--core-mid)" stopOpacity="0.5" />
+            <stop offset="55%" stopColor="var(--core-mid)" stopOpacity="0.14" />
+            <stop offset="100%" stopColor="var(--core-mid)" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="cr-ball" cx="50%" cy="46%" r="58%">
+            <stop offset="0%" stopColor="var(--core-center)" />
+            <stop offset="38%" stopColor="var(--core-hot)" />
+            <stop offset="72%" stopColor="var(--core-mid)" />
+            <stop offset="100%" stopColor="#a12508" />
+          </radialGradient>
+          <linearGradient id="cr-crack" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--core-hot)" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="var(--core-mid)" stopOpacity="0.15" />
+          </linearGradient>
+        </defs>
+
+        <rect width="1600" height="900" fill="url(#cr-bg)" />
+
+        {/* magma veins radiating out of the core */}
         {CRACKS.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke="var(--core-mid)" strokeWidth="3" opacity="0.5" strokeLinecap="round" />
+          <g key={i}>
+            <path d={d} fill="none" stroke="var(--core-mid)" strokeWidth="12" opacity="0.16" strokeLinecap="round" />
+            <path d={d} fill="none" stroke="url(#cr-crack)" strokeWidth="4" strokeLinecap="round" />
+          </g>
         ))}
 
-        <g className="cityscape-anim" style={{ animation: "sun-pulse 5s ease-in-out infinite" }}>
-          <circle cx="800" cy="350" r="260" fill="var(--core-mid)" opacity="0.22" />
-          <circle cx="800" cy="350" r="170" fill="var(--core-mid)" opacity="0.55" />
-          <circle cx="800" cy="350" r="100" fill="var(--core-center)" />
+        {/* the core itself */}
+        <g className="anim" style={{ animation: "soft-pulse 6s ease-in-out infinite" }}>
+          <circle cx="1120" cy="450" r="380" fill="url(#cr-halo)" />
+          <circle cx="1120" cy="450" r="168" fill="url(#cr-ball)" />
+          <ellipse cx="1074" cy="396" rx="62" ry="40" fill="#fff8dc" opacity="0.35" />
         </g>
+
+        {/* rising embers */}
+        {EMBERS.map((e, i) => (
+          <circle
+            key={i}
+            cx={e.x}
+            cy={e.y}
+            r={e.r}
+            fill="var(--core-hot)"
+            className="anim"
+            style={{ animation: `ember-rise ${e.dur}s linear ${-e.delay}s infinite` }}
+          />
+        ))}
       </svg>
 
-      <div className="relative z-10 flex min-h-[100vh] flex-col justify-center px-6 py-24 sm:px-10">
+      {/* scrim behind the copy */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(10,3,1,0.88) 0%, rgba(10,3,1,0.6) 44%, transparent 72%)",
+        }}
+      />
+
+      <div className="relative z-10 flex min-h-[110svh] flex-col justify-center px-6 py-24 sm:px-10">
         <Contact />
       </div>
     </section>

@@ -18,9 +18,12 @@ const body = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: `${site.name} — Portfolio`,
+  title: "Sridhar's Portfolio",
   description: site.tagline,
   metadataBase: new URL("https://sridharmalladi.online"),
+  icons: {
+    icon: "/icon.svg",
+  },
   openGraph: {
     title: `${site.name} — ${site.role}`,
     description: site.tagline,

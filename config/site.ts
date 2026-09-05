@@ -13,6 +13,10 @@ export const site = {
     "Motion Systems",
     "Creative Coding",
   ],
+  // Drop real entries in here whenever you're ready; the section renders
+  // a placeholder while the list is empty.
+  projects: [] as { name: string; blurb: string; href?: string }[],
+
   socials: {
     github: "https://github.com/Sridharmalladi",
     // TODO(sridhar): confirm your real LinkedIn handle.

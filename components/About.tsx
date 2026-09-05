@@ -2,9 +2,8 @@
 
 import { site } from "@/config/site";
 import ScrollReveal from "@/components/ScrollReveal";
-import Card from "@/components/ui/Card";
 
-/** Pure content — the Surface zone owns the background, layout, and scrim. */
+/** Read on the way down through the sky, before the city. */
 export default function About() {
   return (
     <div>
@@ -12,12 +11,9 @@ export default function About() {
         <p className="label" style={{ color: "var(--accent)" }}>
           About
         </p>
-        <h2 className="mx-auto mt-3 max-w-xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
-          What I do
-        </h2>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.08} className="mx-auto mt-6 max-w-2xl space-y-4">
+      <ScrollReveal delay={0.08} className="mx-auto mt-5 max-w-2xl space-y-4">
         {site.about.map((line) => (
           <p
             key={line}
@@ -26,14 +22,6 @@ export default function About() {
           >
             {line}
           </p>
-        ))}
-      </ScrollReveal>
-
-      <ScrollReveal delay={0.16} className="mt-8 flex flex-wrap justify-center gap-3">
-        {site.focus.map((f) => (
-          <Card key={f} className="px-4 py-2 text-sm font-medium">
-            {f}
-          </Card>
         ))}
       </ScrollReveal>
     </div>

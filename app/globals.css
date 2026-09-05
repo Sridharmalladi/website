@@ -52,6 +52,9 @@
   --insect: #0a0706;
 
   /* fossils */
+  --bone: #e6d9ba;
+  --bone-shade: #b6a179;
+  --bone-line: #6d5334;
   --fossil-1: #2a1b11;
   --fossil-2: #3b2817;
   --fossil-3: #4d3421;
@@ -267,6 +270,19 @@ button {
 @keyframes soft-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.86; }
+}
+@keyframes bubble-rise {
+  0% { transform: translateY(0) scale(0.55); opacity: 0; }
+  16% { opacity: 0.85; }
+  100% { transform: translateY(-330px) scale(1.35); opacity: 0; }
+}
+@keyframes flare-flicker {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+@keyframes granule {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
 }
 @keyframes ember-rise {
   0% { transform: translateY(0); opacity: 0; }

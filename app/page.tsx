@@ -1,5 +1,10 @@
-import GameStage from "@/components/GameStage";
+import Portfolio from "@/components/Portfolio";
 
 export default function Page() {
-  return <GameStage />;
+  return (
+    <>
+      <div className="bg-field" aria-hidden />
+      <Portfolio />
+    </>
+  );
 }

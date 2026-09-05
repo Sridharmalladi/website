@@ -7,74 +7,16 @@
   --font-pixel: "Pixelify Sans", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --world-fade: 420ms;
-}
-
-/* DAY -------------------------------------------------------------------- */
-:root,
-:root[data-world="DAY"] {
-  --sky-top: #a9e2ff;
-  --sky-bot: #eaf8ff;
-  --celestial: #ffd66b;
-  --celestial-glow: #fff2c4;
-  --hill-far: #bfe6a6;
-  --hill-near: #8bd177;
-  --ground: #6c4a30;
-  --ground-top: #8a5e3c;
-  --platform: #d7b078;
-  --platform-edge: #9c6b3c;
-  --panel: rgba(255, 255, 255, 0.82);
-  --panel-border: rgba(28, 36, 51, 0.16);
-  --text: #1b2333;
-  --text-dim: #566074;
-  --accent: #1f6feb;
-  --accent-2: #ff4d8d;
-  --accent-ink: #ffffff;
-  --glow: rgba(31, 111, 235, 0.45);
-}
-
-/* DUSK — the loud one -------------------------------------------------- */
-:root[data-world="DUSK"] {
-  --sky-top: #ff5aa0;
-  --sky-bot: #7b2ff7;
-  --celestial: #ffe27a;
-  --celestial-glow: #ffd1e6;
-  --hill-far: #6b39b3;
-  --hill-near: #3d1f78;
-  --ground: #241042;
-  --ground-top: #3a1c63;
-  --platform: #b45cff;
-  --platform-edge: #ff6fc7;
-  --panel: rgba(30, 10, 46, 0.66);
-  --panel-border: rgba(255, 111, 199, 0.4);
-  --text: #fff0fb;
-  --text-dim: #e7b8dd;
-  --accent: #ff2d95;
-  --accent-2: #ffd166;
+  --bg: #0b0710;
+  --bg-2: #140b20;
+  --panel: rgba(255, 255, 255, 0.045);
+  --panel-border: rgba(255, 255, 255, 0.10);
+  --text: #f4eefb;
+  --text-dim: #ad9dc4;
+  --accent: #ff2e93;
+  --accent-2: #7c5cff;
   --accent-ink: #1a0620;
-  --glow: rgba(255, 95, 160, 0.55);
-}
-
-/* NIGHT — arcade after dark ------------------------------------------- */
-:root[data-world="NIGHT"] {
-  --sky-top: #0a0f2c;
-  --sky-bot: #141c44;
-  --celestial: #cdd6ff;
-  --celestial-glow: #6b7bd6;
-  --hill-far: #182150;
-  --hill-near: #0d1334;
-  --ground: #080d24;
-  --ground-top: #131b45;
-  --platform: #1b2452;
-  --platform-edge: #37e6d5;
-  --panel: rgba(9, 13, 34, 0.74);
-  --panel-border: rgba(55, 230, 213, 0.36);
-  --text: #eaf0ff;
-  --text-dim: #8ea0d6;
-  --accent: #37e6d5;
-  --accent-2: #ff5fb0;
-  --accent-ink: #04121a;
-  --glow: rgba(55, 230, 213, 0.5);
+  --glow: rgba(255, 46, 147, 0.35);
 }
 
 /* ============================================================= BASE ===== */
@@ -86,22 +28,11 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  background: var(--sky-bot);
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
-}
-
-body {
-  overflow: hidden;
-}
-
-@media (max-width: 780px) {
-  body {
-    overflow-y: auto;
-  }
+  scroll-behavior: smooth;
 }
 
 ::selection {
@@ -115,33 +46,29 @@ button {
 
 .font-pixel {
   font-family: var(--font-pixel);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
-/* Smooth palette transition when the world changes */
-.world-fade,
-.world-fade * {
-  transition:
-    background-color var(--world-fade) ease,
-    border-color var(--world-fade) ease,
-    color var(--world-fade) ease,
-    box-shadow var(--world-fade) ease,
-    fill var(--world-fade) ease,
-    stroke var(--world-fade) ease;
+/* faint fixed backdrop: two soft accent blooms, nothing bright/animated */
+.bg-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 40% at 15% 0%, rgba(255, 46, 147, 0.14), transparent 60%),
+    radial-gradient(50% 35% at 100% 25%, rgba(124, 92, 255, 0.12), transparent 60%),
+    var(--bg);
 }
 
 /* ======================================================= COMPONENTS ==== */
-/* Sleek pixel panel: crisp 2px border + stepped corner notches */
 .pixel-panel {
   position: relative;
   background: var(--panel);
-  border: 2px solid var(--panel-border);
-  border-radius: 4px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 10px 30px -12px rgba(0, 0, 0, 0.4),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .pixel-panel::before,
 .pixel-panel::after {
@@ -150,55 +77,65 @@ button {
   width: 6px;
   height: 6px;
   background: var(--accent);
+  opacity: 0.9;
 }
 .pixel-panel::before {
-  top: -2px;
-  left: -2px;
-  box-shadow: calc(100% + 2px) 0 0 var(--accent);
+  top: -1px;
+  left: -1px;
 }
 .pixel-panel::after {
-  bottom: -2px;
-  left: -2px;
-  box-shadow: calc(100% + 2px) 0 0 var(--accent);
+  bottom: -1px;
+  right: -1px;
 }
 
-/* Arcade button: sits on a hard shadow, presses down on :active */
 .arcade-btn {
-  --lift: 4px;
+  --lift: 3px;
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
+  gap: 0.55rem;
+  padding: 0.65rem 1.1rem;
   min-height: 44px;
   font-family: var(--font-pixel);
   font-size: 0.8rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   color: var(--text);
   background: var(--panel);
-  border: 2px solid var(--panel-border);
-  border-radius: 4px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
   box-shadow: 0 var(--lift) 0 0 var(--accent);
   transform: translateY(0);
   transition:
     transform 90ms ease,
     box-shadow 90ms ease,
-    background-color 160ms ease;
+    background-color 160ms ease,
+    border-color 160ms ease;
   cursor: pointer;
 }
 .arcade-btn:hover {
-  background: color-mix(in srgb, var(--panel) 70%, var(--accent) 30%);
+  border-color: var(--accent);
+  background: rgba(255, 46, 147, 0.08);
 }
 .arcade-btn:active {
   transform: translateY(var(--lift));
   box-shadow: 0 0 0 0 var(--accent);
 }
 .arcade-btn:focus-visible {
-  outline: 3px solid var(--accent-2);
+  outline: 2px solid var(--accent-2);
   outline-offset: 2px;
 }
+.arcade-btn--solid {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 var(--lift) 0 0 var(--accent-2);
+}
+.arcade-btn--solid:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  filter: brightness(1.08);
+}
 
-/* Cursor glow — the hover light the user liked, retro-tuned + cheap */
+/* cursor-tracked hover light, kept from the earlier build */
 .cursor-glow {
   position: relative;
   overflow: hidden;
@@ -208,80 +145,22 @@ button {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    260px circle at var(--mx, -100px) var(--my, -100px),
+    240px circle at var(--mx, -100px) var(--my, -100px),
     var(--glow),
     transparent 60%
   );
   opacity: 0;
-  transition: opacity 240ms ease;
+  transition: opacity 220ms ease;
   pointer-events: none;
 }
 .cursor-glow:hover::after {
   opacity: 1;
 }
 
-/* ========================================================== PLAYER ===== */
-.player {
-  transition: none;
-}
-.player .player-leg {
-  transform-origin: top center;
-}
-/* idle sway */
-.player[data-moving="false"] {
-  animation: bob 2.2s ease-in-out infinite;
-}
-.player[data-moving="false"] .player-leg--l,
-.player[data-moving="false"] .player-leg--r {
-  animation: none;
-}
-/* walk cycle */
-.player[data-moving="true"] .player-leg--l {
-  animation: step 260ms steps(2) infinite;
-}
-.player[data-moving="true"] .player-leg--r {
-  animation: step 260ms steps(2) infinite;
-  animation-delay: -130ms;
-}
-.player[data-air="true"] .player-leg--l {
-  transform: rotate(-16deg);
-}
-.player[data-air="true"] .player-leg--r {
-  transform: rotate(16deg);
-}
-@keyframes step {
-  0% {
-    transform: rotate(-22deg);
-  }
-  100% {
-    transform: rotate(22deg);
-  }
-}
-@keyframes blink-eye {
-  0%,
-  92%,
-  100% {
-    transform: scaleY(1);
-  }
-  96% {
-    transform: scaleY(0.1);
-  }
-}
-.player-eye {
-  animation: blink-eye 4s steps(1) infinite;
-}
-
 /* ==================================================== REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
-  .world-fade,
-  .world-fade * {
-    transition: none !important;
-  }
-  .parallax-layer {
-    transform: none !important;
-  }
-  .player,
-  .player * {
-    animation: none !important;
+  html,
+  body {
+    scroll-behavior: auto;
   }
 }

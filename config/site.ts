@@ -1,12 +1,17 @@
-// Single edit point for identity + contact.
+// Single edit point for identity + contact + copy.
 export const site = {
   name: "SRIDHAR MALLADI",
-  handle: "PLAYER 1",
-  tagline: "Developer who builds interfaces that feel like they have weight.",
+  role: "Developer",
+  tagline: "I build interfaces that feel like they have weight to them.",
   about: [
-    "I make web things — interactive UI, playful motion, small game-shaped experiments.",
-    "This page is one of them: a tiny sleek platformer. Walk around, poke at it.",
-    "Projects load onto their own platforms soon.",
+    "I make interactive UI, playful motion, and the small details that make software feel considered rather than assembled.",
+    "Comfortable across the stack, happiest on the front end — animation, layout systems, and interactions that hold up under real use.",
+  ],
+  focus: [
+    "Frontend Engineering",
+    "Interaction Design",
+    "Motion Systems",
+    "Creative Coding",
   ],
   socials: {
     github: "https://github.com/Sridharmalladi",

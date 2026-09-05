@@ -22,15 +22,15 @@ export const metadata: Metadata = {
   description: site.tagline,
   metadataBase: new URL("https://sridharmalladi.online"),
   openGraph: {
-    title: `${site.name} — a tiny sleek platformer`,
+    title: `${site.name} — ${site.role}`,
     description: site.tagline,
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#7b2ff7",
-  colorScheme: "light dark",
+  themeColor: "#0b0710",
+  colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
 };
@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-world="DAY" className={`${pixel.variable} ${body.variable}`}>
+    <html lang="en" className={`${pixel.variable} ${body.variable}`}>
       <body>{children}</body>
     </html>
   );

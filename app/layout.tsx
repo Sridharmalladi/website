@@ -1,26 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Della_Respira } from "next/font/google";
 import { site } from "@/config/site";
 import "./globals.css";
 
 /**
- * Inter — the readability/aesthetic default across most modern product design
- * (GitHub, Vercel, Figma, Linear). One family, full weight range, no novelty face.
+ * Della Respira. It ships a single 400 weight, so hierarchy comes from size,
+ * letter-spacing and colour rather than boldness — asking the browser to
+ * synthesise bold from one weight just smears the serifs.
  */
-const inter = Inter({
+const della = Della_Respira({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400"],
   variable: "--font-body",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Sridhar's Portfolio",
+  title: "Sridhar Malladi",
   description: site.tagline,
   metadataBase: new URL("https://sridharmalladi.online"),
   icons: { icon: "/icon.svg" },
   openGraph: {
-    title: `${site.name} — ${site.role}`,
+    title: site.name,
     description: site.tagline,
     type: "website",
   },
@@ -39,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={della.variable}>
       <body>{children}</body>
     </html>
   );

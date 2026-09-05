@@ -769,7 +769,7 @@ const TRAIN_TOP = 4138;
 const TRAIN_H = 3.6 * M; // 72
 
 const CAR_L = 18 * M; // 18 m carriage
-const FAR_RAIL = 4116; // the line behind, drawn higher and smaller
+const FAR_RAIL = 4128; // the line behind — same stock, just further away
 const FAR_TOP = FAR_RAIL - TRAIN_H - 20;
 
 /** One 18 m x 3.6 m carriage, wheels riding the rail. */
@@ -805,6 +805,44 @@ function Carriage({ x, seed, top = TRAIN_TOP, railY = RAIL_Y }: { x: number; see
           <circle cx={bx + 24} cy={wheelY} r="3.4" fill="#4a2b38" />
         </g>
       ))}
+    </g>
+  );
+}
+
+/** Cab car; shared by both services so the two trains are identical stock. */
+function Locomotive({ top = TRAIN_TOP, railY = RAIL_Y }: { top?: number; railY?: number }) {
+  return (
+    <g transform={`translate(${(CAR_L + 8) * 3} 0)`}>
+          <path
+            d={`M0 ${top} L${CAR_L - 90} ${top} C ${CAR_L - 44} ${top}, ${CAR_L - 8} ${top + 20}, ${CAR_L} ${top + 40}
+                L${CAR_L} ${top + TRAIN_H - 8} A 8 8 0 0 1 ${CAR_L - 8} ${top + TRAIN_H} L0 ${top + TRAIN_H} Z`}
+            fill="url(#train)"
+          />
+          <rect x="5" y={top - 5} width={CAR_L - 96} height="10" rx="5" fill="var(--train-roof)" />
+          <path
+            d={`M${CAR_L - 86} ${top + 12} C ${CAR_L - 48} ${top + 14}, ${CAR_L - 20} ${top + 26}, ${CAR_L - 10} ${top + 42} L${CAR_L - 86} ${top + 42} Z`}
+            fill="var(--train-window)"
+            opacity="0.95"
+          />
+          <circle cx={CAR_L - 52} cy={top + 30} r="5" fill="#5a3520" opacity="0.8" />
+          {[0, 1, 2, 3].map((i) => (
+            <rect key={i} x={26 + i * 52} y={top + 14} width="30" height="26" rx="4" fill="var(--train-window)" opacity="0.9" />
+          ))}
+          <circle cx={CAR_L - 14} cy={top + 56} r="5" fill="#fff6cf" />
+          <path
+            d={`M${CAR_L - 10} ${top + 46} L${CAR_L + 200} ${top + 20} L${CAR_L + 200} ${top + 92} L${CAR_L - 10} ${top + 66} Z`}
+            fill="url(#headlamp)"
+          />
+          <rect x="0" y={top + TRAIN_H - 9} width={CAR_L - 8} height="9" rx="3" fill="#2a1020" opacity="0.85" />
+          {[34, CAR_L - 76].map((bx, i) => (
+            <g key={i}>
+              <rect x={bx} y={top + TRAIN_H} width="34" height="8" rx="3" fill="#1a0d14" />
+              <circle cx={bx + 9} cy={railY - 5} r="10" fill="#241119" />
+              <circle cx={bx + 9} cy={railY - 5} r="3.6" fill="#4a2b38" />
+              <circle cx={bx + 25} cy={railY - 5} r="10" fill="#241119" />
+              <circle cx={bx + 25} cy={railY - 5} r="3.6" fill="#4a2b38" />
+            </g>
+          ))}
     </g>
   );
 }
@@ -882,14 +920,13 @@ function Underground() {
         </g>
       ))}
 
-      {/* opposite service on the far line */}
-      <g opacity="0.72" className="anim" style={{ animation: "train-x-rev 7.4s linear -2.2s infinite" }}>
-        <g transform={`translate(0 ${FAR_TOP - TRAIN_TOP}) scale(0.84)`} style={{ transformOrigin: `0px ${TRAIN_TOP}px` }}>
-          <g transform="scale(-1 1)">
-            <Carriage x={-CAR_L} seed={4} />
-            <Carriage x={-(CAR_L + 8) * 2 + CAR_L} seed={5} />
-            <Carriage x={-(CAR_L + 8) * 3 + CAR_L} seed={6} />
-          </g>
+      {/* opposite service on the far line — same stock, same size, mirrored */}
+      <g opacity="0.86" className="anim" style={{ animation: "train-x-rev 7.4s linear -2.2s infinite" }}>
+        <g transform={`translate(${(CAR_L + 8) * 4} 0) scale(-1 1)`}>
+          <Carriage x={0} seed={4} top={FAR_TOP} railY={FAR_RAIL} />
+          <Carriage x={CAR_L + 8} seed={5} top={FAR_TOP} railY={FAR_RAIL} />
+          <Carriage x={(CAR_L + 8) * 2} seed={6} top={FAR_TOP} railY={FAR_RAIL} />
+          <Locomotive top={FAR_TOP} railY={FAR_RAIL} />
         </g>
       </g>
 
@@ -897,38 +934,7 @@ function Underground() {
         <Carriage x={0} seed={2} />
         <Carriage x={CAR_L + 8} seed={1} />
         <Carriage x={(CAR_L + 8) * 2} seed={3} />
-        <g transform={`translate(${CAR_L * 3 + 24} 0)`}>
-          <path
-            d={`M0 ${TRAIN_TOP} L${CAR_L - 90} ${TRAIN_TOP} C ${CAR_L - 44} ${TRAIN_TOP}, ${CAR_L - 8} ${TRAIN_TOP + 20}, ${CAR_L} ${TRAIN_TOP + 40}
-                L${CAR_L} ${TRAIN_TOP + TRAIN_H - 8} A 8 8 0 0 1 ${CAR_L - 8} ${TRAIN_TOP + TRAIN_H} L0 ${TRAIN_TOP + TRAIN_H} Z`}
-            fill="url(#train)"
-          />
-          <rect x="5" y={TRAIN_TOP - 5} width={CAR_L - 96} height="10" rx="5" fill="var(--train-roof)" />
-          <path
-            d={`M${CAR_L - 86} ${TRAIN_TOP + 12} C ${CAR_L - 48} ${TRAIN_TOP + 14}, ${CAR_L - 20} ${TRAIN_TOP + 26}, ${CAR_L - 10} ${TRAIN_TOP + 42} L${CAR_L - 86} ${TRAIN_TOP + 42} Z`}
-            fill="var(--train-window)"
-            opacity="0.95"
-          />
-          <circle cx={CAR_L - 52} cy={TRAIN_TOP + 30} r="5" fill="#5a3520" opacity="0.8" />
-          {[0, 1, 2, 3].map((i) => (
-            <rect key={i} x={26 + i * 52} y={TRAIN_TOP + 14} width="30" height="26" rx="4" fill="var(--train-window)" opacity="0.9" />
-          ))}
-          <circle cx={CAR_L - 14} cy={TRAIN_TOP + 56} r="5" fill="#fff6cf" />
-          <path
-            d={`M${CAR_L - 10} ${TRAIN_TOP + 46} L${CAR_L + 200} ${TRAIN_TOP + 20} L${CAR_L + 200} ${TRAIN_TOP + 92} L${CAR_L - 10} ${TRAIN_TOP + 66} Z`}
-            fill="url(#headlamp)"
-          />
-          <rect x="0" y={TRAIN_TOP + TRAIN_H - 9} width={CAR_L - 8} height="9" rx="3" fill="#2a1020" opacity="0.85" />
-          {[34, CAR_L - 76].map((bx, i) => (
-            <g key={i}>
-              <rect x={bx} y={TRAIN_TOP + TRAIN_H} width="34" height="8" rx="3" fill="#1a0d14" />
-              <circle cx={bx + 9} cy={RAIL_Y - 5} r="10" fill="#241119" />
-              <circle cx={bx + 9} cy={RAIL_Y - 5} r="3.6" fill="#4a2b38" />
-              <circle cx={bx + 25} cy={RAIL_Y - 5} r="10" fill="#241119" />
-              <circle cx={bx + 25} cy={RAIL_Y - 5} r="3.6" fill="#4a2b38" />
-            </g>
-          ))}
-        </g>
+        <Locomotive />
       </g>
     </>
   );

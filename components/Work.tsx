@@ -12,14 +12,14 @@ export default function Work() {
         <p className="label" style={{ color: "var(--accent)" }}>
           Work
         </p>
-        <h2 className="mx-auto mt-3 max-w-xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
+        <h2 className="mx-auto mt-3 max-w-xl text-3xl font-normal tracking-[0.01em] sm:text-4xl">
           What I do
         </h2>
       </ScrollReveal>
 
       <ScrollReveal delay={0.08} className="mt-7 flex flex-wrap justify-center gap-3">
         {site.focus.map((f) => (
-          <Card key={f} className="px-4 py-2 text-sm font-medium">
+          <Card key={f} className="px-4 py-2 text-sm">
             {f}
           </Card>
         ))}
@@ -33,7 +33,7 @@ export default function Work() {
           <div className="mx-auto mt-5 grid max-w-3xl gap-3 sm:grid-cols-2">
             {site.projects.map((p) => (
               <Card key={p.name} className="p-5 text-left">
-                <h3 className="text-base font-semibold">{p.name}</h3>
+                <h3 className="text-base">{p.name}</h3>
                 <p className="mt-1.5 text-sm" style={{ color: "var(--text-dim)" }}>
                   {p.blurb}
                 </p>
@@ -42,7 +42,7 @@ export default function Work() {
                     href={p.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-block text-sm font-medium"
+                    className="mt-3 inline-block text-sm"
                     style={{ color: "var(--accent)" }}
                   >
                     View →

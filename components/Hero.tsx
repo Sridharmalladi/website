@@ -7,7 +7,7 @@ import SocialLinks from "@/components/SocialLinks";
 export default function Hero() {
   return (
     <div>
-      <h1 className="mx-auto max-w-3xl text-[12vw] font-extrabold leading-[0.95] tracking-[-0.03em] sm:text-6xl md:text-7xl">
+      <h1 className="mx-auto max-w-3xl text-[11vw] font-normal leading-[1.02] tracking-[0.01em] sm:text-6xl md:text-7xl">
         {site.name}
       </h1>
 

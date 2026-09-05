@@ -133,6 +133,32 @@ function Space() {
         </g>
       ))}
 
+      {/* not from here */}
+      {[
+        { x: 470, y: 760, s: 1, dur: 9, delay: -2.6 },
+        { x: 1040, y: 1290, s: 0.62, dur: 12, delay: -7.4 },
+      ].map((u, i) => (
+        <g key={`ufo${i}`} transform={`translate(${u.x} ${u.y}) scale(${u.s})`}>
+          <g className="anim" style={{ animation: `hover-bob ${u.dur}s ease-in-out ${u.delay}s infinite` }}>
+            <ellipse cx="0" cy="26" rx="54" ry="12" fill="url(#beam)" />
+            <ellipse cx="0" cy="0" rx="46" ry="13" fill="url(#hull)" />
+            <path d="M-24 -6 C -18 -22, 18 -22, 24 -6 Z" fill="url(#canopy)" />
+            <ellipse cx="0" cy="4" rx="46" ry="6" fill="#1b2340" opacity="0.55" />
+            {[-30, -14, 2, 18, 32].map((lx, k) => (
+              <circle
+                key={k}
+                cx={lx}
+                cy="6"
+                r="3.4"
+                fill="#8ffff0"
+                className="anim"
+                style={{ animation: `twinkle ${1.6 + k * 0.3}s ease-in-out ${-(k * 0.42)}s infinite` }}
+              />
+            ))}
+          </g>
+        </g>
+      ))}
+
       {/* Mars — smallest and furthest left */}
       <g>
         <circle cx="185" cy="330" r="34" fill="url(#mars)" />
@@ -743,31 +769,33 @@ const TRAIN_TOP = 4138;
 const TRAIN_H = 3.6 * M; // 72
 
 const CAR_L = 18 * M; // 18 m carriage
+const FAR_RAIL = 4116; // the line behind, drawn higher and smaller
+const FAR_TOP = FAR_RAIL - TRAIN_H - 20;
 
 /** One 18 m x 3.6 m carriage, wheels riding the rail. */
-function Carriage({ x, seed }: { x: number; seed: number }) {
-  const bottom = TRAIN_TOP + TRAIN_H;
-  const wheelY = RAIL_Y - 5;
+function Carriage({ x, seed, top = TRAIN_TOP, railY = RAIL_Y }: { x: number; seed: number; top?: number; railY?: number }) {
+  const bottom = top + TRAIN_H;
+  const wheelY = railY - 5;
   return (
     <g transform={`translate(${x} 0)`}>
-      <rect x="0" y={TRAIN_TOP} width={CAR_L} height={TRAIN_H} rx="10" fill="url(#train)" />
-      <rect x="5" y={TRAIN_TOP - 5} width={CAR_L - 10} height="10" rx="5" fill="var(--train-roof)" />
+      <rect x="0" y={top} width={CAR_L} height={TRAIN_H} rx="10" fill="url(#train)" />
+      <rect x="5" y={top - 5} width={CAR_L - 10} height="10" rx="5" fill="var(--train-roof)" />
       <rect x="0" y={bottom - 9} width={CAR_L} height="9" rx="3" fill="#2a1020" opacity="0.85" />
       {Array.from({ length: 6 }, (_, i) => {
         const wx = 26 + i * 52;
         return (
           <g key={i}>
-            <rect x={wx} y={TRAIN_TOP + 14} width="30" height="26" rx="4" fill="var(--train-window)" opacity="0.92" />
+            <rect x={wx} y={top + 14} width="30" height="26" rx="4" fill="var(--train-window)" opacity="0.92" />
             {(i + seed) % 3 !== 0 && (
               <g fill="#5a3520" opacity="0.75">
-                <circle cx={wx + 15} cy={TRAIN_TOP + 25} r="5" />
-                <path d={`M${wx + 7} ${TRAIN_TOP + 40} a8 9 0 0 1 16 0 Z`} />
+                <circle cx={wx + 15} cy={top + 25} r="5" />
+                <path d={`M${wx + 7} ${top + 40} a8 9 0 0 1 16 0 Z`} />
               </g>
             )}
           </g>
         );
       })}
-      <rect x={CAR_L - 26} y={TRAIN_TOP + 12} width="16" height={TRAIN_H - 26} rx="3" fill="#3a1526" opacity="0.6" />
+      <rect x={CAR_L - 26} y={top + 12} width="16" height={TRAIN_H - 26} rx="3" fill="#3a1526" opacity="0.6" />
       {[34, CAR_L - 66].map((bx, i) => (
         <g key={i}>
           <rect x={bx} y={bottom} width="32" height="8" rx="3" fill="#1a0d14" />
@@ -820,7 +848,31 @@ function Underground() {
         <rect key={i} x={i * 47} y={RAIL_Y + 12} width="30" height="8" rx="2" fill="#33241b" />
       ))}
       <rect x="0" y={RAIL_Y + 4} width={W} height="5" fill="var(--rail)" />
-      <rect x="0" y={RAIL_Y + 28} width={W} height="5" fill="var(--rail)" opacity="0.7" />
+
+      {/* far track, set higher and smaller so it reads as the line behind */}
+      <rect x="0" y={FAR_RAIL - 4} width={W} height="46" fill="#1a110d" />
+      {Array.from({ length: 30 }, (_, i) => (
+        <rect key={`fs${i}`} x={i * 41} y={FAR_RAIL + 8} width="24" height="6" rx="2" fill="#2c1f17" />
+      ))}
+      <rect x="0" y={FAR_RAIL + 2} width={W} height="4" fill="var(--rail)" opacity="0.65" />
+
+      {/* maintenance level below the ballast: walkway, cable trays, drain */}
+      <rect x="0" y="4392" width={W} height="26" fill="#241812" />
+      <rect x="0" y="4392" width={W} height="4" fill="#3d2820" opacity="0.8" />
+      {Array.from({ length: 9 }, (_, i) => (
+        <rect key={`ct${i}`} x={20 + i * 132} y="4432" width="108" height="11" rx="4" fill="#33241b" />
+      ))}
+      {Array.from({ length: 9 }, (_, i) => (
+        <rect key={`cw${i}`} x={26 + i * 132} y="4435" width="96" height="3" rx="1.5" fill="#5c452c" opacity="0.7" />
+      ))}
+      <rect x="-20" y="4468" width={W + 40} height="20" rx="10" fill="#2b2019" />
+      <rect x="-20" y="4472" width={W + 40} height="5" rx="2.5" fill="#42301f" opacity="0.7" />
+      {[150, 470, 790, 1090].map((x, i) => (
+        <rect key={`fl${i}`} x={x} y="4462" width="14" height="32" rx="3" fill="#3d2820" />
+      ))}
+      <rect x="0" y="4512" width={W} height="10" fill="#1c130c" />
+      {/* seepage collecting in the drain */}
+      <ellipse cx="640" cy="4518" rx="180" ry="5" fill="#3e6b76" opacity="0.4" />
 
       {[0, 1, 2, 3].map((i) => (
         <g key={i} transform={`translate(0 ${3930 + i * 46})`}>
@@ -829,6 +881,17 @@ function Underground() {
           </g>
         </g>
       ))}
+
+      {/* opposite service on the far line */}
+      <g opacity="0.72" className="anim" style={{ animation: "train-x-rev 7.4s linear -2.2s infinite" }}>
+        <g transform={`translate(0 ${FAR_TOP - TRAIN_TOP}) scale(0.84)`} style={{ transformOrigin: `0px ${TRAIN_TOP}px` }}>
+          <g transform="scale(-1 1)">
+            <Carriage x={-CAR_L} seed={4} />
+            <Carriage x={-(CAR_L + 8) * 2 + CAR_L} seed={5} />
+            <Carriage x={-(CAR_L + 8) * 3 + CAR_L} seed={6} />
+          </g>
+        </g>
+      </g>
 
       <g className="anim" style={{ animation: "train-x 5.2s linear -3.1s infinite" }}>
         <Carriage x={0} seed={2} />
@@ -1020,8 +1083,6 @@ function TRex() {
         </g>
       </g>
 
-      {/* sediment lying over the lower half — it is still half in the rock */}
-      <rect x="-430" y="118" width="720" height="190" fill="url(#burial)" />
     </g>
   );
 }
@@ -1363,6 +1424,19 @@ export default function Descent() {
           <stop offset="100%" stopColor="#1b0502" />
         </linearGradient>
 
+        <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#cfd6ea" />
+          <stop offset="60%" stopColor="#8f9ab8" />
+          <stop offset="100%" stopColor="#3e4560" />
+        </linearGradient>
+        <radialGradient id="canopy" cx="40%" cy="30%" r="70%">
+          <stop offset="0%" stopColor="#d9fbff" />
+          <stop offset="100%" stopColor="#4aa7bf" />
+        </radialGradient>
+        <radialGradient id="beam" cx="50%" cy="0%" r="90%">
+          <stop offset="0%" stopColor="#8ffff0" stopOpacity="0.32" />
+          <stop offset="100%" stopColor="#8ffff0" stopOpacity="0" />
+        </radialGradient>
         <radialGradient id="neb-a" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="var(--accent-2)" stopOpacity="0.3" />
           <stop offset="100%" stopColor="var(--accent-2)" stopOpacity="0" />
@@ -1466,12 +1540,6 @@ export default function Descent() {
           <stop offset="0%" stopColor="#cfc3a4" />
           <stop offset="55%" stopColor="#a9986f" />
           <stop offset="100%" stopColor="#7d6c48" />
-        </linearGradient>
-        {/* the deeper the bone sits, the more the rock takes it back */}
-        <linearGradient id="burial" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#3b2817" stopOpacity="0" />
-          <stop offset="60%" stopColor="#3b2817" stopOpacity="0.72" />
-          <stop offset="100%" stopColor="#3b2817" stopOpacity="0.95" />
         </linearGradient>
         <linearGradient id="bone-stroke" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--bone)" />

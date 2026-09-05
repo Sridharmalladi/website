@@ -17,6 +17,17 @@
   --accent-2: #7c5cff;
   --accent-ink: #1a0620;
   --glow: rgba(255, 46, 147, 0.35);
+
+  /* hero cityscape illustration */
+  --city-sky-top: #ff8fc0;
+  --city-sky-mid: #b06ce8;
+  --city-sky-bot: #140b20;
+  --city-sun: #ffe27a;
+  --city-sun-glow: #ffd1e6;
+  --city-cloud: rgba(255, 255, 255, 0.4);
+  --city-building-far: #3a2360;
+  --city-building-near: #1c1130;
+  --city-window: #ffe27a;
 }
 
 /* ============================================================= BASE ===== */
@@ -157,10 +168,63 @@ button {
   opacity: 1;
 }
 
+/* ========================================================= CITYSCAPE === */
+.cityscape {
+  display: block;
+}
+
+@keyframes cloud-drift {
+  0% {
+    transform: translateX(-120px);
+  }
+  100% {
+    transform: translateX(280px);
+  }
+}
+@keyframes plane-fly {
+  0% {
+    transform: translate(-120px, 220px);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(1750px, 300px);
+    opacity: 0;
+  }
+}
+@keyframes sun-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.035);
+    opacity: 0.92;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
 /* ==================================================== REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
   html,
   body {
     scroll-behavior: auto;
+  }
+  .cityscape-anim {
+    animation: none !important;
   }
 }

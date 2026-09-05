@@ -1,6 +1,7 @@
 "use client";
 
 import Hero from "@/components/Hero";
+import Frame, { FRAME_W } from "./Frame";
 
 const STARS = Array.from({ length: 64 }, (_, i) => ({
   x: (i * 197 + 37) % 1600,
@@ -19,7 +20,12 @@ const SPARKLES = [
 /** Zone 1: deep space — a ringed planet, a moon, stars. Holds the hero content. */
 export default function Space() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
+    <section className="px-4 py-10 sm:py-16">
+      <Frame
+        label="Space"
+        ratio="21 / 9"
+        glow="radial-gradient(circle, #7c5cff, transparent 70%)"
+      >
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -135,17 +141,9 @@ export default function Space() {
         {/* far, tiny world for depth */}
         <circle cx="1480" cy="795" r="22" fill="#4a3f6b" opacity="0.8" />
       </svg>
+      </Frame>
 
-      {/* scrim keeps the name readable over the starfield */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to top, var(--space-bot) 6%, rgba(5,4,12,0.55) 42%, transparent 78%)",
-        }}
-      />
-
-      <div className="relative z-10 flex min-h-[100svh] flex-col justify-end px-6 pb-24 sm:px-10">
+      <div className={`mx-auto mt-12 ${FRAME_W} text-center`}>
         <Hero />
       </div>
     </section>

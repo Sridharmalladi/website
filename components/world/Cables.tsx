@@ -1,5 +1,7 @@
 "use client";
 
+import Frame from "./Frame";
+
 const POLES = [120, 800, 1480];
 const WIRES = [250, 400, 545, 690];
 
@@ -44,9 +46,8 @@ function Insect() {
 /** Zone 5: the power grid — cable runs and the things living on them. */
 export default function Cables() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
-      <span className="zone-label">Power Grid</span>
-
+    <section className="px-4 py-10 sm:py-16">
+      <Frame label="Power Grid" glow="radial-gradient(circle, #7cffd8, transparent 70%)">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -141,6 +142,7 @@ export default function Cables() {
           </g>
         ))}
       </svg>
+      </Frame>
     </section>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import Frame from "./Frame";
+
 /** A real airliner silhouette, nose pointing right. */
 function Airliner({ tint }: { tint: string }) {
   return (
@@ -40,7 +42,8 @@ const CLOUDS = [
 /** Zone 2: entering the atmosphere — fixed sun, fast clouds, human-made planes. */
 export default function Sky() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
+    <section className="px-4 py-10 sm:py-16">
+      <Frame label="Sky" glow="radial-gradient(circle, #d95f9b, transparent 70%)">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -116,6 +119,7 @@ export default function Sky() {
           </g>
         ))}
       </svg>
+      </Frame>
     </section>
   );
 }

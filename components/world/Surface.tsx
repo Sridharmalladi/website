@@ -1,5 +1,7 @@
 "use client";
 
+import Frame, { FRAME_W } from "./Frame";
+
 import type { ReactNode } from "react";
 import About from "@/components/About";
 
@@ -102,9 +104,8 @@ const PEOPLE = [60, 175, 300, 470, 620, 900, 1050, 1230, 1400, 1530].map((x, i) 
 /** Zone 3: street level — towers, traffic, people. Holds the About content. */
 export default function Surface() {
   return (
-    <section id="surface" className="relative min-h-[100svh] overflow-hidden">
-      <span className="zone-label">Surface</span>
-
+    <section id="surface" className="px-4 py-10 sm:py-16">
+      <Frame label="Surface" glow="radial-gradient(circle, #ff2e93, transparent 70%)">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -206,17 +207,9 @@ export default function Surface() {
           </g>
         ))}
       </svg>
+      </Frame>
 
-      {/* scrim behind the copy */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(5,4,12,0.82) 0%, rgba(5,4,12,0.55) 46%, transparent 78%)",
-        }}
-      />
-
-      <div className="relative z-10 flex min-h-[100svh] flex-col justify-center px-6 py-24 sm:px-10">
+      <div className={`mx-auto mt-12 ${FRAME_W} text-center`}>
         <About />
       </div>
     </section>

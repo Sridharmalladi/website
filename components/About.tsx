@@ -12,12 +12,12 @@ export default function About() {
         <p className="label" style={{ color: "var(--accent)" }}>
           About
         </p>
-        <h2 className="mt-3 max-w-xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
+        <h2 className="mx-auto mt-3 max-w-xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
           What I do
         </h2>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.08} className="mt-6 max-w-2xl space-y-4">
+      <ScrollReveal delay={0.08} className="mx-auto mt-6 max-w-2xl space-y-4">
         {site.about.map((line) => (
           <p
             key={line}
@@ -29,7 +29,7 @@ export default function About() {
         ))}
       </ScrollReveal>
 
-      <ScrollReveal delay={0.16} className="mt-8 flex flex-wrap gap-3">
+      <ScrollReveal delay={0.16} className="mt-8 flex flex-wrap justify-center gap-3">
         {site.focus.map((f) => (
           <Card key={f} className="px-4 py-2 text-sm font-medium">
             {f}

@@ -1,5 +1,7 @@
 "use client";
 
+import Frame, { FRAME_W } from "./Frame";
+
 import Contact from "@/components/Contact";
 
 const CRACKS = [
@@ -22,9 +24,8 @@ const EMBERS = Array.from({ length: 18 }, (_, i) => ({
 /** Zone 7: the Earth's core. The finale — holds the contact content. */
 export default function Core() {
   return (
-    <section className="relative min-h-[110svh] overflow-hidden">
-      <span className="zone-label">Core</span>
-
+    <section className="px-4 py-10 sm:py-16">
+      <Frame label="Core" glow="radial-gradient(circle, #ff5a1f, transparent 70%)">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -85,17 +86,9 @@ export default function Core() {
           />
         ))}
       </svg>
+      </Frame>
 
-      {/* scrim behind the copy */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(10,3,1,0.88) 0%, rgba(10,3,1,0.6) 44%, transparent 72%)",
-        }}
-      />
-
-      <div className="relative z-10 flex min-h-[110svh] flex-col justify-center px-6 py-24 sm:px-10">
+      <div className={`mx-auto mt-12 ${FRAME_W} text-center`}>
         <Contact />
       </div>
     </section>

@@ -1,5 +1,7 @@
 "use client";
 
+import Frame from "./Frame";
+
 const RAIL_Y = 690;
 const BODY_TOP = 470;
 const BODY_H = 190;
@@ -49,9 +51,8 @@ function Carriage({ x, seed }: { x: number; seed: number }) {
 /** Zone 4: a real train running through an arched tunnel. Pure visual beat. */
 export default function Underground() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
-      <span className="zone-label">Subway</span>
-
+    <section className="px-4 py-10 sm:py-16">
+      <Frame label="Subway" glow="radial-gradient(circle, #e8355f, transparent 70%)">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -191,6 +192,7 @@ export default function Underground() {
           </g>
         </g>
       </svg>
+      </Frame>
     </section>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import Frame from "./Frame";
+
 function spiralPath(cx: number, cy: number, turns: number, r0: number, r1: number, steps: number) {
   let d = "";
   for (let i = 0; i <= steps; i++) {
@@ -49,9 +51,8 @@ const GRAIN = Array.from({ length: 90 }, (_, i) => ({
 /** Zone 6: rock strata and what's pressed into them. */
 export default function Fossils() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
-      <span className="zone-label">Fossil Record</span>
-
+    <section className="px-4 py-10 sm:py-16">
+      <Frame label="Fossil Record" glow="radial-gradient(circle, #c99b5e, transparent 70%)">
       <svg
         className="absolute inset-0 h-full w-full"
         viewBox="0 0 1600 900"
@@ -166,6 +167,7 @@ export default function Fossils() {
           />
         ))}
       </svg>
+      </Frame>
     </section>
   );
 }

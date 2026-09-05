@@ -271,10 +271,13 @@ button {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.86; }
 }
-@keyframes bubble-rise {
-  0% { transform: translateY(0) scale(0.55); opacity: 0; }
-  16% { opacity: 0.85; }
-  100% { transform: translateY(-330px) scale(1.35); opacity: 0; }
+@keyframes shoot {
+  0% { transform: translate(0, 0) scaleX(0.2); opacity: 0; }
+  4% { opacity: 1; }
+  10% { transform: translate(90px, 42px) scaleX(1); opacity: 1; }
+  46% { opacity: 1; }
+  60% { transform: translate(560px, 262px) scaleX(1); opacity: 0; }
+  100% { transform: translate(560px, 262px) scaleX(1); opacity: 0; }
 }
 @keyframes flare-flicker {
   0%, 100% { opacity: 0.75; transform: scale(1); }

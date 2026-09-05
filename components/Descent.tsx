@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 /**
- * The whole journey as ONE continuous SVG strip: outer planets -> Earth -> sky
+ * The whole journey as ONE continuous SVG strip: outer planets -> sky
  * -> city -> subway -> fossil beds -> core. A single background gradient spans
  * the full height so there are no seams between zones.
  *
@@ -78,12 +78,26 @@ const STARS = Array.from({ length: 110 }, (_, i) => ({
   d: (i * 0.37) % 5,
 }));
 
-/** Outer planets first (small = far), arriving at Earth (large = near). */
+/**
+ * Looking outward from Earth, so Earth itself isn't in frame — only the
+ * planets beyond it. Kept to the sides and clear of the vertical band where
+ * the name and copy sit.
+ */
+const SHOOTERS = [
+  { x: 60, y: 210, rot: 24, dur: 9, delay: -2.4, len: 120 },
+  { x: 520, y: 90, rot: 18, dur: 13, delay: -7.1, len: 90 },
+  { x: 760, y: 700, rot: 30, dur: 11, delay: -4.6, len: 140 },
+  { x: 120, y: 980, rot: 21, dur: 17, delay: -11.3, len: 100 },
+  { x: 600, y: 1320, rot: 27, dur: 15, delay: -1.9, len: 115 },
+  { x: 880, y: 1620, rot: 16, dur: 19, delay: -13.7, len: 80 },
+  { x: 260, y: 1500, rot: 33, dur: 12, delay: -6.2, len: 130 },
+];
+
 function Space() {
   return (
     <>
       <ellipse cx="250" cy="300" rx="440" ry="330" fill="url(#neb-a)" />
-      <ellipse cx="980" cy="1000" rx="430" ry="340" fill="url(#neb-b)" />
+      <ellipse cx="980" cy="1100" rx="430" ry="340" fill="url(#neb-b)" />
 
       {STARS.map((s, i) => (
         <circle
@@ -94,79 +108,57 @@ function Space() {
           fill="#fff"
           opacity={s.o}
           className="anim"
-          style={{ animation: `twinkle ${3 + (i % 4)}s ease-in-out ${s.d}s infinite` }}
+          style={{ animation: `twinkle ${2.6 + ((i * 7) % 9) * 0.4}s ease-in-out ${-((i * 3.7) % 11).toFixed(2)}s infinite` }}
         />
       ))}
 
-      {/* Neptune — furthest, so smallest */}
-      <g>
-        <circle cx="300" cy="170" r="17" fill="url(#neptune)" />
-        <circle cx="300" cy="170" r="17" fill="none" stroke="#a8c8ff" strokeWidth="0.6" opacity="0.35" />
-      </g>
+      {/* shooting stars */}
+      {SHOOTERS.map((sh, i) => (
+        <g key={i} transform={`translate(${sh.x} ${sh.y}) rotate(${sh.rot})`}>
+          <g className="anim" style={{ animation: `shoot ${sh.dur}s linear ${sh.delay}s infinite` }}>
+            <rect x={-sh.len} y="-1.6" width={sh.len} height="3.2" rx="1.6" fill="url(#shoot-trail)" />
+            <circle cx="0" cy="0" r="3" fill="#fff" />
+          </g>
+        </g>
+      ))}
 
-      {/* Uranus */}
+      {/* Mars — smallest and furthest left */}
       <g>
-        <circle cx="905" cy="330" r="25" fill="url(#uranus)" />
-        <g transform="rotate(80 905 330)">
-          <ellipse cx="905" cy="330" rx="41" ry="9" fill="none" stroke="#bfe8ee" strokeWidth="1.6" opacity="0.5" />
-        </g>
-      </g>
-
-      {/* Saturn */}
-      <g>
-        <g transform="rotate(-18 400 620)">
-          <ellipse cx="400" cy="620" rx="118" ry="28" fill="none" stroke="url(#ring)" strokeWidth="13" />
-        </g>
-        <circle cx="400" cy="620" r="58" fill="url(#saturn)" />
-        <g clipPath="url(#saturn-clip)" opacity="0.3">
-          <ellipse cx="400" cy="596" rx="70" ry="7" fill="#8a6023" />
-          <ellipse cx="400" cy="628" rx="70" ry="6" fill="#fff0c0" opacity="0.5" />
-          <ellipse cx="400" cy="652" rx="70" ry="8" fill="#8a6023" />
-        </g>
-        <g transform="rotate(-18 400 620)">
-          <path d="M 282 620 A 118 28 0 0 0 518 620" fill="none" stroke="url(#ring)" strokeWidth="13" />
+        <circle cx="185" cy="330" r="34" fill="url(#mars)" />
+        <g clipPath="url(#mars-clip)">
+          <ellipse cx="185" cy="302" rx="20" ry="8" fill="#f6f0e8" opacity="0.8" />
+          <ellipse cx="172" cy="340" rx="13" ry="8" fill="#8a3a20" opacity="0.45" />
+          <ellipse cx="200" cy="354" rx="10" ry="6" fill="#8a3a20" opacity="0.4" />
         </g>
       </g>
 
       {/* Jupiter — banded, with the Great Red Spot */}
       <g>
-        <circle cx="855" cy="915" r="92" fill="url(#jupiter)" />
+        <circle cx="975" cy="500" r="86" fill="url(#jupiter)" />
         <g clipPath="url(#jupiter-clip)">
-          <ellipse cx="855" cy="858" rx="110" ry="12" fill="#c99b6a" opacity="0.55" />
-          <ellipse cx="855" cy="888" rx="110" ry="9" fill="#f2dcc0" opacity="0.45" />
-          <ellipse cx="855" cy="924" rx="110" ry="13" fill="#b8814f" opacity="0.5" />
-          <ellipse cx="855" cy="956" rx="110" ry="10" fill="#f2dcc0" opacity="0.4" />
-          <ellipse cx="855" cy="982" rx="110" ry="12" fill="#c99b6a" opacity="0.5" />
-          <ellipse cx="812" cy="944" rx="26" ry="15" fill="#d4553a" opacity="0.85" />
+          <ellipse cx="975" cy="450" rx="104" ry="11" fill="#c99b6a" opacity="0.55" />
+          <ellipse cx="975" cy="478" rx="104" ry="9" fill="#f2dcc0" opacity="0.45" />
+          <ellipse cx="975" cy="510" rx="104" ry="12" fill="#b8814f" opacity="0.5" />
+          <ellipse cx="975" cy="540" rx="104" ry="9" fill="#f2dcc0" opacity="0.4" />
+          <ellipse cx="975" cy="566" rx="104" ry="11" fill="#c99b6a" opacity="0.5" />
+          <ellipse cx="935" cy="528" rx="24" ry="14" fill="#d4553a" opacity="0.85" />
         </g>
       </g>
 
-      {/* Mars — rusty, with a polar cap */}
+      {/* Saturn — low and left, well below the name */}
       <g>
-        <circle cx="255" cy="1195" r="46" fill="url(#mars)" />
-        <g clipPath="url(#mars-clip)">
-          <ellipse cx="255" cy="1157" rx="26" ry="10" fill="#f6f0e8" opacity="0.8" />
-          <ellipse cx="238" cy="1205" rx="18" ry="11" fill="#8a3a20" opacity="0.45" />
-          <ellipse cx="276" cy="1224" rx="13" ry="8" fill="#8a3a20" opacity="0.4" />
+        <g transform="rotate(-18 285 1215)">
+          <ellipse cx="285" cy="1215" rx="124" ry="30" fill="none" stroke="url(#ring)" strokeWidth="13" />
         </g>
-      </g>
-
-      {/* Earth — nearest, so largest; we arrive here */}
-      <g>
-        <circle cx="740" cy="1520" r="176" fill="url(#earth-halo)" opacity="0.55" />
-        <circle cx="740" cy="1520" r="132" fill="url(#earth)" />
-        <g clipPath="url(#earth-clip)">
-          {/* landmasses */}
-          <path d="M660 1436 C 700 1420, 742 1438, 736 1470 C 730 1500, 686 1508, 664 1490 C 646 1476, 640 1450, 660 1436 Z" fill="#3f9e6a" opacity="0.9" />
-          <path d="M770 1462 C 810 1450, 848 1470, 840 1500 C 832 1526, 792 1530, 774 1512 C 760 1498, 756 1472, 770 1462 Z" fill="#3f9e6a" opacity="0.85" />
-          <path d="M690 1548 C 726 1538, 760 1560, 750 1592 C 740 1622, 700 1628, 682 1606 C 668 1588, 672 1560, 690 1548 Z" fill="#46a874" opacity="0.85" />
-          <path d="M812 1560 C 842 1554, 866 1576, 856 1600 C 846 1622, 814 1624, 802 1606 C 792 1590, 796 1566, 812 1560 Z" fill="#3f9e6a" opacity="0.8" />
-          {/* cloud bands */}
-          <ellipse cx="700" cy="1478" rx="88" ry="15" fill="#fff" opacity="0.28" />
-          <ellipse cx="790" cy="1540" rx="96" ry="13" fill="#fff" opacity="0.22" />
-          <ellipse cx="716" cy="1600" rx="74" ry="12" fill="#fff" opacity="0.2" />
+        <circle cx="285" cy="1215" r="60" fill="url(#saturn)" />
+        <g clipPath="url(#saturn-clip)" opacity="0.3">
+          <ellipse cx="285" cy="1190" rx="72" ry="7" fill="#8a6023" />
+          <ellipse cx="285" cy="1223" rx="72" ry="6" fill="#fff0c0" opacity="0.5" />
+          <ellipse cx="285" cy="1248" rx="72" ry="8" fill="#8a6023" />
         </g>
-        <circle cx="740" cy="1520" r="132" fill="none" stroke="#bfe4ff" strokeWidth="2" opacity="0.35" />
+        <g transform="rotate(-18 285 1215)">
+          <path d="M 161 1215 A 124 30 0 0 0 409 1215" fill="none" stroke="url(#ring)" strokeWidth="13" />
+        </g>
       </g>
     </>
   );
@@ -191,9 +183,9 @@ function Airliner({ tint }: { tint: string }) {
 }
 
 const PLANES = [
-  { y: 2190, s: 1, dur: 9, delay: 0, tint: "#3b2340" },
-  { y: 2430, s: 0.62, dur: 13, delay: -4, tint: "#4a2f52" },
-  { y: 2060, s: 0.42, dur: 17, delay: -9, tint: "#56395e" },
+  { y: 2190, s: 1, dur: 9.4, delay: -3.7, tint: "#3b2340" },
+  { y: 2430, s: 0.62, dur: 12.6, delay: -8.9, tint: "#4a2f52" },
+  { y: 2060, s: 0.42, dur: 17.3, delay: -14.2, tint: "#56395e" },
 ];
 
 const CLOUDS = [
@@ -205,89 +197,9 @@ const CLOUDS = [
   { x: 1080, y: 2520, s: 0.55, dur: 8, o: 0.7 },
 ];
 
-const SUN_X = 900;
-const SUN_Y = 2120;
-const SUN_R = 96;
-
-/** Granulation cells, sunspots and looping prominences on the solar limb. */
-function Sun() {
-  const granules = Array.from({ length: 46 }, (_, i) => {
-    const a = (i * 137.5 * Math.PI) / 180;
-    const rad = Math.sqrt((i + 0.5) / 46) * (SUN_R - 12);
-    return {
-      x: SUN_X + Math.cos(a) * rad,
-      y: SUN_Y + Math.sin(a) * rad,
-      r: 5 + ((i * 7) % 5),
-      d: (i * 0.23) % 4,
-    };
-  });
-
-  // prominences: loops anchored on the limb
-  const loops = [
-    { a: -0.5, h: 78, w: 0.36 },
-    { a: 0.55, h: 62, w: 0.3 },
-    { a: 2.3, h: 90, w: 0.4 },
-    { a: 3.6, h: 54, w: 0.28 },
-    { a: 4.9, h: 70, w: 0.34 },
-  ].map((l, i) => {
-    const a1 = l.a - l.w;
-    const a2 = l.a + l.w;
-    const p1 = [SUN_X + Math.cos(a1) * (SUN_R - 4), SUN_Y + Math.sin(a1) * (SUN_R - 4)];
-    const p2 = [SUN_X + Math.cos(a2) * (SUN_R - 4), SUN_Y + Math.sin(a2) * (SUN_R - 4)];
-    const cm = [SUN_X + Math.cos(l.a) * (SUN_R + l.h * 1.6), SUN_Y + Math.sin(l.a) * (SUN_R + l.h * 1.6)];
-    return { d: `M ${p1[0]} ${p1[1]} Q ${cm[0]} ${cm[1]} ${p2[0]} ${p2[1]}`, i };
-  });
-
-  return (
-    <g>
-      <circle cx={SUN_X} cy={SUN_Y} r={SUN_R * 3.2} fill="url(#sun-glow)" />
-      <circle cx={SUN_X} cy={SUN_Y} r={SUN_R} fill="url(#sun)" />
-
-      {/* convective granulation */}
-      <g clipPath="url(#sun-clip)">
-        {granules.map((g, i) => (
-          <circle
-            key={i}
-            cx={g.x}
-            cy={g.y}
-            r={g.r}
-            fill="#fff6c8"
-            className="anim"
-            style={{ animation: `granule ${3 + (i % 4)}s ease-in-out ${g.d}s infinite` }}
-          />
-        ))}
-        {/* sunspots with penumbra */}
-        <g opacity="0.75">
-          <ellipse cx={SUN_X - 34} cy={SUN_Y + 16} rx="21" ry="14" fill="#c97a1e" opacity="0.7" />
-          <ellipse cx={SUN_X - 34} cy={SUN_Y + 16} rx="11" ry="7" fill="#7a3d08" />
-          <ellipse cx={SUN_X + 40} cy={SUN_Y - 30} rx="15" ry="10" fill="#c97a1e" opacity="0.7" />
-          <ellipse cx={SUN_X + 40} cy={SUN_Y - 30} rx="8" ry="5" fill="#7a3d08" />
-        </g>
-      </g>
-
-      {/* prominences / flares arcing off the limb */}
-      {loops.map((l) => (
-        <path
-          key={l.i}
-          d={l.d}
-          fill="none"
-          stroke="url(#flare)"
-          strokeWidth="11"
-          strokeLinecap="round"
-          className="anim"
-          style={{ animation: `flare-flicker ${4 + (l.i % 3)}s ease-in-out ${-l.i * 0.9}s infinite` }}
-        />
-      ))}
-      <circle cx={SUN_X} cy={SUN_Y} r={SUN_R + 5} fill="none" stroke="#ffd98a" strokeWidth="3" opacity="0.45" />
-    </g>
-  );
-}
-
 function Sky() {
   return (
     <>
-      <Sun />
-
       {PLANES.map((p, i) => (
         <g key={i} transform={`translate(0 ${p.y})`}>
           <g className="anim" style={{ animation: `fly-x ${p.dur}s linear ${p.delay}s infinite` }}>
@@ -300,7 +212,7 @@ function Sky() {
 
       {CLOUDS.map((c, i) => (
         <g key={i} transform={`translate(0 ${c.y})`}>
-          <g className="anim" style={{ animation: `cloud-drift ${c.dur}s linear ${-i * 1.6}s infinite` }}>
+          <g className="anim" style={{ animation: `cloud-drift ${c.dur}s linear ${-((i * 4.3 + 1.7) % c.dur).toFixed(2)}s infinite` }}>
             <g transform={`translate(${c.x} 0) scale(${c.s})`} fill="url(#cloud)" opacity={c.o}>
               <ellipse cx="0" cy="6" rx="92" ry="23" />
               <ellipse cx="-42" cy="0" rx="44" ry="23" />
@@ -368,7 +280,7 @@ function windows(b: Building, seed: number, dim: boolean): ReactNode[] {
           opacity={dim ? 0.4 : 0.85}
           className="anim"
           style={{
-            animation: `twinkle ${7 + (i % 5)}s ease-in-out ${((i * 13 + seed * 19) % 90) / 10}s infinite`,
+            animation: `twinkle ${6.5 + ((i * 3 + seed) % 9) * 0.7}s ease-in-out ${-(((i * 13 + seed * 19) % 130) / 10)}s infinite`,
           }}
         />,
       );
@@ -388,7 +300,7 @@ function Smoke({ x, y }: { x: number; y: number }) {
           r="11"
           fill="#cbb8d8"
           className="anim"
-          style={{ animation: `smoke-rise 7s ease-out ${-i * 1.75}s infinite` }}
+          style={{ animation: `smoke-rise ${6.6 + (i % 3) * 0.7}s ease-out ${-(i * 1.9 + 0.8)}s infinite` }}
         />
       ))}
     </g>
@@ -411,13 +323,13 @@ function cap(b: Building, stroke: string): ReactNode {
 }
 
 const CARS = [
-  { lane: GROUND + 34, dur: 3.6, delay: 0, rev: false, body: "#ff5a8a", roof: "#3a1030" },
-  { lane: GROUND + 34, dur: 4.8, delay: -2.1, rev: false, body: "#ffd166", roof: "#4a3510" },
-  { lane: GROUND + 76, dur: 4.2, delay: -1.2, rev: true, body: "#7c5cff", roof: "#241a3a" },
-  { lane: GROUND + 76, dur: 5.4, delay: -3.4, rev: true, body: "#59e0d0", roof: "#0f3b38" },
+  { lane: GROUND + 34, dur: 3.7, delay: -1.9, rev: false, body: "#ff5a8a", roof: "#3a1030" },
+  { lane: GROUND + 34, dur: 4.9, delay: -3.4, rev: false, body: "#ffd166", roof: "#4a3510" },
+  { lane: GROUND + 76, dur: 4.3, delay: -2.6, rev: true, body: "#7c5cff", roof: "#241a3a" },
+  { lane: GROUND + 76, dur: 5.6, delay: -4.8, rev: true, body: "#59e0d0", roof: "#0f3b38" },
 ];
 
-function Walker({ tint }: { tint: string }) {
+function Walker({ tint, step, phase }: { tint: string; step: number; phase: number }) {
   return (
     <g fill={tint}>
       <circle cx="0" cy="-30" r="5.4" />
@@ -429,7 +341,7 @@ function Walker({ tint }: { tint: string }) {
         width="3.4"
         height="11"
         rx="1.5"
-        style={{ animation: "leg-a 0.62s ease-in-out infinite" }}
+        style={{ animation: `leg-a ${step}s ease-in-out ${phase}s infinite` }}
       />
       <rect
         className="anim leg"
@@ -438,18 +350,18 @@ function Walker({ tint }: { tint: string }) {
         width="3.4"
         height="11"
         rx="1.5"
-        style={{ animation: "leg-b 0.62s ease-in-out infinite" }}
+        style={{ animation: `leg-b ${step}s ease-in-out ${phase}s infinite` }}
       />
     </g>
   );
 }
 
 const PEOPLE = [
-  { dur: 22, delay: 0, rev: false, s: 1, tint: "var(--person)" },
-  { dur: 27, delay: -6, rev: false, s: 0.86, tint: "#22143b" },
-  { dur: 31, delay: -14, rev: false, s: 1.06, tint: "#1a1030" },
-  { dur: 25, delay: -3, rev: true, s: 0.94, tint: "#22143b" },
-  { dur: 34, delay: -18, rev: true, s: 1, tint: "var(--person)" },
+  { dur: 22, delay: -7.3, rev: false, s: 1, tint: "var(--person)", step: 0.62 },
+  { dur: 27, delay: -18.4, rev: false, s: 0.86, tint: "#22143b", step: 0.55 },
+  { dur: 31, delay: -3.1, rev: false, s: 1.06, tint: "#1a1030", step: 0.7 },
+  { dur: 25, delay: -16.8, rev: true, s: 0.94, tint: "#22143b", step: 0.58 },
+  { dur: 34, delay: -27.5, rev: true, s: 1, tint: "var(--person)", step: 0.66 },
 ];
 
 function Surface() {
@@ -485,7 +397,6 @@ function Surface() {
         <g key={i}>
           <rect x={x} y={GROUND - 74} width="4" height="74" fill="#3a2a52" />
           <rect x={x - 15} y={GROUND - 78} width="34" height="5" rx="2" fill="#3a2a52" />
-          <circle cx={x + 2} cy={GROUND - 70} r="40" fill="url(#lamp)" />
         </g>
       ))}
 
@@ -498,7 +409,7 @@ function Surface() {
             }}
           >
             <g transform={`scale(${p.rev ? -p.s : p.s} ${p.s})`}>
-              <Walker tint={p.tint} />
+              <Walker tint={p.tint} step={p.step} phase={-(i * 0.37)} />
             </g>
           </g>
         </g>
@@ -602,13 +513,13 @@ function Underground() {
 
       {[0, 1, 2, 3].map((i) => (
         <g key={i} transform={`translate(0 ${3930 + i * 46})`}>
-          <g className="anim" style={{ animation: `speed-line 2.2s linear ${-i * 0.28}s infinite` }}>
+          <g className="anim" style={{ animation: `speed-line ${2.1 + i * 0.13}s linear ${-(1.3 + i * 0.41)}s infinite` }}>
             <rect x="0" y="0" width="200" height="4" rx="2" fill="#ff8fae" />
           </g>
         </g>
       ))}
 
-      <g className="anim" style={{ animation: "train-x 5s linear infinite" }}>
+      <g className="anim" style={{ animation: "train-x 5.2s linear -3.1s infinite" }}>
         <Carriage x={0} seed={2} />
         <Carriage x={262} seed={1} />
         <Carriage x={524} seed={3} />
@@ -650,191 +561,122 @@ function Underground() {
 /* --------------------------------------------------------------- fossils -- */
 
 /**
- * Articulated theropod skeleton, side view, facing left. Built from real
- * elements: skull with fenestrae, cervical/dorsal/sacral/caudal vertebrae with
- * neural spines, ribcage, gastralia, scapula, forelimb, three-part pelvis and
- * hind limb with metatarsus and pedal claws.
+ * A sauropod skeleton in the classic museum-mount / cartoon-dig silhouette:
+ * small head, long sweeping neck, barrel ribcage, four columnar legs, long
+ * tapering tail. Drawn bold so it reads instantly at any size.
  */
-function Theropod() {
+function Sauropod() {
   const LINE = "var(--bone-line)";
 
-  // vertebral column, sampled off three curves
-  const neck = Array.from({ length: 8 }, (_, i) =>
-    bezPoint([236, 44], [286, -22], [352, -40], [420, -22], i / 7),
+  const neck = Array.from({ length: 13 }, (_, i) =>
+    bezPoint([-190, -60], [-340, -130], [-480, -262], [-596, -322], i / 12),
   );
-  const dorsal = Array.from({ length: 9 }, (_, i) =>
-    bezPoint([420, -22], [478, -8], [536, 0], [604, 6], i / 8),
+  const tail = Array.from({ length: 18 }, (_, i) =>
+    bezPoint([200, -50], [430, -28], [670, 62], [948, 156], i / 17),
   );
-  const tail = Array.from({ length: 16 }, (_, i) =>
-    bezPoint([604, 6], [742, 34], [880, 92], [1078, 190], i / 15),
+  const backbone = Array.from({ length: 9 }, (_, i) =>
+    bezPoint([-190, -60], [-90, -76], [100, -74], [200, -50], i / 8),
   );
 
-  const vert = (
+  const chain = (
     pts: [number, number][],
     size: (t: number) => number,
-    spine: (t: number) => number,
     key: string,
   ) =>
-    pts.map((p, i) => {
+    pts.map((pt, i) => {
       const t = i / (pts.length - 1);
       const prev = pts[Math.max(0, i - 1)];
       const next = pts[Math.min(pts.length - 1, i + 1)];
       const ang = (Math.atan2(next[1] - prev[1], next[0] - prev[0]) * 180) / Math.PI;
-      const s = size(t);
-      const sp = spine(t);
+      const sz = size(t);
       return (
-        <g key={`${key}${i}`} transform={`translate(${p[0]} ${p[1]}) rotate(${ang})`}>
-          {sp > 2 && (
-            <path
-              d={`M ${-s * 0.3} ${-s * 0.34} L ${-s * 0.16} ${-s * 0.34 - sp} L ${s * 0.16} ${-s * 0.34 - sp} L ${s * 0.3} ${-s * 0.34} Z`}
-              fill="url(#bone)"
-              stroke={LINE}
-              strokeWidth="1.4"
-            />
-          )}
+        <g key={`${key}${i}`} transform={`translate(${pt[0]} ${pt[1]}) rotate(${ang})`}>
           <rect
-            x={-s * 0.52}
-            y={-s * 0.34}
-            width={s * 1.04}
-            height={s * 0.68}
-            rx={s * 0.2}
+            x={-sz * 0.5}
+            y={-sz * 0.46}
+            width={sz}
+            height={sz * 0.92}
+            rx={sz * 0.3}
             fill="url(#bone)"
             stroke={LINE}
-            strokeWidth="1.5"
+            strokeWidth="2.4"
           />
         </g>
       );
     });
 
+  /** One columnar leg: femur, shin, foot. */
+  const Leg = ({ x, y, k = 1, dim = false }: { x: number; y: number; k?: number; dim?: boolean }) => (
+    <g opacity={dim ? 0.5 : 1}>
+      <Bone x1={x} y1={y} x2={x - 26 * k} y2={y + 170} w={40} w2={28} />
+      <Bone x1={x - 26 * k} y1={y + 170} x2={x - 4 * k} y2={y + 300} w={28} w2={22} />
+      <path
+        d={`M ${x - 44 * k} ${y + 300} q ${40 * k} -16 ${80 * k} 0 q ${-4 * k} 22 ${-40 * k} 22 q ${-36 * k} 0 ${-40 * k} -22 Z`}
+        fill="url(#bone)"
+        stroke={LINE}
+        strokeWidth="2.2"
+      />
+    </g>
+  );
+
   return (
     <g>
-      {/* ---- tail, dorsal, neck ---- */}
-      {vert(tail as [number, number][], (t) => 30 - t * 20, (t) => Math.max(0, 26 - t * 26), "t")}
-      {vert(dorsal as [number, number][], () => 34, () => 52, "d")}
-      {vert(neck as [number, number][], (t) => 32 - t * 4, (t) => 16 + t * 14, "c")}
+      {/* far-side legs sit behind the body */}
+      <Leg x={-105} y={-14} k={1} dim />
+      <Leg x={222} y={-6} k={-1} dim />
 
-      {/* ---- ribcage ---- */}
-      {dorsal.slice(0, 8).map((p, i) => (
-        <path
-          key={`r${i}`}
-          d={`M ${p[0]} ${p[1] + 14} C ${p[0] - 30 + i * 4} ${p[1] + 92}, ${p[0] + 22} ${p[1] + 168}, ${p[0] - 8 + i * 3} ${p[1] + 210}`}
-          fill="none"
-          stroke="url(#bone-stroke)"
-          strokeWidth="9"
-          strokeLinecap="round"
-        />
-      ))}
-      {/* gastralia (belly ribs) */}
-      {Array.from({ length: 7 }, (_, i) => (
-        <path
-          key={`g${i}`}
-          d={`M ${430 + i * 26} 214 Q ${455 + i * 26} 232, ${492 + i * 26} 220`}
-          fill="none"
-          stroke="url(#bone-stroke)"
-          strokeWidth="5"
-          strokeLinecap="round"
-          opacity="0.9"
-        />
-      ))}
-
-      {/* ---- pectoral girdle + forelimb ---- */}
-      <path
-        d="M416 6 C 396 44, 388 84, 396 116 L420 112 C 412 80, 418 44, 436 14 Z"
-        fill="url(#bone)"
-        stroke={LINE}
-        strokeWidth="1.5"
-      />
-      <Bone x1={404} y1={112} x2={378} y2={166} w={14} w2={11} />
-      <Bone x1={378} y1={166} x2={398} y2={206} w={10} w2={8} />
-      {[0, 1, 2].map((i) => (
-        <Bone key={i} x1={398} y1={206} x2={374 + i * 14} y2={232 + i * 6} w={6} w2={3} />
-      ))}
-
-      {/* ---- pelvis: ilium, pubis, ischium ---- */}
-      <path
-        d="M560 -12 C 616 -30, 686 -22, 706 6 C 716 22, 700 40, 664 44 L586 40 C 562 34, 552 6, 560 -12 Z"
-        fill="url(#bone)"
-        stroke={LINE}
-        strokeWidth="1.6"
-      />
-      <Bone x1={612} y1={40} x2={556} y2={188} w={15} w2={11} />
-      <path d="M540 182 L586 196 L578 214 L532 200 Z" fill="url(#bone)" stroke={LINE} strokeWidth="1.5" />
-      <Bone x1={664} y1={42} x2={706} y2={158} w={13} w2={9} />
-
-      {/* ---- hind limb ---- */}
-      <Bone x1={640} y1={30} x2={676} y2={196} w={30} w2={20} />
-      <Bone x1={676} y1={196} x2={628} y2={334} w={20} w2={14} />
-      <Bone x1={686} y1={200} x2={648} y2={330} w={8} w2={6} />
-      <Bone x1={628} y1={334} x2={664} y2={422} w={15} w2={11} />
-      <Bone x1={636} y1={338} x2={672} y2={420} w={7} w2={6} />
-      {[
-        [714, 446],
-        [700, 462],
-        [672, 468],
-      ].map(([tx, ty], i) => (
-        <g key={i}>
-          <Bone x1={664} y1={422} x2={tx} y2={ty} w={9} w2={5} />
+      {/* ribcage */}
+      {backbone.map((p, i) => {
+        const drop = 168 + Math.sin((i / 8) * Math.PI) * 74;
+        return (
           <path
-            d={`M ${tx} ${ty} q 16 2 22 12 q -14 -2 -22 -4 Z`}
-            fill="url(#bone)"
-            stroke={LINE}
-            strokeWidth="1.2"
+            key={`rib${i}`}
+            d={`M ${p[0]} ${p[1] + 10} C ${p[0] - 74} ${p[1] + drop * 0.5}, ${p[0] - 46} ${p[1] + drop}, ${p[0] + 6} ${p[1] + drop}`}
+            fill="none"
+            stroke="url(#bone-stroke)"
+            strokeWidth="15"
+            strokeLinecap="round"
           />
-        </g>
-      ))}
-      {/* backward-pointing hallux */}
-      <Bone x1={664} y1={422} x2={634} y2={438} w={7} w2={4} />
+        );
+      })}
 
-      {/* ---- skull ---- */}
-      <g transform="translate(96 30) rotate(-7)">
-        {/* cranium + maxilla */}
+      {/* shoulder + hip blocks */}
+      <rect x="-238" y="-92" width="86" height="74" rx="26" fill="url(#bone)" stroke={LINE} strokeWidth="2.4" />
+      <rect x="158" y="-86" width="104" height="80" rx="28" fill="url(#bone)" stroke={LINE} strokeWidth="2.4" />
+
+      {/* backbone, neck, tail */}
+      {chain(backbone as [number, number][], () => 46, "b")}
+      {chain(neck as [number, number][], (t) => 42 - t * 16, "n")}
+      {chain(tail as [number, number][], (t) => 44 - t * 32, "t")}
+
+      {/* near-side legs */}
+      <Leg x={-150} y={-20} k={1} />
+      <Leg x={186} y={-10} k={-1} />
+
+      {/* head — small, blunt, unmistakably sauropod */}
+      <g transform="translate(-660 -352) rotate(-16)">
         <path
-          d="M14 22 C 6 4, 24 -22, 62 -34 C 104 -47, 158 -44, 186 -30
-             C 204 -21, 212 -6, 208 10 L196 24 L150 30 L60 36 C 32 38, 20 34, 14 22 Z"
+          d="M0 16 C -4 0, 12 -18, 44 -24 C 78 -30, 116 -24, 128 -12 L134 2 L120 14 L44 22 C 16 25, 4 24, 0 16 Z"
           fill="url(#bone)"
           stroke={LINE}
-          strokeWidth="2"
+          strokeWidth="2.4"
         />
-        {/* naris */}
-        <ellipse cx="46" cy="-8" rx="12" ry="7" fill="#2a1b11" opacity="0.75" transform="rotate(-14 46 -8)" />
-        {/* antorbital fenestra */}
-        <path d="M86 -10 L124 -18 L132 4 L92 10 Z" fill="#2a1b11" opacity="0.75" />
-        {/* orbit */}
-        <circle cx="162" cy="-12" r="15" fill="#2a1b11" opacity="0.8" />
-        {/* infratemporal fenestra */}
-        <path d="M182 -6 L200 -2 L196 16 L180 12 Z" fill="#2a1b11" opacity="0.7" />
-        {/* maxillary teeth */}
-        {Array.from({ length: 11 }, (_, i) => (
-          <path
-            key={i}
-            d={`M ${26 + i * 13} 34 L ${30 + i * 13} 50 L ${34 + i * 13} 34 Z`}
-            fill="url(#bone)"
-            stroke={LINE}
-            strokeWidth="1"
-          />
-        ))}
-        {/* mandible */}
         <path
-          d="M18 46 C 40 56, 120 52, 196 40 L206 50 L200 62 C 120 74, 44 74, 22 62 C 12 58, 12 50, 18 46 Z"
+          d="M6 26 C 30 34, 92 30, 126 20 L132 28 L124 38 C 90 46, 28 46, 8 38 C 0 34, 0 28, 6 26 Z"
           fill="url(#bone)"
           stroke={LINE}
-          strokeWidth="2"
+          strokeWidth="2.2"
         />
-        <path d="M120 52 L162 48 L160 62 L120 64 Z" fill="#2a1b11" opacity="0.55" />
-        {/* dentary teeth */}
-        {Array.from({ length: 10 }, (_, i) => (
-          <path
-            key={`d${i}`}
-            d={`M ${34 + i * 14} 48 L ${38 + i * 14} 32 L ${42 + i * 14} 48 Z`}
-            fill="url(#bone)"
-            stroke={LINE}
-            strokeWidth="1"
-          />
+        <circle cx="92" cy="-6" r="11" fill="#2a1b11" opacity="0.8" />
+        <ellipse cx="28" cy="-6" rx="8" ry="5" fill="#2a1b11" opacity="0.7" />
+        {Array.from({ length: 6 }, (_, i) => (
+          <path key={i} d={`M ${24 + i * 15} 22 L ${27 + i * 15} 32 L ${30 + i * 15} 22 Z`} fill="url(#bone)" stroke={LINE} strokeWidth="1" />
         ))}
       </g>
     </g>
   );
 }
+
 
 const DUST = Array.from({ length: 26 }, (_, i) => ({
   x: (i * 149 + 30) % W,
@@ -907,8 +749,8 @@ function Fossils() {
       ))}
 
       {/* the main specimen */}
-      <g transform="translate(60 4990) scale(0.98)">
-        <Theropod />
+      <g transform="translate(600 5210) scale(0.6)">
+        <Sauropod />
       </g>
 
       {/* ammonite with septa */}
@@ -989,6 +831,16 @@ function Fossils() {
         <path d="M150 0 L176 -18 L170 0 L176 18 Z" strokeWidth="2.2" />
       </g>
 
+      {/* trilobite */}
+      <g transform="translate(1010 4880) scale(1.15)" stroke="var(--bone-line)" fill="url(#bone)" strokeWidth="2.2">
+        <path d="M-58 0 C -50 -34, 52 -34, 64 0 C 52 34, -50 34, -58 0 Z" />
+        <path d="M-58 0 C -52 -20, -20 -22, -14 0 C -20 22, -52 20, -58 0 Z" />
+        <line x1="-14" y1="-26" x2="-14" y2="26" />
+        {[2, 16, 30, 44].map((x, i) => (
+          <line key={i} x1={x} y1="-27" x2={x} y2="27" opacity="0.8" />
+        ))}
+      </g>
+
       {/* burrow trace fossils */}
       {[
         "M300 5180 C 340 5210, 300 5250, 350 5286",
@@ -1025,52 +877,76 @@ function Fossils() {
 
 /* ------------------------------------------------------------------- core -- */
 
-const BUBBLES = Array.from({ length: 30 }, (_, i) => ({
-  x: 50 + ((i * 137) % 1100),
-  y: 6760 + ((i * 53) % 260),
-  r: 5 + ((i * 11) % 5) * 3.4,
-  d: (i * 0.6) % 11,
-  dur: 9 + (i % 6) * 2,
-}));
-
-/** No radiating lines — just a molten dome with bubbles boiling up out of it. */
+/** Convection cells and flares on the crust of the core. No bubbles. */
 function Core() {
+  // granulation across the visible crown of the dome
+  const cells = Array.from({ length: 34 }, (_, i) => {
+    const t = (i / 34) * Math.PI * 2;
+    const spread = -Math.PI / 2 + Math.sin(t * 1.7 + i) * 1.15;
+    const depth = DOME_R - 30 - ((i * 37) % 190);
+    return {
+      x: 600 + Math.cos(spread) * depth,
+      y: DOME_CY + Math.sin(spread) * depth,
+      r: 16 + ((i * 11) % 5) * 7,
+      dur: 4 + ((i * 5) % 7) * 0.8,
+      delay: -((i * 3.3) % 13),
+    };
+  });
+
+  // flares looping off the crown
+  const flares = [-1.05, -0.72, -0.4, -0.08, 0.26, 0.6, 0.95].map((off, i) => {
+    const a = -Math.PI / 2 + off;
+    const w = 0.09 + (i % 3) * 0.02;
+    const h = 130 + ((i * 47) % 130);
+    const p1 = [600 + Math.cos(a - w) * (DOME_R - 6), DOME_CY + Math.sin(a - w) * (DOME_R - 6)];
+    const p2 = [600 + Math.cos(a + w) * (DOME_R - 6), DOME_CY + Math.sin(a + w) * (DOME_R - 6)];
+    const cm = [600 + Math.cos(a) * (DOME_R + h * 1.7), DOME_CY + Math.sin(a) * (DOME_R + h * 1.7)];
+    return {
+      d: `M ${p1[0].toFixed(1)} ${p1[1].toFixed(1)} Q ${cm[0].toFixed(1)} ${cm[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`,
+      dur: 5 + ((i * 3) % 5),
+      delay: -((i * 4.7) % 17),
+      i,
+    };
+  });
+
   return (
     <>
-      <ellipse cx="600" cy={DOME_CY - DOME_R} rx="760" ry="380" fill="url(#core-halo)" />
+      <ellipse cx="600" cy={DOME_CY - DOME_R} rx="780" ry="400" fill="url(#core-halo)" />
 
-      <g className="anim" style={{ animation: "soft-pulse 6s ease-in-out infinite" }}>
-        <circle cx="600" cy={DOME_CY} r={DOME_R} fill="url(#dome)" />
-        <circle cx="600" cy={DOME_CY} r={DOME_R - 50} fill="url(#dome-inner)" opacity="0.85" />
-      </g>
+      {flares.map((f) => (
+        <path
+          key={f.i}
+          d={f.d}
+          fill="none"
+          stroke="url(#flare)"
+          strokeWidth="13"
+          strokeLinecap="round"
+          className="anim"
+          style={{ animation: `flare-flicker ${f.dur}s ease-in-out ${f.delay}s infinite` }}
+        />
+      ))}
 
-      {/* convection blisters sitting on the dome surface */}
-      {[-0.62, -0.38, -0.14, 0.12, 0.36, 0.6].map((t, i) => {
-        const a = -Math.PI / 2 + t;
-        const cx = 600 + Math.cos(a) * (DOME_R - 26);
-        const cy = DOME_CY + Math.sin(a) * (DOME_R - 26);
-        return (
+      <circle cx="600" cy={DOME_CY} r={DOME_R} fill="url(#dome)" />
+
+      <g clipPath="url(#dome-clip)">
+        {cells.map((c, i) => (
           <circle
             key={i}
-            cx={cx}
-            cy={cy}
-            r={20 + (i % 3) * 8}
-            fill="#ffcf7a"
-            opacity="0.4"
+            cx={c.x}
+            cy={c.y}
+            r={c.r}
+            fill="#fff2b8"
+            opacity="0.28"
             className="anim"
-            style={{ animation: `soft-pulse ${4 + (i % 3)}s ease-in-out ${-i * 0.7}s infinite` }}
+            style={{ animation: `granule ${c.dur}s ease-in-out ${c.delay}s infinite` }}
           />
-        );
-      })}
+        ))}
+        {/* darker crust patches, the way spots sit on a hot surface */}
+        <ellipse cx="470" cy={DOME_CY - DOME_R + 120} rx="70" ry="34" fill="#a12508" opacity="0.35" />
+        <ellipse cx="806" cy={DOME_CY - DOME_R + 190} rx="54" ry="26" fill="#a12508" opacity="0.3" />
+      </g>
 
-      {/* bubbles rising off the core */}
-      {BUBBLES.map((b, i) => (
-        <g key={i} transform={`translate(${b.x} ${b.y})`}>
-          <g className="anim" style={{ animation: `bubble-rise ${b.dur}s ease-out ${-b.d}s infinite` }}>
-            <circle r={b.r} fill="url(#bubble)" />
-          </g>
-        </g>
-      ))}
+      <circle cx="600" cy={DOME_CY} r={DOME_R - 60} fill="url(#dome-inner)" opacity="0.8" />
     </>
   );
 }
@@ -1117,16 +993,6 @@ export default function Descent() {
           <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
         </radialGradient>
 
-        <radialGradient id="neptune" cx="36%" cy="30%" r="76%">
-          <stop offset="0%" stopColor="#6fa8ff" />
-          <stop offset="60%" stopColor="#2a54c0" />
-          <stop offset="100%" stopColor="#0a1638" />
-        </radialGradient>
-        <radialGradient id="uranus" cx="36%" cy="30%" r="76%">
-          <stop offset="0%" stopColor="#c8f4f2" />
-          <stop offset="60%" stopColor="#69c4c8" />
-          <stop offset="100%" stopColor="#173a44" />
-        </radialGradient>
         <radialGradient id="saturn" cx="34%" cy="28%" r="78%">
           <stop offset="0%" stopColor="#ffe9b8" />
           <stop offset="55%" stopColor="#d9a95e" />
@@ -1142,16 +1008,6 @@ export default function Descent() {
           <stop offset="55%" stopColor="#c2542a" />
           <stop offset="100%" stopColor="#3d1408" />
         </radialGradient>
-        <radialGradient id="earth" cx="34%" cy="28%" r="78%">
-          <stop offset="0%" stopColor="#7cc6ff" />
-          <stop offset="52%" stopColor="#2a6fd0" />
-          <stop offset="100%" stopColor="#08183a" />
-        </radialGradient>
-        <radialGradient id="earth-halo" cx="50%" cy="50%" r="50%">
-          <stop offset="62%" stopColor="#6fc0ff" stopOpacity="0" />
-          <stop offset="82%" stopColor="#6fc0ff" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#6fc0ff" stopOpacity="0" />
-        </radialGradient>
         <linearGradient id="ring" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#ffd8a8" stopOpacity="0.15" />
           <stop offset="35%" stopColor="#ffe8c0" stopOpacity="0.8" />
@@ -1159,40 +1015,28 @@ export default function Descent() {
           <stop offset="100%" stopColor="#ffd8a8" stopOpacity="0.15" />
         </linearGradient>
         <clipPath id="saturn-clip">
-          <circle cx="400" cy="620" r="58" />
+          <circle cx="285" cy="1215" r="60" />
         </clipPath>
         <clipPath id="jupiter-clip">
-          <circle cx="855" cy="915" r="92" />
+          <circle cx="975" cy="500" r="86" />
         </clipPath>
         <clipPath id="mars-clip">
-          <circle cx="255" cy="1195" r="46" />
-        </clipPath>
-        <clipPath id="earth-clip">
-          <circle cx="740" cy="1520" r="132" />
+          <circle cx="185" cy="330" r="34" />
         </clipPath>
 
-        <radialGradient id="sun-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="var(--sun-glow)" stopOpacity="0.75" />
-          <stop offset="42%" stopColor="var(--sun-glow)" stopOpacity="0.22" />
-          <stop offset="100%" stopColor="var(--sun-glow)" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="sun" cx="50%" cy="42%" r="62%">
-          <stop offset="0%" stopColor="#fffdf2" />
-          <stop offset="52%" stopColor="var(--sun)" />
-          <stop offset="100%" stopColor="#ff9e3c" />
-        </radialGradient>
         <linearGradient id="flare" x1="0" y1="1" x2="0" y2="0">
           <stop offset="0%" stopColor="#ffb03c" stopOpacity="0.95" />
           <stop offset="100%" stopColor="#ff5a1f" stopOpacity="0.1" />
         </linearGradient>
-        <clipPath id="sun-clip">
-          <circle cx={SUN_X} cy={SUN_Y} r={SUN_R} />
-        </clipPath>
 
         <linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#fff6fb" stopOpacity="0.95" />
           <stop offset="60%" stopColor="#ffd9ec" stopOpacity="0.78" />
           <stop offset="100%" stopColor="#d99ec0" stopOpacity="0.6" />
+        </linearGradient>
+        <linearGradient id="shoot-trail" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#fff" stopOpacity="0" />
+          <stop offset="100%" stopColor="#fff" stopOpacity="0.9" />
         </linearGradient>
         <linearGradient id="trail" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#fff" stopOpacity="0" />
@@ -1211,10 +1055,6 @@ export default function Descent() {
           <stop offset="0%" stopColor="#ff9dc4" stopOpacity="0" />
           <stop offset="100%" stopColor="#ff9dc4" stopOpacity="0.15" />
         </linearGradient>
-        <radialGradient id="lamp" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="var(--city-window)" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="var(--city-window)" stopOpacity="0" />
-        </radialGradient>
 
         <linearGradient id="train" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ff5f80" />
@@ -1250,14 +1090,12 @@ export default function Descent() {
           <stop offset="62%" stopColor="var(--core-mid)" />
           <stop offset="100%" stopColor="#a12508" />
         </radialGradient>
+        <clipPath id="dome-clip">
+          <circle cx="600" cy={DOME_CY} r={DOME_R} />
+        </clipPath>
         <radialGradient id="dome-inner" cx="50%" cy="12%" r="45%">
           <stop offset="0%" stopColor="#fffbe8" stopOpacity="0.7" />
           <stop offset="100%" stopColor="#ffb257" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="bubble" cx="38%" cy="32%" r="70%">
-          <stop offset="0%" stopColor="#fff3c4" stopOpacity="0.95" />
-          <stop offset="55%" stopColor="#ffa53c" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#ff5a1f" stopOpacity="0.12" />
         </radialGradient>
       </defs>
 

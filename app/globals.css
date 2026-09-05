@@ -28,6 +28,29 @@
   --city-building-far: #3a2360;
   --city-building-near: #1c1130;
   --city-window: #ffe27a;
+
+  /* the space -> core descent */
+  --space-bg: #05040c;
+  --star: #ffffff;
+  --ship: #d9d4ff;
+  --road: #241a30;
+  --car: #ffd166;
+  --person: #2a1c40;
+  --soil: #3a2818;
+  --tunnel-bg: #170f0c;
+  --tunnel-line: #2e2119;
+  --train-body: var(--accent);
+  --train-window: #ffe27a;
+  --cable-bg: #120c09;
+  --cable-wire: #4a3620;
+  --insect: #0e0a08;
+  --fossil-1: #2b1c12;
+  --fossil-2: #3a2717;
+  --fossil-3: #4a3220;
+  --fossil-mark: rgba(255, 240, 220, 0.16);
+  --core-outer: #2a0a05;
+  --core-mid: #ff5a1f;
+  --core-center: #ffe27a;
 }
 
 /* ============================================================= BASE ===== */
@@ -215,6 +238,161 @@ button {
   }
   50% {
     opacity: 0.3;
+  }
+}
+@keyframes fly-x {
+  0% {
+    transform: translateX(-150px);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(1750px);
+    opacity: 0;
+  }
+}
+@keyframes car-drive {
+  0% {
+    transform: translateX(-80px);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(1700px);
+    opacity: 0;
+  }
+}
+@keyframes car-drive-rev {
+  0% {
+    transform: translateX(1700px);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-80px);
+    opacity: 0;
+  }
+}
+@keyframes train-dash {
+  0% {
+    transform: translateX(-320px);
+  }
+  100% {
+    transform: translateX(1900px);
+  }
+}
+@keyframes speed-line {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(1700px);
+    opacity: 0;
+  }
+}
+@keyframes insect-crawl {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(26px) translateY(-3px);
+  }
+  50% {
+    transform: translateX(50px) translateY(1px);
+  }
+  75% {
+    transform: translateX(24px) translateY(3px);
+  }
+}
+@keyframes dust-drift {
+  0% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-40px);
+    opacity: 0.5;
+  }
+}
+
+.zone-label {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  z-index: 5;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.45);
+}
+@media (min-width: 640px) {
+  .zone-label {
+    left: 40px;
+    top: 28px;
+  }
+}
+
+/* ======================================================= DEPTH GAUGE === */
+.depth-gauge-track {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  width: 3px;
+  height: min(46vh, 380px);
+  border-radius: 3px;
+  background: linear-gradient(
+    to bottom,
+    var(--space-bg),
+    var(--city-sky-mid),
+    var(--road),
+    var(--tunnel-line),
+    var(--cable-wire),
+    var(--fossil-3),
+    var(--core-mid)
+  );
+  opacity: 0.5;
+}
+.depth-gauge-dot {
+  position: absolute;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--core-center);
+  box-shadow: 0 0 10px 2px var(--core-mid);
+  transform: translate(-50%, -50%);
+}
+@media (max-width: 780px) {
+  .depth-gauge-track {
+    display: none;
   }
 }
 

@@ -4,12 +4,13 @@ import { site } from "@/config/site";
 import ScrollReveal from "@/components/ScrollReveal";
 import SocialLinks from "@/components/SocialLinks";
 
+/** Pure content — the Core zone owns the background, layout, and scrim. */
 export default function Contact() {
   return (
-    <section id="contact" className="relative px-6 py-24 sm:px-10">
+    <div>
       <ScrollReveal>
-        <p className="font-pixel text-xs tracking-[0.3em]" style={{ color: "var(--accent)" }}>
-          SAY HI
+        <p className="font-pixel text-xs tracking-[0.3em]" style={{ color: "var(--core-center)" }}>
+          THE CORE
         </p>
         <h2 className="mt-3 max-w-xl text-3xl font-bold sm:text-4xl">
           Let&apos;s build something.
@@ -23,6 +24,6 @@ export default function Contact() {
       <footer className="mt-24 border-t pt-6 text-xs" style={{ borderColor: "var(--panel-border)", color: "var(--text-dim)" }}>
         © {new Date().getFullYear()} {site.name}
       </footer>
-    </section>
+    </div>
   );
 }

@@ -4,16 +4,15 @@ import { site } from "@/config/site";
 import ScrollReveal from "@/components/ScrollReveal";
 import PixelPanel from "@/components/ui/PixelPanel";
 
+/** Pure content — the Surface zone owns the background, layout, and scrim. */
 export default function About() {
   return (
-    <section id="about" className="relative px-6 py-20 sm:px-10">
+    <div>
       <ScrollReveal>
         <p className="font-pixel text-xs tracking-[0.3em]" style={{ color: "var(--accent)" }}>
           ABOUT
         </p>
-        <h2 className="mt-3 max-w-xl text-3xl font-bold sm:text-4xl">
-          What I do
-        </h2>
+        <h2 className="mt-3 max-w-xl text-3xl font-bold sm:text-4xl">What I do</h2>
       </ScrollReveal>
 
       <ScrollReveal delay={0.08} className="mt-6 max-w-2xl space-y-4">
@@ -31,6 +30,6 @@ export default function About() {
           </PixelPanel>
         ))}
       </ScrollReveal>
-    </section>
+    </div>
   );
 }

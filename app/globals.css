@@ -195,147 +195,83 @@ button {
   }
 }
 
+.leg {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
 /* ============================================================ MOTION ==== */
+/* Strip is 1200 units wide; cross-strip travel ranges are tuned to that. */
 @keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.9;
-  }
-  50% {
-    opacity: 0.25;
-  }
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.25; }
 }
 @keyframes fly-x {
-  0% {
-    transform: translateX(-260px);
-    opacity: 0;
-  }
-  8% {
-    opacity: 1;
-  }
-  92% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(1860px);
-    opacity: 0;
-  }
+  0% { transform: translateX(-320px); opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { transform: translateX(1520px); opacity: 0; }
 }
 @keyframes cloud-drift {
-  0% {
-    transform: translateX(-140px);
-  }
-  100% {
-    transform: translateX(300px);
-  }
+  0% { transform: translateX(-160px); }
+  100% { transform: translateX(320px); }
 }
-@keyframes car-drive {
-  0% {
-    transform: translateX(-90px);
-    opacity: 0;
-  }
-  8% {
-    opacity: 1;
-  }
-  92% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(1700px);
-    opacity: 0;
-  }
+@keyframes car-x {
+  0% { transform: translateX(-140px); opacity: 0; }
+  7% { opacity: 1; }
+  93% { opacity: 1; }
+  100% { transform: translateX(1340px); opacity: 0; }
 }
-@keyframes car-drive-rev {
-  0% {
-    transform: translateX(1700px);
-    opacity: 0;
-  }
-  8% {
-    opacity: 1;
-  }
-  92% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-90px);
-    opacity: 0;
-  }
+@keyframes car-x-rev {
+  0% { transform: translateX(1340px); opacity: 0; }
+  7% { opacity: 1; }
+  93% { opacity: 1; }
+  100% { transform: translateX(-140px); opacity: 0; }
 }
-@keyframes train-dash {
-  0% {
-    transform: translateX(-1250px);
-  }
-  100% {
-    transform: translateX(1700px);
-  }
+@keyframes walk-x {
+  0% { transform: translateX(-60px); }
+  100% { transform: translateX(1260px); }
+}
+@keyframes walk-x-rev {
+  0% { transform: translateX(1260px); }
+  100% { transform: translateX(-60px); }
+}
+@keyframes leg-a {
+  0%, 100% { transform: rotate(24deg); }
+  50% { transform: rotate(-24deg); }
+}
+@keyframes leg-b {
+  0%, 100% { transform: rotate(-24deg); }
+  50% { transform: rotate(24deg); }
+}
+@keyframes smoke-rise {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  18% { opacity: 0.5; }
+  100% { transform: translate(-26px, -190px) scale(2.1); opacity: 0; }
+}
+@keyframes train-x {
+  0% { transform: translateX(-1500px); }
+  100% { transform: translateX(1400px); }
 }
 @keyframes speed-line {
-  0% {
-    transform: translateX(-200px);
-    opacity: 0;
-  }
-  12% {
-    opacity: 0.55;
-  }
-  88% {
-    opacity: 0.55;
-  }
-  100% {
-    transform: translateX(1700px);
-    opacity: 0;
-  }
-}
-@keyframes insect-crawl {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(26px, -3px);
-  }
-  50% {
-    transform: translate(50px, 1px);
-  }
-  75% {
-    transform: translate(24px, 3px);
-  }
+  0% { transform: translateX(-260px); opacity: 0; }
+  12% { opacity: 0.55; }
+  88% { opacity: 0.55; }
+  100% { transform: translateX(1360px); opacity: 0; }
 }
 @keyframes dust-drift {
-  0% {
-    transform: translateY(0);
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateY(-46px);
-    opacity: 0.35;
-  }
+  0% { transform: translateY(0); opacity: 0.3; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-46px); opacity: 0.3; }
 }
 @keyframes soft-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.88;
-    transform: scale(1.03);
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.86; }
 }
 @keyframes ember-rise {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  15% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(-260px);
-    opacity: 0;
-  }
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translateY(-300px); opacity: 0; }
 }
 
 /* ======================================================= DEPTH GAUGE === */

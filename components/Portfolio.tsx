@@ -1,24 +1,31 @@
-import Space from "@/components/world/Space";
-import Sky from "@/components/world/Sky";
-import Surface from "@/components/world/Surface";
-import Underground from "@/components/world/Underground";
-import Cables from "@/components/world/Cables";
-import Fossils from "@/components/world/Fossils";
-import Core from "@/components/world/Core";
+import Descent from "@/components/Descent";
 import DepthGauge from "@/components/DepthGauge";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Contact from "@/components/Contact";
 
-/** One descent: space -> sky -> surface -> subway -> power grid -> fossils -> core. */
+/**
+ * One centered column: a single continuous strip of artwork with page
+ * background either side of it. Copy is positioned over the strip at the depth
+ * it belongs to — all of it dark background at those points, so it stays legible.
+ */
 export default function Portfolio() {
   return (
-    <div className="relative z-10">
+    <div className="relative mx-auto w-[min(94vw,1200px)]">
       <DepthGauge />
-      <Space />
-      <Sky />
-      <Surface />
-      <Underground />
-      <Cables />
-      <Fossils />
-      <Core />
+      <Descent />
+
+      <div className="absolute inset-x-0 px-5 text-center" style={{ top: "3.5%" }}>
+        <Hero />
+      </div>
+
+      <div className="absolute inset-x-0 px-5 text-center" style={{ top: "45.5%" }}>
+        <About />
+      </div>
+
+      <div className="absolute inset-x-0 px-5 text-center" style={{ top: "86.5%" }}>
+        <Contact />
+      </div>
     </div>
   );
 }

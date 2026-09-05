@@ -1,6 +1,9 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
+import { BANDS, STRIP_H, STRIP_W } from "@/config/bands";
+import { useLiveBands } from "@/hooks/useLiveBands";
+import { cn } from "@/lib/cn";
 
 /**
  * The whole journey as ONE continuous SVG strip: outer planets -> sky
@@ -12,8 +15,8 @@ import type { ReactNode } from "react";
  * an animated CSS transform would otherwise replace the SVG one.
  */
 
-const W = 1200;
-const H = 7000;
+const W = STRIP_W;
+const H = STRIP_H;
 
 const GROUND = 3400; // street level
 const ROAD_BOTTOM = 3540;
@@ -70,7 +73,7 @@ function Bone({
 
 /* ----------------------------------------------------------------- space -- */
 
-const STARS = Array.from({ length: 110 }, (_, i) => ({
+const STARS = Array.from({ length: 68 }, (_, i) => ({
   x: (i * 173 + 31) % W,
   y: (i * 149 + 17) % 1780,
   r: 0.6 + ((i * 29) % 6) * 0.26,
@@ -259,6 +262,41 @@ const NEAR: Building[] = [
   { x: 1035, w: 180, h: 300, rows: 7, cols: 4, cap: "mast" },
 ];
 
+/** A lit window with someone at a desk: monitor glow, head and shoulders. */
+function DeskWindow({
+  x,
+  y,
+  w,
+  h,
+  seed,
+}: {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  seed: number;
+}) {
+  const flip = seed % 2 === 0;
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <rect width={w} height={h} rx="1.5" fill="var(--city-window)" opacity="0.9" />
+      <g transform={flip ? `translate(${w} 0) scale(-1 1)` : undefined}>
+        {/* desk */}
+        <rect x={w * 0.12} y={h * 0.72} width={w * 0.76} height={h * 0.1} fill="#6b4a1e" opacity="0.75" />
+        {/* monitor, back of the panel to us */}
+        <rect x={w * 0.5} y={h * 0.34} width={w * 0.34} height={h * 0.34} rx="1" fill="#2b1c3a" />
+        <rect x={w * 0.53} y={h * 0.38} width={w * 0.28} height={h * 0.24} fill="#9fe8ff" opacity="0.85" />
+        {/* person */}
+        <circle cx={w * 0.3} cy={h * 0.42} r={Math.max(1.4, w * 0.11)} fill="#2b1c3a" />
+        <path
+          d={`M ${w * 0.16} ${h * 0.74} a ${w * 0.14} ${h * 0.2} 0 0 1 ${w * 0.28} 0 Z`}
+          fill="#2b1c3a"
+        />
+      </g>
+    </g>
+  );
+}
+
 function windows(b: Building, seed: number, dim: boolean): ReactNode[] {
   const pad = 10;
   const gx = (b.w - pad * 2) / b.cols;
@@ -267,21 +305,38 @@ function windows(b: Building, seed: number, dim: boolean): ReactNode[] {
   for (let r = 0; r < b.rows; r++) {
     for (let c = 0; c < b.cols; c++) {
       const i = r * b.cols + c;
-      if ((i * 7 + seed * 5) % 4 === 0) continue;
+      if ((i * 7 + seed * 5) % 4 === 0) continue; // dark window
+      const x = b.x + pad + c * gx;
+      const y = GROUND - b.h + pad + r * gy;
+      const w = Math.max(3, gx * (dim ? 0.5 : 0.62));
+      const h = Math.max(3, gy * (dim ? 0.44 : 0.56));
+
+      // near buildings are big enough to show the room; far ones stay lit panes
+      if (!dim && w >= 12 && (i * 3 + seed) % 5 !== 0) {
+        out.push(<DeskWindow key={i} x={x} y={y} w={w} h={h} seed={i + seed} />);
+        continue;
+      }
+
+      // only some panes flicker — the rest are static, which is cheaper and calmer
+      const animated = (i * 5 + seed * 3) % 3 === 0;
       out.push(
         <rect
           key={i}
-          x={b.x + pad + c * gx}
-          y={GROUND - b.h + pad + r * gy}
-          width={Math.max(3, gx * 0.5)}
-          height={Math.max(3, gy * 0.44)}
+          x={x}
+          y={y}
+          width={w}
+          height={h}
           rx="1"
           fill="var(--city-window)"
           opacity={dim ? 0.4 : 0.85}
-          className="anim"
-          style={{
-            animation: `twinkle ${6.5 + ((i * 3 + seed) % 9) * 0.7}s ease-in-out ${-(((i * 13 + seed * 19) % 130) / 10)}s infinite`,
-          }}
+          className={animated ? "anim" : undefined}
+          style={
+            animated
+              ? {
+                  animation: `twinkle ${6.5 + ((i * 3 + seed) % 9) * 0.7}s ease-in-out ${-(((i * 13 + seed * 19) % 130) / 10)}s infinite`,
+                }
+              : undefined
+          }
         />,
       );
     }
@@ -762,17 +817,17 @@ function Fossils() {
       ))}
 
       {/* the main specimen */}
-      <g transform="translate(560 5150) scale(1.15)">
+      <g transform="translate(470 5075) scale(0.62)">
         <TRex />
       </g>
 
       {/* ammonite with septa */}
       <g transform="translate(0 0)">
-        <path d={spiral(168, 4640, 2.5, 5, 54, 80)} fill="none" stroke="url(#bone-stroke)" strokeWidth="7" strokeLinecap="round" />
+        <path d={spiral(168, 4645, 2.5, 4, 36, 80)} fill="none" stroke="url(#bone-stroke)" strokeWidth="7" strokeLinecap="round" />
         {Array.from({ length: 11 }, (_, i) => {
-          const t = 0.28 + (i / 11) * 0.72;
+          const t = 0.3 + (i / 11) * 0.7;
           const a = t * 2.5 * Math.PI * 2;
-          const ro = 5 + (54 - 5) * t;
+          const ro = 4 + (36 - 4) * t;
           const ri = ro * 0.58;
           return (
             <line
@@ -791,9 +846,9 @@ function Fossils() {
 
       {/* bivalves */}
       {[
-        [430, 4700, 1],
-        [700, 4660, 0.8],
-        [1010, 5490, 1.1],
+        [430, 4706, 0.7],
+        [700, 4668, 0.56],
+        [1010, 5492, 0.75],
       ].map(([x, y, s], i) => (
         <g key={`bv${i}`} transform={`translate(${x} ${y}) scale(${s})`}>
           <path
@@ -810,7 +865,7 @@ function Fossils() {
       ))}
 
       {/* fern frond */}
-      <g transform="translate(940 5760) rotate(-12)" stroke="var(--bone-shade)" fill="none" strokeLinecap="round">
+      <g transform="translate(950 5745) rotate(-12) scale(0.68)" stroke="var(--bone-shade)" fill="none" strokeLinecap="round">
         <path d="M0 0 C 40 -30, 96 -46, 150 -50" strokeWidth="4" />
         {Array.from({ length: 12 }, (_, i) => {
           const t = i / 11;
@@ -827,7 +882,7 @@ function Fossils() {
       </g>
 
       {/* fish with vertebral column */}
-      <g transform="translate(210 5340) rotate(6)" stroke="var(--bone-line)" fill="none" strokeLinecap="round">
+      <g transform="translate(215 5330) rotate(6) scale(0.62)" stroke="var(--bone-line)" fill="none" strokeLinecap="round">
         <path d="M0 0 C 24 -26, 96 -30, 150 0 C 96 30, 24 26, 0 0 Z" strokeWidth="2.4" fill="url(#bone)" opacity="0.75" />
         <line x1="14" y1="0" x2="146" y2="0" strokeWidth="3" />
         {Array.from({ length: 12 }, (_, i) => {
@@ -844,8 +899,69 @@ function Fossils() {
         <path d="M150 0 L176 -18 L170 0 L176 18 Z" strokeWidth="2.2" />
       </g>
 
+      {/* gold seams and nuggets */}
+      {[
+        "M60 5060 C 130 5040, 180 5090, 250 5062 C 300 5042, 340 5072, 392 5052",
+        "M690 5610 C 760 5586, 812 5628, 884 5600 C 930 5582, 966 5606, 1010 5590",
+        "M180 5820 C 250 5798, 300 5836, 372 5812",
+      ].map((d, i) => (
+        <g key={`au${i}`}>
+          <path d={d} fill="none" stroke="#6b4f14" strokeWidth="9" opacity="0.5" strokeLinecap="round" />
+          <path d={d} fill="none" stroke="url(#gold)" strokeWidth="4" strokeLinecap="round" />
+        </g>
+      ))}
+      {[
+        [128, 5052],
+        [268, 5060],
+        [742, 5602],
+        [906, 5596],
+        [236, 5806],
+      ].map(([x, y], i) => (
+        <g key={`nug${i}`}>
+          <ellipse cx={x} cy={y} rx={9 + (i % 3) * 3} ry={6 + (i % 2) * 3} fill="url(#gold)" />
+          <ellipse cx={x - 2} cy={y - 2} rx={3} ry={2} fill="#fff6cf" opacity="0.75" />
+        </g>
+      ))}
+
+      {/* diamonds in their pockets */}
+      {[
+        { x: 880, y: 5040, s: 1.15, d: -2.4 },
+        { x: 330, y: 5480, s: 0.85, d: -6.1 },
+        { x: 1092, y: 5250, s: 0.7, d: -9.4 },
+        { x: 560, y: 5860, s: 1, d: -4.2 },
+      ].map((g, i) => (
+        <g key={`dia${i}`} transform={`translate(${g.x} ${g.y}) scale(${g.s})`}>
+          <circle r="34" fill="url(#gem-halo)" />
+          <path d="M-16 -6 L0 -22 L16 -6 L0 22 Z" fill="url(#diamond)" stroke="#dff6ff" strokeWidth="1.4" />
+          <path d="M-16 -6 L16 -6" stroke="#eafaff" strokeWidth="1.2" opacity="0.9" />
+          <path d="M0 -22 L-6 -6 L0 22 L6 -6 Z" fill="#ffffff" opacity="0.35" />
+          <circle
+            cx="7"
+            cy="-11"
+            r="2.6"
+            fill="#fff"
+            className="anim"
+            style={{ animation: `twinkle ${3.4 + i}s ease-in-out ${g.d}s infinite` }}
+          />
+        </g>
+      ))}
+
+      {/* a small amethyst cluster */}
+      <g transform="translate(760 5320) scale(0.9)">
+        <circle r="26" fill="url(#gem-halo)" opacity="0.7" />
+        {[-14, 0, 13].map((dx, i) => (
+          <path
+            key={i}
+            d={`M${dx - 7} 8 L${dx} ${-14 - i * 4} L${dx + 7} 8 Z`}
+            fill="url(#amethyst)"
+            stroke="#e6d2ff"
+            strokeWidth="1"
+          />
+        ))}
+      </g>
+
       {/* trilobite */}
-      <g transform="translate(1010 4880) scale(1.15)" stroke="var(--bone-line)" fill="url(#bone)" strokeWidth="2.2">
+      <g transform="translate(1010 4870) scale(0.72)" stroke="var(--bone-line)" fill="url(#bone)" strokeWidth="2.2">
         <path d="M-58 0 C -50 -34, 52 -34, 64 0 C 52 34, -50 34, -58 0 Z" />
         <path d="M-58 0 C -52 -20, -20 -22, -14 0 C -20 22, -52 20, -58 0 Z" />
         <line x1="-14" y1="-26" x2="-14" y2="26" />
@@ -938,12 +1054,20 @@ function Core() {
 /* ------------------------------------------------------------------ strip -- */
 
 export default function Descent() {
+  const hostRef = useRef<HTMLDivElement>(null);
+  const live = useLiveBands(hostRef);
+
+  // one band per scene, in the order they are drawn
+  const scenes = [Space, Sky, Surface, Underground, Fossils, Core];
+
   return (
+    <div ref={hostRef}>
     <svg
       className="block h-auto w-full"
       viewBox={`0 0 ${W} ${H}`}
       preserveAspectRatio="xMidYMid meet"
-      aria-hidden
+      role="img"
+      aria-label="A cross-section descending from the outer planets, through the sky and a city street, down past a subway tunnel and fossil beds, to the Earth's molten core."
     >
       <defs>
         {/* ONE gradient for the whole descent — this is what removes the seams */}
@@ -1054,6 +1178,25 @@ export default function Descent() {
           <stop offset="100%" stopColor="#fff3c0" stopOpacity="0" />
         </linearGradient>
 
+        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#c8912b" />
+          <stop offset="45%" stopColor="#ffd75e" />
+          <stop offset="100%" stopColor="#b8801f" />
+        </linearGradient>
+        <linearGradient id="diamond" x1="0" y1="0" x2="0.4" y2="1">
+          <stop offset="0%" stopColor="#eafcff" />
+          <stop offset="55%" stopColor="#9fe0f5" />
+          <stop offset="100%" stopColor="#4fa6c9" />
+        </linearGradient>
+        <linearGradient id="amethyst" x1="0" y1="0" x2="0.3" y2="1">
+          <stop offset="0%" stopColor="#e9d4ff" />
+          <stop offset="60%" stopColor="#a06fe0" />
+          <stop offset="100%" stopColor="#6d3fb0" />
+        </linearGradient>
+        <radialGradient id="gem-halo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#bfefff" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#bfefff" stopOpacity="0" />
+        </radialGradient>
         <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--bone)" />
           <stop offset="100%" stopColor="var(--bone-shade)" />
@@ -1085,12 +1228,12 @@ export default function Descent() {
 
       <rect width={W} height={H} fill="url(#strip)" />
 
-      <Space />
-      <Sky />
-      <Surface />
-      <Underground />
-      <Fossils />
-      <Core />
+      {scenes.map((Scene, i) => (
+        <g key={BANDS[i].id} className={cn("band", live.has(i) && "band--live")}>
+          <Scene />
+        </g>
+      ))}
     </svg>
+    </div>
   );
 }

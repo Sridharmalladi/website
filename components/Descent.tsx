@@ -487,21 +487,21 @@ function Underground() {
       <rect x="640" y="3570" width="420" height="14" rx="7" fill="#3a2b1e" opacity="0.7" />
       <rect x="200" y="3640" width="320" height="12" rx="6" fill="#3a2b1e" opacity="0.6" />
 
-      <path d="M -40 4540 L -40 3760 A 640 340 0 0 1 1240 3760 L 1240 4540 Z" fill="#31201a" opacity="0.6" />
-      <path d="M 40 4540 L 40 3800 A 560 300 0 0 1 1160 3800 L 1160 4540 Z" fill="var(--tunnel-deep)" />
+      <path d="M -40 4560 L -40 3960 A 640 150 0 0 1 1240 3960 L 1240 4560 Z" fill="#31201a" opacity="0.6" />
+      <path d="M 40 4560 L 40 3995 A 560 130 0 0 1 1160 3995 L 1160 4560 Z" fill="var(--tunnel-deep)" />
 
       {Array.from({ length: 6 }, (_, i) => {
         const x = 130 + i * 190;
         return (
           <g key={i}>
-            <circle cx={x} cy="3700" r="60" fill="url(#tunnel-lamp)" />
-            <rect x={x - 18} y="3690" width="36" height="8" rx="4" fill="#ffdca0" opacity="0.9" />
+            <circle cx={x} cy="3922" r="22" fill="url(#tunnel-lamp)" />
+            <rect x={x - 11} y="3918" width="22" height="5" rx="2.5" fill="#ffdca0" opacity="0.85" />
           </g>
         );
       })}
 
       {Array.from({ length: 7 }, (_, i) => (
-        <rect key={i} x={70 + i * 170} y="3820" width="9" height="720" fill="#3d2820" opacity="0.45" />
+        <rect key={i} x={70 + i * 170} y="3990" width="9" height="570" fill="#3d2820" opacity="0.45" />
       ))}
 
       <rect x="0" y={RAIL_Y - 6} width={W} height="150" fill="#1c120e" />
@@ -561,117 +561,130 @@ function Underground() {
 /* --------------------------------------------------------------- fossils -- */
 
 /**
- * A sauropod skeleton in the classic museum-mount / cartoon-dig silhouette:
- * small head, long sweeping neck, barrel ribcage, four columnar legs, long
- * tapering tail. Drawn bold so it reads instantly at any size.
+ * Cartoon dig-site T. rex, in the style of the reference: every bone a clean,
+ * separated shape — individual vertebrae beads down the spine and tail, an
+ * open-jawed skull with a big orbit, a hooked ribcage, one tiny forelimb and
+ * one heavy hind leg. Reads instantly, no anatomical clutter.
  */
-function Sauropod() {
+function TRex() {
   const LINE = "var(--bone-line)";
+  const fill = "url(#bone)";
 
-  const neck = Array.from({ length: 13 }, (_, i) =>
-    bezPoint([-190, -60], [-340, -130], [-480, -262], [-596, -322], i / 12),
+  const tail = Array.from({ length: 17 }, (_, i) =>
+    bezPoint([-14, 4], [-130, 30], [-268, 62], [-408, 74], i / 16),
   );
-  const tail = Array.from({ length: 18 }, (_, i) =>
-    bezPoint([200, -50], [430, -28], [670, 62], [948, 156], i / 17),
+  const back = Array.from({ length: 7 }, (_, i) =>
+    bezPoint([-6, 0], [30, -12], [72, -22], [112, -32], i / 6),
   );
-  const backbone = Array.from({ length: 9 }, (_, i) =>
-    bezPoint([-190, -60], [-90, -76], [100, -74], [200, -50], i / 8),
+  const neck = Array.from({ length: 7 }, (_, i) =>
+    bezPoint([112, -32], [146, -52], [156, -92], [172, -126], i / 6),
   );
 
-  const chain = (
-    pts: [number, number][],
-    size: (t: number) => number,
-    key: string,
-  ) =>
+  /** A run of separated vertebra beads along a sampled curve. */
+  const beads = (pts: [number, number][], size: (t: number) => number, key: string) =>
     pts.map((pt, i) => {
       const t = i / (pts.length - 1);
       const prev = pts[Math.max(0, i - 1)];
       const next = pts[Math.min(pts.length - 1, i + 1)];
       const ang = (Math.atan2(next[1] - prev[1], next[0] - prev[0]) * 180) / Math.PI;
-      const sz = size(t);
+      const r = size(t);
       return (
         <g key={`${key}${i}`} transform={`translate(${pt[0]} ${pt[1]}) rotate(${ang})`}>
           <rect
-            x={-sz * 0.5}
-            y={-sz * 0.46}
-            width={sz}
-            height={sz * 0.92}
-            rx={sz * 0.3}
-            fill="url(#bone)"
+            x={-r * 0.62}
+            y={-r}
+            width={r * 1.24}
+            height={r * 2}
+            rx={r * 0.55}
+            fill={fill}
             stroke={LINE}
-            strokeWidth="2.4"
+            strokeWidth="1.6"
           />
         </g>
       );
     });
 
-  /** One columnar leg: femur, shin, foot. */
-  const Leg = ({ x, y, k = 1, dim = false }: { x: number; y: number; k?: number; dim?: boolean }) => (
-    <g opacity={dim ? 0.5 : 1}>
-      <Bone x1={x} y1={y} x2={x - 26 * k} y2={y + 170} w={40} w2={28} />
-      <Bone x1={x - 26 * k} y1={y + 170} x2={x - 4 * k} y2={y + 300} w={28} w2={22} />
-      <path
-        d={`M ${x - 44 * k} ${y + 300} q ${40 * k} -16 ${80 * k} 0 q ${-4 * k} 22 ${-40 * k} 22 q ${-36 * k} 0 ${-40 * k} -22 Z`}
-        fill="url(#bone)"
-        stroke={LINE}
-        strokeWidth="2.2"
-      />
-    </g>
-  );
-
   return (
     <g>
-      {/* far-side legs sit behind the body */}
-      <Leg x={-105} y={-14} k={1} dim />
-      <Leg x={222} y={-6} k={-1} dim />
+      {/* tail — beads shrinking to a point */}
+      {beads(tail as [number, number][], (t) => 13 - t * 8.5, "tl")}
 
-      {/* ribcage */}
-      {backbone.map((p, i) => {
-        const drop = 168 + Math.sin((i / 8) * Math.PI) * 74;
+      {/* ribcage: hooked ribs hanging off the back, clearly separated */}
+      {back.slice(0, 6).map((p, i) => {
+        const len = 96 - Math.abs(i - 2.2) * 11;
         return (
           <path
-            key={`rib${i}`}
-            d={`M ${p[0]} ${p[1] + 10} C ${p[0] - 74} ${p[1] + drop * 0.5}, ${p[0] - 46} ${p[1] + drop}, ${p[0] + 6} ${p[1] + drop}`}
+            key={`rb${i}`}
+            d={`M ${p[0]} ${p[1] + 12} C ${p[0] - 26} ${p[1] + len * 0.55}, ${p[0] - 20} ${p[1] + len}, ${p[0] + 12} ${p[1] + len + 10}`}
             fill="none"
             stroke="url(#bone-stroke)"
-            strokeWidth="15"
+            strokeWidth="7"
             strokeLinecap="round"
           />
         );
       })}
 
-      {/* shoulder + hip blocks */}
-      <rect x="-238" y="-92" width="86" height="74" rx="26" fill="url(#bone)" stroke={LINE} strokeWidth="2.4" />
-      <rect x="158" y="-86" width="104" height="80" rx="28" fill="url(#bone)" stroke={LINE} strokeWidth="2.4" />
+      {/* pelvis */}
+      <path
+        d="M-34 -22 C 6 -34, 46 -28, 54 -6 C 58 8, 40 20, 14 20 L-26 16 C -44 10, -46 -14, -34 -22 Z"
+        fill={fill}
+        stroke={LINE}
+        strokeWidth="1.8"
+      />
 
-      {/* backbone, neck, tail */}
-      {chain(backbone as [number, number][], () => 46, "b")}
-      {chain(neck as [number, number][], (t) => 42 - t * 16, "n")}
-      {chain(tail as [number, number][], (t) => 44 - t * 32, "t")}
+      {/* hind leg: femur, shin, foot with toes */}
+      <Bone x1={22} y1={6} x2={54} y2={92} w={26} w2={17} />
+      <Bone x1={54} y1={92} x2={16} y2={168} w={17} w2={12} />
+      <Bone x1={16} y1={168} x2={44} y2={210} w={12} w2={9} />
+      {[
+        [96, 222],
+        [86, 236],
+        [58, 240],
+      ].map(([tx, ty], i) => (
+        <Bone key={i} x1={44} y1={210} x2={tx} y2={ty} w={9} w2={5} />
+      ))}
 
-      {/* near-side legs */}
-      <Leg x={-150} y={-20} k={1} />
-      <Leg x={186} y={-10} k={-1} />
+      {/* tiny forelimb */}
+      <Bone x1={104} y1={-6} x2={126} y2={34} w={9} w2={7} />
+      <Bone x1={126} y1={34} x2={150} y2={52} w={7} w2={5} />
+      {[0, 1].map((i) => (
+        <Bone key={i} x1={150} y1={52} x2={168 + i * 6} y2={60 + i * 9} w={4} w2={2.5} />
+      ))}
 
-      {/* head — small, blunt, unmistakably sauropod */}
-      <g transform="translate(-660 -352) rotate(-16)">
+      {/* back + neck beads */}
+      {beads(back as [number, number][], () => 14, "bk")}
+      {beads(neck as [number, number][], (t) => 12 - t * 2, "nk")}
+
+      {/* skull, jaw open, facing right */}
+      <g transform="translate(178 -140) rotate(-12)">
+        {/* cranium + upper jaw */}
         <path
-          d="M0 16 C -4 0, 12 -18, 44 -24 C 78 -30, 116 -24, 128 -12 L134 2 L120 14 L44 22 C 16 25, 4 24, 0 16 Z"
-          fill="url(#bone)"
+          d="M0 6 C -4 -14, 12 -30, 40 -34 C 74 -39, 104 -30, 116 -16
+             L124 -4 L112 6 L96 8 L34 16 C 12 18, 2 16, 0 6 Z"
+          fill={fill}
           stroke={LINE}
-          strokeWidth="2.4"
+          strokeWidth="2"
         />
-        <path
-          d="M6 26 C 30 34, 92 30, 126 20 L132 28 L124 38 C 90 46, 28 46, 8 38 C 0 34, 0 28, 6 26 Z"
-          fill="url(#bone)"
-          stroke={LINE}
-          strokeWidth="2.2"
-        />
-        <circle cx="92" cy="-6" r="11" fill="#2a1b11" opacity="0.8" />
-        <ellipse cx="28" cy="-6" rx="8" ry="5" fill="#2a1b11" opacity="0.7" />
-        {Array.from({ length: 6 }, (_, i) => (
-          <path key={i} d={`M ${24 + i * 15} 22 L ${27 + i * 15} 32 L ${30 + i * 15} 22 Z`} fill="url(#bone)" stroke={LINE} strokeWidth="1" />
+        {/* big cartoon orbit */}
+        <circle cx="72" cy="-14" r="13" fill="#2f2013" opacity="0.85" />
+        {/* nostril */}
+        <ellipse cx="106" cy="-12" rx="6" ry="4" fill="#2f2013" opacity="0.7" />
+        {/* upper teeth */}
+        {Array.from({ length: 7 }, (_, i) => (
+          <path key={i} d={`M ${34 + i * 13} 15 L ${37 + i * 13} 27 L ${40 + i * 13} 15 Z`} fill={fill} stroke={LINE} strokeWidth="1" />
         ))}
+        {/* lower jaw, dropped open */}
+        <g transform="translate(2 30) rotate(9)">
+          <path
+            d="M4 0 C 26 8, 82 6, 112 -2 L120 6 L112 16 C 80 24, 24 24, 6 16 C -2 12, -2 3, 4 0 Z"
+            fill={fill}
+            stroke={LINE}
+            strokeWidth="1.8"
+          />
+          {Array.from({ length: 6 }, (_, i) => (
+            <path key={i} d={`M ${28 + i * 14} 2 L ${31 + i * 14} -10 L ${34 + i * 14} 2 Z`} fill={fill} stroke={LINE} strokeWidth="1" />
+          ))}
+        </g>
       </g>
     </g>
   );
@@ -749,8 +762,8 @@ function Fossils() {
       ))}
 
       {/* the main specimen */}
-      <g transform="translate(600 5210) scale(0.6)">
-        <Sauropod />
+      <g transform="translate(560 5150) scale(1.15)">
+        <TRex />
       </g>
 
       {/* ammonite with septa */}
@@ -893,38 +906,9 @@ function Core() {
     };
   });
 
-  // flares looping off the crown
-  const flares = [-1.05, -0.72, -0.4, -0.08, 0.26, 0.6, 0.95].map((off, i) => {
-    const a = -Math.PI / 2 + off;
-    const w = 0.09 + (i % 3) * 0.02;
-    const h = 130 + ((i * 47) % 130);
-    const p1 = [600 + Math.cos(a - w) * (DOME_R - 6), DOME_CY + Math.sin(a - w) * (DOME_R - 6)];
-    const p2 = [600 + Math.cos(a + w) * (DOME_R - 6), DOME_CY + Math.sin(a + w) * (DOME_R - 6)];
-    const cm = [600 + Math.cos(a) * (DOME_R + h * 1.7), DOME_CY + Math.sin(a) * (DOME_R + h * 1.7)];
-    return {
-      d: `M ${p1[0].toFixed(1)} ${p1[1].toFixed(1)} Q ${cm[0].toFixed(1)} ${cm[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`,
-      dur: 5 + ((i * 3) % 5),
-      delay: -((i * 4.7) % 17),
-      i,
-    };
-  });
-
   return (
     <>
       <ellipse cx="600" cy={DOME_CY - DOME_R} rx="780" ry="400" fill="url(#core-halo)" />
-
-      {flares.map((f) => (
-        <path
-          key={f.i}
-          d={f.d}
-          fill="none"
-          stroke="url(#flare)"
-          strokeWidth="13"
-          strokeLinecap="round"
-          className="anim"
-          style={{ animation: `flare-flicker ${f.dur}s ease-in-out ${f.delay}s infinite` }}
-        />
-      ))}
 
       <circle cx="600" cy={DOME_CY} r={DOME_R} fill="url(#dome)" />
 

@@ -30,26 +30,46 @@ export default function Work() {
           Selected Projects
         </p>
         {site.projects.length > 0 ? (
-          <div className="mx-auto mt-5 grid max-w-3xl gap-3 sm:grid-cols-2">
-            {site.projects.map((p) => (
-              <Card key={p.name} className="p-5 text-left">
-                <h3 className="text-base">{p.name}</h3>
-                <p className="mt-1.5 text-sm" style={{ color: "var(--text-dim)" }}>
-                  {p.blurb}
-                </p>
-                {p.href && (
-                  <a
-                    href={p.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-block text-sm"
-                    style={{ color: "var(--accent)" }}
-                  >
-                    View →
-                  </a>
-                )}
-              </Card>
-            ))}
+          <div className="mx-auto mt-5 grid max-w-3xl gap-4 sm:grid-cols-2">
+            {site.projects.map((p) => {
+              const inner = (
+                <>
+                  {p.shot && (
+                    <span className="project-shot">
+                      <img src={p.shot} alt={p.alt ?? `${p.name} homepage`} loading="lazy" />
+                    </span>
+                  )}
+                  <span className="block p-5 text-left">
+                    <span className="block text-base">{p.name}</span>
+                    <span className="mt-1.5 block text-sm" style={{ color: "var(--text-dim)" }}>
+                      {p.blurb}
+                    </span>
+                    {p.href && (
+                      <span className="mt-3 inline-block text-sm" style={{ color: "var(--accent)" }}>
+                        Visit site →
+                      </span>
+                    )}
+                  </span>
+                </>
+              );
+
+              return p.href ? (
+                <Card
+                  key={p.name}
+                  as="a"
+                  href={p.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-card block overflow-hidden no-underline"
+                >
+                  {inner}
+                </Card>
+              ) : (
+                <Card key={p.name} className="project-card block overflow-hidden">
+                  {inner}
+                </Card>
+              );
+            })}
           </div>
         ) : (
           <p className="mx-auto mt-4 max-w-md text-sm" style={{ color: "var(--text-dim)" }}>

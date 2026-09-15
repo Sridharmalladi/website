@@ -1,15 +1,24 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ElementType, ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/cn";
 import CursorGlow from "./CursorGlow";
 
-export default function Card({
-  children,
-  className,
-}: {
-  children: ReactNode;
+type Props<T extends ElementType> = {
+  as?: T;
   className?: string;
-}) {
-  return <CursorGlow className={cn("card", className)}>{children}</CursorGlow>;
+} & Omit<ComponentPropsWithoutRef<T>, "as" | "className">;
+
+export default function Card<T extends ElementType = "div">({
+  as,
+  className,
+  ...rest
+}: Props<T>) {
+  return (
+    <CursorGlow
+      as={(as ?? "div") as ElementType}
+      className={cn("card", className)}
+      {...rest}
+    />
+  );
 }

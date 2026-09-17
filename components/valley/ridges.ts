@@ -60,11 +60,14 @@ function ridgePath(seed: number, baseY: number, amplitude: number, roughness: nu
 }
 
 /**
- * Far to near. Distance flattens a skyline, so the far range gets the smallest
- * amplitude and the fastest decay; the near range is tall, rough and close.
+ * Four ranges, far to near. Distance flattens a skyline, so the far range gets
+ * the smallest amplitude and the fastest decay; the near range is tall, rough
+ * and close. Four washes rather than three because layered ink needs the extra
+ * step to fade properly into the mist.
  */
 export const RIDGE_PATHS = [
-  ridgePath(20260917, 250, 190, 0.52),
-  ridgePath(884213, 330, 240, 0.56),
-  ridgePath(1471902, 424, 300, 0.6),
+  ridgePath(20260917, 214, 150, 0.48),
+  ridgePath(884213, 288, 200, 0.52),
+  ridgePath(1471902, 362, 250, 0.56),
+  ridgePath(59214077, 438, 290, 0.6),
 ] as const;

@@ -6,9 +6,9 @@
 :root {
   --font-body: "Della Respira", Georgia, "Times New Roman", serif;
 
-  /* Fallback ground. The live scene is painted by MidnightRange and sits behind
+  /* Fallback ground. The live scene is painted by ValleyAir and sits behind
      everything; this is what shows before it mounts and under overscroll. */
-  --bg: #03040c;
+  --bg: #0a1620;
 
   --text: #fbf7f4;
   --text-dim: #d8cfd6;
@@ -63,170 +63,182 @@ button {
   text-transform: uppercase;
 }
 
-/* ========================================================== MIDNIGHT ===== */
-/* Fixed behind the page: sky, stars, moon, three ridges with mist between. */
-.midnight {
+/* =========================================================== VALLEY ===== */
+/* Fixed behind the page: sky, a low sun, four ridge washes with mist between
+   them, air crossing left to right, and a faint paper grain over the lot.
+   Nothing in here is opaque — it is all meant to sit under the type. */
+.valley {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
-.midnight__sky {
+.valley__sky {
   position: absolute;
   inset: 0;
 }
 
-.midnight__stars span {
+/* Parked in the margin beside the text column, never behind it. */
+.valley__sun {
   position: absolute;
-  border-radius: 50%;
-  background: #eef3ff;
-  animation-name: star-twinkle;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-@keyframes star-twinkle {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(0.35); }
-}
-
-.midnight__moon {
-  position: absolute;
-  /* Parked in the margin beside the text column, never behind it. */
-  right: clamp(10px, calc(50% - var(--column) / 2 - 96px), 13vw);
-  width: clamp(54px, 6vw, 84px);
+  right: clamp(8px, calc(50% - var(--column) / 2 - 120px), 15vw);
+  width: clamp(200px, 26vw, 380px);
   aspect-ratio: 1;
   translate: 0 -50%;
-}
-.midnight__moon-disc {
-  position: absolute;
-  inset: 34%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #fdfbf2 0%, #e6e9f2 58%, #b9c2d6 100%);
-  box-shadow: 0 0 18px 2px rgba(226, 233, 250, 0.35);
-}
-.midnight__moon-glow {
-  position: absolute;
-  inset: -90%;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(198, 214, 255, 0.22) 0%,
-    rgba(198, 214, 255, 0.08) 38%,
-    transparent 70%
+    rgba(255, 224, 168, 0.5) 0%,
+    rgba(255, 196, 130, 0.22) 34%,
+    rgba(255, 176, 120, 0.08) 58%,
+    transparent 76%
   );
 }
 
-/* Ridges are pinned to the bottom of the frame and drift at their own rates. */
-.midnight__ridge {
+.valley__mist-stack {
+  position: absolute;
+  inset: 0;
+}
+
+/* Ridge washes, pinned to the bottom, each drifting at its own rate. */
+.valley__ridge {
   position: absolute;
   inset: auto 0 0 0;
-  height: min(58vh, 520px);
 }
-.midnight__ridge svg {
+.valley__ridge svg {
   display: block;
   width: 100%;
   height: 100%;
 }
-.midnight__ridge--1 {
-  height: min(70vh, 620px);
-}
-.midnight__ridge--2 {
-  height: min(62vh, 560px);
-}
+.valley__ridge--1 { height: min(76vh, 660px); }
+.valley__ridge--2 { height: min(68vh, 600px); }
+.valley__ridge--3 { height: min(60vh, 540px); }
+.valley__ridge--4 { height: min(52vh, 470px); }
 
-/* Mist: wide, soft bands lying along each crest, drifting slowly sideways.
-   Each band has to straddle the ridgeline it belongs to — a band that sits
-   below its crest is simply painted over by that ridge's fill. Crest heights
-   come from the ridge boxes: the silhouette starts ~52% / ~37% / ~19% up its
-   own box, measured from the bottom of the frame. */
-.midnight__mist {
+/* Mist bands, each straddling the crest of the wash behind it. */
+.valley__mist {
   position: absolute;
   left: -30%;
   width: 160%;
   border-radius: 50%;
-  filter: blur(20px);
-  /* Fog isn't an even slab: this thins it in places and fades both ends, so no
-     band terminates in a straight edge at the side of the screen. */
+  filter: blur(22px);
+  /* fog is never an even slab, and no band should end in a straight edge */
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0, 0, 0, 0.85) 11%,
-    #000 26%,
-    rgba(0, 0, 0, 0.42) 44%,
-    #000 61%,
-    rgba(0, 0, 0, 0.72) 79%,
+    rgba(0, 0, 0, 0.8) 12%,
+    #000 28%,
+    rgba(0, 0, 0, 0.44) 46%,
+    #000 63%,
+    rgba(0, 0, 0, 0.7) 81%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0, 0, 0, 0.85) 11%,
-    #000 26%,
-    rgba(0, 0, 0, 0.42) 44%,
-    #000 61%,
-    rgba(0, 0, 0, 0.72) 79%,
+    rgba(0, 0, 0, 0.8) 12%,
+    #000 28%,
+    rgba(0, 0, 0, 0.44) 46%,
+    #000 63%,
+    rgba(0, 0, 0, 0.7) 81%,
     transparent 100%
   );
-  animation-name: mist-drift;
-  animation-timing-function: ease-in-out;
+  animation-name: valley-mist;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
-.midnight__mist--far {
-  bottom: 23vh;
+.valley__mist--1 {
+  bottom: 30vh;
   height: 13vh;
-  background: linear-gradient(to top, rgba(168, 194, 232, 0.34), rgba(168, 194, 232, 0));
-  animation-duration: 74s;
+  background: linear-gradient(to top, rgba(206, 226, 224, 0.2), rgba(206, 226, 224, 0));
+  animation-duration: 96s;
 }
-.midnight__mist--mid {
-  bottom: 11vh;
+.valley__mist--2 {
+  bottom: 21vh;
   height: 12vh;
-  background: linear-gradient(to top, rgba(152, 178, 222, 0.34), rgba(152, 178, 222, 0));
-  animation-duration: 58s;
-  animation-direction: reverse;
+  background: linear-gradient(to top, rgba(190, 214, 214, 0.2), rgba(190, 214, 214, 0));
+  animation-duration: 76s;
 }
-.midnight__mist--near {
-  bottom: -2vh;
+.valley__mist--3 {
+  bottom: 12vh;
+  height: 12vh;
+  background: linear-gradient(to top, rgba(172, 200, 200, 0.19), rgba(172, 200, 200, 0));
+  animation-duration: 112s;
+}
+.valley__mist--4 {
+  bottom: 1vh;
   height: 11vh;
-  background: linear-gradient(to top, rgba(138, 162, 206, 0.3), rgba(138, 162, 206, 0));
-  animation-duration: 92s;
+  background: linear-gradient(to top, rgba(154, 184, 188, 0.18), rgba(154, 184, 188, 0));
+  animation-duration: 88s;
 }
-@keyframes mist-drift {
-  0%, 100% { transform: translateX(-3%) scaleY(1); }
-  50% { transform: translateX(4%) scaleY(1.12); }
+/* mist drifts the same way the air does: left to right */
+@keyframes valley-mist {
+  0% { transform: translateX(-6%) scaleY(1); }
+  50% { transform: translateX(3%) scaleY(1.1); }
+  100% { transform: translateX(-6%) scaleY(1); }
 }
 
-.midnight__haze {
+/* Air: long translucent streaks crossing the frame, always left to right. */
+.valley__air {
   position: absolute;
-  inset: auto 0 0 0;
-  height: 30vh;
-  background: linear-gradient(to top, rgba(2, 3, 8, 0.6), rgba(2, 3, 8, 0));
+  inset: 0;
+}
+.valley__air span {
+  position: absolute;
+  left: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    rgba(230, 244, 240, 0) 0%,
+    rgba(230, 244, 240, 0.7) 22%,
+    rgba(255, 240, 214, 0.85) 52%,
+    rgba(230, 244, 240, 0.6) 76%,
+    rgba(230, 244, 240, 0) 100%
+  );
+  filter: blur(1.2px);
+  animation-name: air-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes air-drift {
+  0% { transform: translateX(-60vw); }
+  100% { transform: translateX(160vw); }
+}
+
+/* Paper: the grain that keeps big soft washes from banding. */
+.valley__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(6, 14, 20, 0.34) 0%,
+    rgba(6, 14, 20, 0.42) 46%,
+    rgba(5, 12, 18, 0.54) 100%
+  );
+}
+
+.valley__paper {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (max-width: 640px) {
-  /* No margin to park a bright disc in at this width, so the moon stays behind
-     cloud: the glow keeps lighting the scene, the disc itself goes. */
-  .midnight__moon-disc {
+  /* fewer big blurred paints on a phone */
+  .valley__mist--1,
+  .valley__mist--3 {
     display: none;
   }
-  .midnight__moon {
-    right: 6vw;
+  .valley__sun {
+    right: 4vw;
+    width: 52vw;
   }
-
-  /* one mist band instead of three: fewer big blurred paints on a phone */
-  .midnight__mist--far,
-  .midnight__mist--near {
-    display: none;
-  }
-  .midnight__ridge {
-    height: min(46vh, 380px);
-  }
-  .midnight__ridge--1 {
-    height: min(56vh, 440px);
-  }
-  .midnight__ridge--2 {
-    height: min(50vh, 410px);
-  }
+  .valley__ridge--1 { height: min(58vh, 460px); }
+  .valley__ridge--2 { height: min(52vh, 420px); }
+  .valley__ridge--3 { height: min(46vh, 380px); }
+  .valley__ridge--4 { height: min(40vh, 340px); }
 }
 
 /* ======================================================== COMPONENTS ==== */
@@ -366,8 +378,8 @@ a.project-card:hover .project-shot img {
   body {
     scroll-behavior: auto;
   }
-  .midnight__stars span,
-  .midnight__mist {
+  .valley__mist,
+  .valley__air span {
     animation: none;
   }
   .project-card,

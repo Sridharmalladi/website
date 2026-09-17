@@ -1,4 +1,4 @@
-import MidnightRange from "@/components/midnight/MidnightRange";
+import ValleyAir from "@/components/valley/ValleyAir";
 import SocialLinks from "@/components/SocialLinks";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -6,7 +6,7 @@ import Work from "@/components/Work";
 import { site } from "@/config/site";
 
 /**
- * One centred column over the fixed midnight range. The background can't collide
+ * One centred column over the fixed valley. The background can't collide
  * with the copy or add to the page's height, so the page is exactly as long as
  * what's written on it.
  */
@@ -17,11 +17,11 @@ export default function Portfolio() {
         Skip to content
       </a>
 
-      <MidnightRange />
+      <ValleyAir />
 
       <main className="page">
         <header className="pt-10 sm:pt-14">
-          <SocialLinks solid />
+          <SocialLinks />
         </header>
 
         <section className="pt-16 sm:pt-24" aria-label="Introduction">

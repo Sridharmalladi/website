@@ -39,7 +39,7 @@ export const site = {
   socials: {
     github: "https://github.com/Sridharmalladi",
     linkedin: "https://www.linkedin.com/in/sridhar-malladi/",
-    email: "shridhar123malladi@gmail.com",
+    email: "sridhar.malladi05@gmail.com",
   },
 } as const;
 

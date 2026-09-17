@@ -21,7 +21,6 @@ export default function Work() {
             <span className="tile__fold" aria-hidden />
             <span className="tile__meta">
               <span className="tile__name">{p.name}</span>
-              <span className="tile__blurb">{p.blurb}</span>
             </span>
           </>
         );

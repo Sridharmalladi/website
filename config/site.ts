@@ -5,7 +5,6 @@ export const site = {
   tagline: "Data scientist working on LLMs and models in production.",
   about: [
     "Data science with a focus on AI — fine-tuning LLMs, putting models into production, and monitoring them once they run.",
-    "On top of that I build interfaces that make a model's output legible enough to act on.",
   ],
 
   // Drop real entries in here whenever you're ready; the section renders

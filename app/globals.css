@@ -223,7 +223,7 @@ a {
 }
 .tile__meta {
   display: block;
-  padding: 0.85rem 0.95rem 1rem;
+  padding: 0.7rem 0.9rem 0.8rem;
   border-top: 1px solid var(--line);
   background: rgba(13, 15, 19, 0.72);
 }
@@ -233,14 +233,6 @@ a {
   font-weight: 700;
   letter-spacing: 0.01em;
 }
-.tile__blurb {
-  display: block;
-  margin-top: 0.3rem;
-  font-size: 0.85rem;
-  line-height: 1.55;
-  color: var(--text-dim);
-}
-
 /* ============================================================= FOOTER ==== */
 .footer {
   margin-top: 4rem;
@@ -272,10 +264,6 @@ a {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
-.footer__copy {
-  margin-left: auto;
-}
-
 .skip-link {
   position: absolute;
   left: 12px;

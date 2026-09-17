@@ -25,11 +25,10 @@ export default function Portfolio() {
 
         <h1 className="welcome">Welcome.</h1>
         <p className="intro">
-          Below are a few of my{" "}
-          <a href="#work">projects</a>.
+          Below are a few of my <a href="#work">projects</a>.
           <br />
-          {site.tagline} For anything <a href={site.socials.github} target="_blank" rel="noopener noreferrer">data</a>{" "}
-          related, you can contact me <CopyEmail>here</CopyEmail>.
+          For anything <a href="#about">data</a> related, you can contact me{" "}
+          <CopyEmail>here</CopyEmail>.
         </p>
 
         <h2 className="section-label" id="about">
@@ -50,7 +49,6 @@ export default function Portfolio() {
             GitHub
           </a>
           <CopyEmail>Email</CopyEmail>
-          <span className="footer__copy">© {new Date().getFullYear()} {site.name}</span>
         </footer>
       </main>
     </>

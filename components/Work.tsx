@@ -1,12 +1,8 @@
 import { site } from "@/config/site";
 
-/** The grid: one tile per project, each tile the whole link to the live site. */
+/** The shelf: one tile per product, each tile the whole link to the project. */
 export default function Work() {
-  if (site.projects.length === 0) {
-    return (
-      <p style={{ color: "var(--text-dim)" }}>Project write-ups are going here next.</p>
-    );
-  }
+  if (site.projects.length === 0) return null;
 
   return (
     <div className="tiles">
@@ -18,9 +14,11 @@ export default function Work() {
                 <img src={p.shot} alt={p.alt ?? `${p.name} homepage`} loading="lazy" />
               </span>
             )}
-            <span className="tile__fold" aria-hidden />
-            <span className="tile__meta">
+            <span className="tile__plate">
               <span className="tile__name">{p.name}</span>
+              <span className="tile__go" aria-hidden>
+                ↗
+              </span>
             </span>
           </>
         );

@@ -8,7 +8,13 @@ import { site } from "@/config/site";
  * mailto. Falls back to a mail client where the clipboard is unavailable — an
  * insecure context, or an older browser.
  */
-export default function CopyEmail({ children }: { children: React.ReactNode }) {
+export default function CopyEmail({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -29,7 +35,12 @@ export default function CopyEmail({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <button type="button" onClick={copy} aria-label="Copy my email address">
+      <button
+        type="button"
+        className={className}
+        onClick={copy}
+        aria-label="Copy my email address"
+      >
         {copied ? "copied" : children}
       </button>
       <span role="status" aria-live="polite" className="sr-only">

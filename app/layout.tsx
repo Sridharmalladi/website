@@ -1,17 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Della_Respira } from "next/font/google";
+import { Lato } from "next/font/google";
 import { site } from "@/config/site";
 import "./globals.css";
 
 /**
- * Della Respira. It ships a single 400 weight, so hierarchy comes from size,
- * letter-spacing and colour rather than boldness — asking the browser to
- * synthesise bold from one weight just smears the serifs.
+ * Lato. A plain grotesque to match the reference layout — the page is a grid of
+ * image tiles, and the type's job is to stay out of their way. Three real
+ * weights shipped, so nothing has to be synthesised.
  */
-const della = Della_Respira({
+const lato = Lato({
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-body",
+  weight: ["300", "400", "700"],
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a1620",
+  themeColor: "#0d0f13",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -40,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={della.variable}>
+    <html lang="en" className={lato.variable}>
       <body>{children}</body>
     </html>
   );

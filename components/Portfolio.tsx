@@ -1,46 +1,56 @@
-import ValleyAir from "@/components/valley/ValleyAir";
-import SocialLinks from "@/components/SocialLinks";
-import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Work from "@/components/Work";
+import CopyEmail from "@/components/CopyEmail";
 import { site } from "@/config/site";
 
 /**
- * One centred column over the fixed valley. The background can't collide
- * with the copy or add to the page's height, so the page is exactly as long as
- * what's written on it.
+ * One centred column on dark speckled paper: the name, a short welcome, what
+ * the work is, and a grid of project tiles. Nothing here moves on its own.
  */
 export default function Portfolio() {
   return (
     <>
-      <a href="#about" className="skip-link">
-        Skip to content
+      <a href="#work" className="skip-link">
+        Skip to projects
       </a>
 
-      <ValleyAir />
-
       <main className="page">
-        <header className="pt-10 sm:pt-14">
-          <SocialLinks />
+        <header className="masthead">
+          <span className="wordmark">
+            Sridhar
+            <br />
+            Malladi
+          </span>
         </header>
 
-        <section className="pt-16 sm:pt-24" aria-label="Introduction">
-          <Hero />
-        </section>
+        <h1 className="welcome">Welcome.</h1>
+        <p className="intro">
+          Below are a few of my{" "}
+          <a href="#work">projects</a>.
+          <br />
+          {site.tagline} For anything <a href={site.socials.github} target="_blank" rel="noopener noreferrer">data</a>{" "}
+          related, you can contact me <CopyEmail>here</CopyEmail>.
+        </p>
 
-        <section id="about" className="pt-20 sm:pt-28" aria-label="About">
-          <About />
-        </section>
+        <h2 className="section-label" id="about">
+          About
+        </h2>
+        <About />
 
-        <section id="work" className="pt-20 sm:pt-28" aria-label="Projects">
-          <Work />
-        </section>
+        <h2 className="section-label" id="work">
+          Projects
+        </h2>
+        <Work />
 
-        <footer
-          className="mt-24 border-t pb-14 pt-6 text-xs sm:mt-32"
-          style={{ borderColor: "var(--panel-border)", color: "var(--text-dim)" }}
-        >
-          © {new Date().getFullYear()} {site.name}
+        <footer className="footer">
+          <a href={site.socials.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+          <a href={site.socials.github} target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <CopyEmail>Email</CopyEmail>
+          <span className="footer__copy">© {new Date().getFullYear()} {site.name}</span>
         </footer>
       </main>
     </>

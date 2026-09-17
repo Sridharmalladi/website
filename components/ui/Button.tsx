@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Common = { children: ReactNode; className?: string; solid?: boolean };
+type Common = { children: ReactNode; className?: string; solid?: boolean; "aria-label"?: string };
 type AsButton = Common & { href?: undefined; onClick?: () => void };
 type AsLink = Common & { href: string; external?: boolean };
 
@@ -17,6 +17,7 @@ export default function Button(props: AsButton | AsLink) {
         href={props.href}
         target={props.external ? "_blank" : undefined}
         rel={props.external ? "noopener noreferrer" : undefined}
+        aria-label={props["aria-label"]}
         className={classes}
       >
         {children}
@@ -24,7 +25,12 @@ export default function Button(props: AsButton | AsLink) {
     );
   }
   return (
-    <button type="button" onClick={(props as AsButton).onClick} className={classes}>
+    <button
+      type="button"
+      onClick={(props as AsButton).onClick}
+      aria-label={props["aria-label"]}
+      className={classes}
+    >
       {children}
     </button>
   );

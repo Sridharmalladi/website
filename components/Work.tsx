@@ -1,22 +1,19 @@
 "use client";
 
 import { site } from "@/config/site";
-import ScrollReveal from "@/components/ScrollReveal";
 import Card from "@/components/ui/Card";
 
 /** Straight to the projects — no skills list in front of them. */
 export default function Work() {
   return (
     <div>
-      <ScrollReveal>
-        <p className="label" style={{ color: "var(--accent)" }}>
-          Projects
-        </p>
-      </ScrollReveal>
+      <p className="label" style={{ color: "var(--accent)" }}>
+        Projects
+      </p>
 
-      <ScrollReveal delay={0.08} className="mt-6">
+      <div className="mt-6">
         {site.projects.length > 0 ? (
-          <div className="mx-auto grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {site.projects.map((p) => {
               const inner = (
                 <>
@@ -58,11 +55,11 @@ export default function Work() {
             })}
           </div>
         ) : (
-          <p className="mx-auto max-w-md text-sm" style={{ color: "var(--text-dim)" }}>
+          <p className="max-w-md text-sm" style={{ color: "var(--text-dim)" }}>
             Project write-ups are going here next.
           </p>
         )}
-      </ScrollReveal>
+      </div>
     </div>
   );
 }

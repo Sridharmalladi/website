@@ -7,7 +7,7 @@
  */
 
 export const STRIP_W = 1200;
-export const STRIP_H = 7000;
+export const STRIP_H = 6870;
 
 export interface Band {
   id: string;
@@ -21,23 +21,12 @@ export const BANDS: Band[] = [
   { id: "sky", from: 1800, to: 2700 },
   { id: "surface", from: 2700, to: 3560 },
   { id: "subway", from: 3560, to: 4560 },
-  { id: "fossils", from: 4560, to: 5950 },
-  { id: "core", from: 5950, to: 7000 },
+  { id: "fossils", from: 4560, to: 5620 },
+  { id: "core", from: 5620, to: 6870 },
 ];
 
-/** Where each copy block is anchored, in strip units. */
-export const ANCHORS = {
-  about: 2100, // sky, once the hero screen has cleared
-  work: 2800, // over the city
-  contact: 5880, // down in the core
-} as const;
-
-/** Strip units -> percentage of total height, for CSS `top`. */
-export const pct = (y: number) => `${((y / STRIP_H) * 100).toFixed(3)}%`;
-
 /**
- * Strip units -> a `top` measured against the ARTWORK's height rather than the
- * page box. The page can carry padding past the last scene without dragging
- * every copy block off the scene it was written for.
+ * Copy placement no longer lives here: the blocks are positioned from CSS
+ * custom properties (--at-about, --at-work, --at-contact in globals.css) so
+ * they can be tuned per breakpoint against the artwork's own height.
  */
-export const at = (y: number) => `calc(var(--art-h) * ${(y / STRIP_H).toFixed(4)})`;

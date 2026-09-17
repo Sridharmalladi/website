@@ -2,9 +2,8 @@
 
 import { site } from "@/config/site";
 import ScrollReveal from "@/components/ScrollReveal";
-import SocialLinks from "@/components/SocialLinks";
 
-/** Pure content — the Core zone owns the background, layout, and scrim. */
+/** The end of the descent. Links live once, up with the name. */
 export default function Contact() {
   return (
     <div>
@@ -16,15 +15,14 @@ export default function Contact() {
           Let&apos;s build something.
         </h2>
         <p className="mx-auto mt-4 max-w-md leading-relaxed" style={{ color: "var(--text-dim)" }}>
-          Open to interesting problems and good teams. Fastest way to reach me is email.
+          Open to interesting problems and good teams.{" "}
+          <a href={`mailto:${site.socials.email}`} style={{ color: "var(--accent)" }}>
+            {site.socials.email}
+          </a>
         </p>
-        <SocialLinks solid className="mt-8 justify-center" />
       </ScrollReveal>
 
-      <footer
-        className="mt-24 border-t pb-10 pt-6 text-xs"
-        style={{ borderColor: "var(--panel-border)", color: "var(--text-dim)" }}
-      >
+      <footer className="mt-12 text-xs" style={{ color: "var(--text-dim)" }}>
         © {new Date().getFullYear()} {site.name}
       </footer>
     </div>

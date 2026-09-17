@@ -4,33 +4,19 @@ import { site } from "@/config/site";
 import ScrollReveal from "@/components/ScrollReveal";
 import Card from "@/components/ui/Card";
 
-/** Sits over the city: what I do, plus the project slots. */
+/** Straight to the projects — no skills list in front of them. */
 export default function Work() {
   return (
     <div>
       <ScrollReveal>
         <p className="label" style={{ color: "var(--accent)" }}>
-          Work
+          Projects
         </p>
-        <h2 className="mx-auto mt-3 max-w-xl text-3xl font-normal tracking-[0.01em] sm:text-4xl">
-          What I do
-        </h2>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.08} className="mt-7 flex flex-wrap justify-center gap-3">
-        {site.focus.map((f) => (
-          <Card key={f} className="px-4 py-2 text-sm">
-            {f}
-          </Card>
-        ))}
-      </ScrollReveal>
-
-      <ScrollReveal delay={0.16} className="mt-12">
-        <p className="label" style={{ color: "var(--text-dim)" }}>
-          Selected Projects
-        </p>
+      <ScrollReveal delay={0.08} className="mt-6">
         {site.projects.length > 0 ? (
-          <div className="mx-auto mt-5 grid max-w-3xl gap-4 sm:grid-cols-2">
+          <div className="mx-auto grid gap-4 sm:grid-cols-2">
             {site.projects.map((p) => {
               const inner = (
                 <>
@@ -72,7 +58,7 @@ export default function Work() {
             })}
           </div>
         ) : (
-          <p className="mx-auto mt-4 max-w-md text-sm" style={{ color: "var(--text-dim)" }}>
+          <p className="mx-auto max-w-md text-sm" style={{ color: "var(--text-dim)" }}>
             Project write-ups are going here next.
           </p>
         )}

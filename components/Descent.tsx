@@ -29,8 +29,8 @@ const PERSON_H = 1.75 * M; // 35
 const GROUND = 3400; // street level
 const ROAD_BOTTOM = 3540;
 const RAIL_Y = 4230;
-const DOME_CY = 7650;
-const DOME_R = 800; // dome crown lands at y = 6850
+const DOME_CY = 7520;
+const DOME_R = 800; // dome crown lands at y = 6720
 
 /* ---------------------------------------------------------------- helpers -- */
 
@@ -136,7 +136,7 @@ function Space() {
       {/* not from here */}
       {[
         { x: 470, y: 760, s: 1, dur: 9, delay: -2.6 },
-        { x: 1040, y: 1290, s: 0.62, dur: 12, delay: -7.4 },
+        { x: 1050, y: 1070, s: 0.62, dur: 12, delay: -7.4 },
       ].map((u, i) => (
         <g key={`ufo${i}`} transform={`translate(${u.x} ${u.y}) scale(${u.s})`}>
           <g className="anim" style={{ animation: `hover-bob ${u.dur}s ease-in-out ${u.delay}s infinite` }}>
@@ -182,19 +182,19 @@ function Space() {
         </g>
       </g>
 
-      {/* Saturn — low and left, well below the name */}
+      {/* Saturn — left, and clear of where the name sits */}
       <g>
-        <g transform="rotate(-18 285 1215)">
-          <ellipse cx="285" cy="1215" rx="124" ry="30" fill="none" stroke="url(#ring)" strokeWidth="13" />
+        <g transform="rotate(-18 285 1020)">
+          <ellipse cx="285" cy="1020" rx="124" ry="30" fill="none" stroke="url(#ring)" strokeWidth="13" />
         </g>
-        <circle cx="285" cy="1215" r="60" fill="url(#saturn)" />
+        <circle cx="285" cy="1020" r="60" fill="url(#saturn)" />
         <g clipPath="url(#saturn-clip)" opacity="0.3">
           <ellipse cx="285" cy="1190" rx="72" ry="7" fill="#8a6023" />
           <ellipse cx="285" cy="1223" rx="72" ry="6" fill="#fff0c0" opacity="0.5" />
           <ellipse cx="285" cy="1248" rx="72" ry="8" fill="#8a6023" />
         </g>
-        <g transform="rotate(-18 285 1215)">
-          <path d="M 161 1215 A 124 30 0 0 0 409 1215" fill="none" stroke="url(#ring)" strokeWidth="13" />
+        <g transform="rotate(-18 285 1020)">
+          <path d="M 161 1020 A 124 30 0 0 0 409 1020" fill="none" stroke="url(#ring)" strokeWidth="13" />
         </g>
       </g>
     </>
@@ -1096,7 +1096,7 @@ function TRex() {
 
 const DUST = Array.from({ length: 26 }, (_, i) => ({
   x: (i * 149 + 30) % W,
-  y: 4620 + ((i * 71) % 1180),
+  y: 4620 + ((i * 71) % 940),
   r: 1.2 + ((i * 13) % 4) * 0.5,
   d: (i * 0.8) % 9,
   dur: 15 + (i % 6) * 3,
@@ -1118,7 +1118,7 @@ function Fossils() {
   return (
     <>
       {/* bedding planes */}
-      {[4600, 4760, 5000, 5260, 5520, 5760].map((y, i) => (
+      {[4600, 4760, 5000, 5260, 5520].map((y, i) => (
         <path
           key={i}
           d={`M -40 ${y} Q 300 ${y - 18 + i * 5}, 600 ${y + 8} T 1240 ${y - 10}`}
@@ -1148,7 +1148,7 @@ function Fossils() {
         <circle
           key={`gr${i}`}
           cx={(i * 211 + 17) % W}
-          cy={4560 + ((i * 137 + 41) % 1320)}
+          cy={4560 + ((i * 137 + 41) % 1040)}
           r={0.8 + ((i * 7) % 3) * 0.4}
           fill="var(--fossil-mark)"
           opacity="0.16"
@@ -1159,7 +1159,6 @@ function Fossils() {
       {[
         [980, 4680, 26],
         [140, 5560, 20],
-        [1090, 5620, 16],
       ].map(([x, y, r], i) => (
         <circle key={`c${i}`} cx={x} cy={y} r={r} fill="#5a4028" opacity="0.4" />
       ))}
@@ -1197,7 +1196,6 @@ function Fossils() {
       {[
         [340, 4690, 0.62],
         [880, 4700, 0.5],
-        [1010, 5810, 0.62],
       ].map(([x, y, s], i) => (
         <g key={`bv${i}`} transform={`translate(${x} ${y}) scale(${s})`}>
           <path
@@ -1212,41 +1210,6 @@ function Fossils() {
           ))}
         </g>
       ))}
-
-      {/* fern frond */}
-      <g transform="translate(300 5840) rotate(-12) scale(0.6)" stroke="var(--bone-shade)" fill="none" strokeLinecap="round">
-        <path d="M0 0 C 40 -30, 96 -46, 150 -50" strokeWidth="4" />
-        {Array.from({ length: 12 }, (_, i) => {
-          const t = i / 11;
-          const x = 150 * t + 6 * Math.sin(t * 3);
-          const y = -50 * t * (1 - 0.15 * t);
-          const l = 22 * (1 - t * 0.6);
-          return (
-            <g key={i}>
-              <path d={`M${x} ${y} q ${l * 0.4} ${-l * 0.7} ${l} ${-l * 0.5}`} strokeWidth="2.2" />
-              <path d={`M${x} ${y} q ${l * 0.4} ${l * 0.6} ${l * 0.9} ${l * 0.4}`} strokeWidth="2.2" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* fish with vertebral column */}
-      <g transform="translate(880 5620) rotate(6) scale(0.55)" stroke="var(--bone-line)" fill="none" strokeLinecap="round">
-        <path d="M0 0 C 24 -26, 96 -30, 150 0 C 96 30, 24 26, 0 0 Z" strokeWidth="2.4" fill="url(#bone)" opacity="0.75" />
-        <line x1="14" y1="0" x2="146" y2="0" strokeWidth="3" />
-        {Array.from({ length: 12 }, (_, i) => {
-          const x = 20 + i * 10;
-          const s = 12 - Math.abs(i - 5.5) * 1.4;
-          return (
-            <g key={i}>
-              <line x1={x} y1="0" x2={x - 4} y2={-s} strokeWidth="1.8" />
-              <line x1={x} y1="0" x2={x - 4} y2={s} strokeWidth="1.8" />
-            </g>
-          );
-        })}
-        <circle cx="14" cy="-4" r="4" strokeWidth="1.8" />
-        <path d="M150 0 L176 -18 L170 0 L176 18 Z" strokeWidth="2.2" />
-      </g>
 
       {/* a limestone cave pocket — stalactites above, stalagmites below,
           with a shallow pool catching the drip */}
@@ -1298,32 +1261,12 @@ function Fossils() {
         />
       </g>
 
-      {/* trilobite */}
-      <g transform="translate(240 5640) scale(0.62)" stroke="var(--bone-line)" fill="url(#bone)" strokeWidth="2.2">
-        <path d="M-58 0 C -50 -34, 52 -34, 64 0 C 52 34, -50 34, -58 0 Z" />
-        <path d="M-58 0 C -52 -20, -20 -22, -14 0 C -20 22, -52 20, -58 0 Z" />
-        <line x1="-14" y1="-26" x2="-14" y2="26" />
-        {[2, 16, 30, 44].map((x, i) => (
-          <line key={i} x1={x} y1="-27" x2={x} y2="27" opacity="0.8" />
-        ))}
-      </g>
-
       {/* burrow trace fossils */}
       {[
         "M120 4820 C 160 4850, 120 4890, 170 4926",
         "M1040 5000 C 1080 5030, 1040 5068, 1086 5100",
       ].map((d, i) => (
         <path key={`bu${i}`} d={d} fill="none" stroke="#6a4f31" strokeWidth="7" opacity="0.35" strokeLinecap="round" />
-      ))}
-
-      {/* footprint trail */}
-      {[0, 1, 2, 3].map((i) => (
-        <path
-          key={`fp${i}`}
-          d={`M${640 + i * 92} ${5880 + (i % 2) * 24} l14 -22 l14 22 l-8 5 l-6 -9 l-6 9 Z`}
-          fill="var(--fossil-mark)"
-          opacity="0.32"
-        />
       ))}
 
       {DUST.map((d, i) => (
@@ -1400,9 +1343,6 @@ export default function Descent() {
 
   return (
     <div ref={hostRef} className="descent">
-      {/* The ribbon is narrower than the page, so the same vertical gradient is
-          repeated full-bleed behind it — no flat void beside the artwork. */}
-      <div className="descent__ambient" aria-hidden />
       <svg
       className="descent__strip block h-auto w-full"
       viewBox={`0 0 ${W} ${H}`}
@@ -1414,22 +1354,22 @@ export default function Descent() {
         {/* ONE gradient for the whole descent — this is what removes the seams */}
         <linearGradient id="strip" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#020208" />
-          <stop offset="14%" stopColor="#05040e" />
-          <stop offset="22%" stopColor="#080615" />
-          <stop offset="26%" stopColor="#241344" />
-          <stop offset="30%" stopColor="#6b3a8a" />
-          <stop offset="34%" stopColor="#d95f9b" />
-          <stop offset="37.5%" stopColor="#ffa9c2" />
-          <stop offset="41%" stopColor="#7a4276" />
-          <stop offset="46%" stopColor="#2b1a33" />
-          <stop offset="48.6%" stopColor="#33220f" />
-          <stop offset="52%" stopColor="#241812" />
-          <stop offset="60%" stopColor="#150d08" />
-          <stop offset="65%" stopColor="#2a1b11" />
-          <stop offset="74%" stopColor="#3b2817" />
-          <stop offset="82%" stopColor="#4d3421" />
-          <stop offset="86%" stopColor="#5c2410" />
-          <stop offset="92%" stopColor="#2b0a05" />
+          <stop offset="14.27%" stopColor="#05040e" />
+          <stop offset="22.42%" stopColor="#080615" />
+          <stop offset="26.49%" stopColor="#241344" />
+          <stop offset="30.57%" stopColor="#6b3a8a" />
+          <stop offset="34.64%" stopColor="#d95f9b" />
+          <stop offset="38.21%" stopColor="#ffa9c2" />
+          <stop offset="41.78%" stopColor="#7a4276" />
+          <stop offset="46.87%" stopColor="#2b1a33" />
+          <stop offset="49.52%" stopColor="#33220f" />
+          <stop offset="52.99%" stopColor="#241812" />
+          <stop offset="61.14%" stopColor="#150d08" />
+          <stop offset="66.23%" stopColor="#2a1b11" />
+          <stop offset="75.4%" stopColor="#3b2817" />
+          <stop offset="79.33%" stopColor="#4d3421" />
+          <stop offset="85.15%" stopColor="#5c2410" />
+          <stop offset="90.98%" stopColor="#2b0a05" />
           <stop offset="100%" stopColor="#1b0502" />
         </linearGradient>
 
@@ -1477,7 +1417,7 @@ export default function Descent() {
           <stop offset="100%" stopColor="#ffd8a8" stopOpacity="0.15" />
         </linearGradient>
         <clipPath id="saturn-clip">
-          <circle cx="285" cy="1215" r="60" />
+          <circle cx="285" cy="1020" r="60" />
         </clipPath>
         <clipPath id="jupiter-clip">
           <circle cx="975" cy="500" r="86" />

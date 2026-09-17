@@ -1,18 +1,13 @@
 // Single edit point for identity + contact + copy.
 export const site = {
   name: "SRIDHAR MALLADI",
-  role: "Developer",
-  tagline: "I build interfaces that feel like they have weight to them.",
+  role: "Data Scientist",
+  tagline: "Data science and AI — I fine-tune LLMs, put models into production, and watch them once they are live.",
   about: [
-    "I make interactive UI, playful motion, and the small details that make software feel considered rather than assembled.",
-    "Comfortable across the stack, happiest on the front end — animation, layout systems, and interactions that hold up under real use.",
+    "Data science with a focus on AI — fine-tuning LLMs, putting models into production, and monitoring them once they run.",
+    "On top of that I build interfaces that make a model's output legible enough to act on.",
   ],
-  focus: [
-    "Frontend Engineering",
-    "Interaction Design",
-    "Motion Systems",
-    "Creative Coding",
-  ],
+
   // Drop real entries in here whenever you're ready; the section renders
   // a placeholder while the list is empty. `shot` is a 1440x900 screenshot of
   // the live site, sitting in /public/shots.

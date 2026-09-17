@@ -1,12 +1,11 @@
 import type { ReactNode } from "react";
 import Descent from "@/components/Descent";
 import DepthGauge from "@/components/DepthGauge";
-import ScrollCue from "@/components/ScrollCue";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Work from "@/components/Work";
 import Contact from "@/components/Contact";
-import { ANCHORS, at as atArt } from "@/config/bands";
+
 
 /**
  * Copy anchored to the strip at the depth it belongs to. Positions come from
@@ -14,20 +13,22 @@ import { ANCHORS, at as atArt } from "@/config/bands";
  * on its own scrim so it stays readable whatever art is behind it.
  */
 function Layer({
-  at,
+  atVar,
   label,
   id,
   floor,
   children,
 }: {
-  at: number;
+  /** CSS custom property holding this block's fraction of the artwork. */
+  atVar: string;
   label: string;
   id: string;
   /** CSS length the block may never sit above (keeps it clear of the hero). */
   floor?: string;
   children: ReactNode;
 }) {
-  const top = floor ? `max(${floor}, ${atArt(at)})` : atArt(at);
+  const place = `calc(var(--art-h) * var(${atVar}))`;
+  const top = floor ? `max(${floor}, ${place})` : place;
   return (
     <section
       id={id}
@@ -59,25 +60,24 @@ export default function Portfolio() {
 
         {/* first screen: the name sits low, out of the planets */}
         <div
-          className="pointer-events-none absolute left-1/2 top-0 flex w-[var(--column)] -translate-x-1/2 flex-col justify-end gap-9 px-5 pb-9"
+          className="pointer-events-none absolute left-1/2 top-0 flex w-[var(--column)] -translate-x-1/2 flex-col justify-end px-5 pb-12"
           style={{ height: "100svh" }}
         >
           <div className="pointer-events-auto relative text-center">
             <div className="copy-scrim" aria-hidden />
             <Hero />
           </div>
-          <ScrollCue />
         </div>
 
-        <Layer at={ANCHORS.about} id="about" label="About" floor="calc(100svh + 7svh)">
+        <Layer atVar="--at-about" id="about" label="About" floor="calc(100svh + 6svh)">
           <About />
         </Layer>
 
-        <Layer at={ANCHORS.work} id="work" label="Work" floor="calc(100svh + 36svh)">
+        <Layer atVar="--at-work" id="work" label="Projects" floor="calc(100svh + 30svh)">
           <Work />
         </Layer>
 
-        <Layer at={ANCHORS.contact} id="contact" label="Contact">
+        <Layer atVar="--at-contact" id="contact" label="Contact">
           <Contact />
         </Layer>
       </main>

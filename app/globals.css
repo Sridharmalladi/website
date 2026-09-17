@@ -12,11 +12,19 @@
      turns a 7000px page into a ~3200px one without dropping a single scene.
      The svh floor keeps the ribbon tall enough to seat the copy on short,
      wide screens; the 94vw ceiling leaves phones full-bleed as they were. */
-  --strip-w: min(94vw, clamp(52svh, 40vw, 520px));
-  /* 1200 x 7000 viewBox -> the ribbon is 5.8333x as tall as it is wide. */
-  --art-h: calc(var(--strip-w) * 5.83333);
-  /* Copy floats wider than the ribbon, centred on it. */
-  --column: min(92vw, 680px);
+  --strip-w: min(94vw, clamp(50svh, 42vw, 560px));
+  /* 1200 x 6870 viewBox -> the ribbon is 5.725x as tall as it is wide. */
+  --art-h: calc(var(--strip-w) * 5.725);
+  /* Copy sits ON the artwork, never hanging off its edges. */
+  --column: min(92vw, var(--strip-w));
+
+  /* Where each block sits, as a fraction of the artwork's height. These are
+     the gaps in the art: open sky, the earth between the street and the
+     tunnel, the bed below the specimen, and the glow above the core. Copy
+     never lands on the city, the trains or the skeleton. */
+  --at-about: 0.518; /* the earth between the street and the tunnel roof */
+  --at-work: 0.79; /* the bed below the skeleton */
+  --at-contact: 0.931; /* the glow above the core */
   /* The page should end ON the core, not on a strip of dead colour under it. */
   --tail: 0px;
 
@@ -90,13 +98,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  /* The root box ends with the artwork, but copy can hang past it. Paint the
-     canvas dark to the art's end and leave the core's colour underneath —
-     no-repeat, or the gradient tiles and the tail comes back navy. */
-  background-color: #1b0502;
-  background-image: linear-gradient(to bottom, var(--bg) 0, var(--bg) 100%);
-  background-repeat: no-repeat;
-  background-size: 100% var(--art-h);
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -104,10 +106,9 @@ body {
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
-  /* The ambient backdrop is 100vw inside a narrower column, so the page has to
-     clip sideways. `clip` rather than `hidden`: hidden would make <body> a
-     scroll container (overflow-y resolves to auto), and the copy that hangs
-     past the last scene would be cut off instead of extending the page. */
+  /* Phones render the ribbon slightly wider than the viewport; clip rather
+     than hidden, which would make <body> a scroll container and cut off copy
+     that sits past the last scene. */
   overflow-x: clip;
 }
 
@@ -144,6 +145,10 @@ button {
        height buys the room that stacked copy blocks need. */
     --strip-w: 118vw;
     --column: 92vw;
+    /* Phones stack the cards, so the blocks need more of the strip. */
+    --at-about: 0.40;
+    --at-work: 0.53;
+    --at-contact: 0.86;
     --tail: 2svh;
   }
 }
@@ -151,87 +156,6 @@ button {
 /* =========================================================== DESCENT ==== */
 .descent {
   position: relative;
-}
-
-/* Same stops as the SVG's own #strip gradient, so the ribbon dissolves into
-   the page instead of ending at a seam. */
-.descent__ambient {
-  position: absolute;
-  inset-block: 0;
-  left: 50%;
-  z-index: -2;
-  width: 100vw;
-  transform: translateX(-50%);
-  background-color: #1b0502;
-  background-repeat: no-repeat;
-  background-size: 100% var(--art-h);
-  background-image: linear-gradient(
-    to bottom,
-    #020208 0%,
-    #05040e 14%,
-    #080615 22%,
-    #241344 26%,
-    #6b3a8a 30%,
-    #d95f9b 34%,
-    #ffa9c2 37.5%,
-    #7a4276 41%,
-    #2b1a33 46%,
-    #33220f 48.6%,
-    #241812 52%,
-    #150d08 60%,
-    #2a1b11 65%,
-    #3b2817 74%,
-    #4d3421 82%,
-    #5c2410 86%,
-    #2b0a05 92%,
-    #1b0502 100%
-  );
-}
-/* Depth of field: the surround sits back, the ribbon is the plane in focus.
-   Masked out at the last scene so it can't draw a hard line across the page. */
-.descent__ambient::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 86%, transparent 100%);
-  background: linear-gradient(
-    to right,
-    rgba(3, 2, 9, 0.6) 0%,
-    rgba(3, 2, 9, 0.22) 28%,
-    rgba(3, 2, 9, 0) 46%,
-    rgba(3, 2, 9, 0) 54%,
-    rgba(3, 2, 9, 0.22) 72%,
-    rgba(3, 2, 9, 0.6) 100%
-  );
-}
-
-/* Feather the ribbon's own edges so detail fades into the surround. */
-.descent__strip {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 6%,
-    #000 94%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 6%,
-    #000 94%,
-    transparent 100%
-  );
-}
-@media (max-width: 640px) {
-  /* full-bleed on phones: nothing to feather into */
-  .descent__strip {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .descent__ambient::after {
-    background: none;
-  }
 }
 
 /* ======================================================= COMPONENTS ==== */
@@ -511,49 +435,6 @@ button {
     rgba(4, 3, 11, 0.24) 82%,
     rgba(4, 3, 11, 0) 100%
   );
-}
-
-/* ========================================================= SCROLL CUE === */
-.scroll-cue {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.scroll-cue__label {
-  font-size: 10px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.42);
-}
-.scroll-cue__rail {
-  position: relative;
-  display: block;
-  width: 1px;
-  height: 46px;
-  overflow: hidden;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.28),
-    rgba(255, 255, 255, 0)
-  );
-}
-.scroll-cue__dot {
-  position: absolute;
-  left: 50%;
-  width: 3px;
-  height: 10px;
-  margin-left: -1.5px;
-  border-radius: 2px;
-  background: var(--accent);
-  box-shadow: 0 0 8px 1px var(--glow);
-  animation: cue-fall 2.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-}
-@keyframes cue-fall {
-  0% { transform: translateY(-14px); opacity: 0; }
-  30% { opacity: 1; }
-  75% { opacity: 1; }
-  100% { transform: translateY(46px); opacity: 0; }
 }
 
 .skip-link {

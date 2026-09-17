@@ -6,9 +6,9 @@
 :root {
   --font-body: "Della Respira", Georgia, "Times New Roman", serif;
 
-  /* Fallback ground. The live field is painted by AuroraField and sits behind
+  /* Fallback ground. The live scene is painted by MidnightRange and sits behind
      everything; this is what shows before it mounts and under overscroll. */
-  --bg: #08070f;
+  --bg: #03040c;
 
   --text: #fbf7f4;
   --text-dim: #d8cfd6;
@@ -63,80 +63,169 @@ button {
   text-transform: uppercase;
 }
 
-/* ============================================================ AURORA ===== */
-/* Fixed behind the page: ground, three ribbons of light, grain, haze. */
-.aurora {
+/* ========================================================== MIDNIGHT ===== */
+/* Fixed behind the page: sky, stars, moon, three ridges with mist between. */
+.midnight {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
-.aurora__ground {
+.midnight__sky {
   position: absolute;
   inset: 0;
 }
-.aurora__ribbon {
+
+.midnight__stars span {
   position: absolute;
-  width: clamp(560px, 92vw, 1100px);
-  height: clamp(420px, 70vh, 760px);
-  translate: -50% -50%;
-  will-change: transform;
-  animation-duration: 58s;
+  border-radius: 50%;
+  background: #eef3ff;
+  animation-name: star-twinkle;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
-/* three periods and directions, so the field never repeats a pose */
-.aurora__ribbon--1 {
-  animation-name: aurora-drift-a;
-}
-.aurora__ribbon--2 {
-  animation-name: aurora-drift-b;
-  animation-duration: 71s;
-}
-.aurora__ribbon--3 {
-  animation-name: aurora-drift-c;
-  animation-duration: 64s;
-  rotate: -6deg;
-}
-@keyframes aurora-drift-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(3.5%, -2.5%) scale(1.06); }
-}
-@keyframes aurora-drift-b {
-  0%, 100% { transform: translate(0, 0) scale(1.04); }
-  50% { transform: translate(-4%, 2%) scale(1); }
-}
-@keyframes aurora-drift-c {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(2.5%, 3%) scale(1.08); }
+@keyframes star-twinkle {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(0.35); }
 }
 
-/* Large soft gradients band on 8-bit displays; a little grain hides the steps. */
-.aurora__grain {
+.midnight__moon {
   position: absolute;
-  inset: 0;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Parked in the margin beside the text column, never behind it. */
+  right: clamp(10px, calc(50% - var(--column) / 2 - 96px), 13vw);
+  width: clamp(54px, 6vw, 84px);
+  aspect-ratio: 1;
+  translate: 0 -50%;
+}
+.midnight__moon-disc {
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #fdfbf2 0%, #e6e9f2 58%, #b9c2d6 100%);
+  box-shadow: 0 0 18px 2px rgba(226, 233, 250, 0.35);
+}
+.midnight__moon-glow {
+  position: absolute;
+  inset: -90%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(198, 214, 255, 0.22) 0%,
+    rgba(198, 214, 255, 0.08) 38%,
+    transparent 70%
+  );
 }
 
-/* A little weight along the bottom so type never floats on empty colour. */
-.aurora__haze {
+/* Ridges are pinned to the bottom of the frame and drift at their own rates. */
+.midnight__ridge {
   position: absolute;
   inset: auto 0 0 0;
-  height: 36vh;
-  background: linear-gradient(to top, rgba(4, 4, 10, 0.42), rgba(4, 4, 10, 0));
+  height: min(58vh, 520px);
+}
+.midnight__ridge svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.midnight__ridge--1 {
+  height: min(70vh, 620px);
+}
+.midnight__ridge--2 {
+  height: min(62vh, 560px);
+}
+
+/* Mist: wide, soft bands lying along each crest, drifting slowly sideways.
+   Each band has to straddle the ridgeline it belongs to — a band that sits
+   below its crest is simply painted over by that ridge's fill. Crest heights
+   come from the ridge boxes: the silhouette starts ~52% / ~37% / ~19% up its
+   own box, measured from the bottom of the frame. */
+.midnight__mist {
+  position: absolute;
+  left: -30%;
+  width: 160%;
+  border-radius: 50%;
+  filter: blur(20px);
+  /* Fog isn't an even slab: this thins it in places and fades both ends, so no
+     band terminates in a straight edge at the side of the screen. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.85) 11%,
+    #000 26%,
+    rgba(0, 0, 0, 0.42) 44%,
+    #000 61%,
+    rgba(0, 0, 0, 0.72) 79%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.85) 11%,
+    #000 26%,
+    rgba(0, 0, 0, 0.42) 44%,
+    #000 61%,
+    rgba(0, 0, 0, 0.72) 79%,
+    transparent 100%
+  );
+  animation-name: mist-drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.midnight__mist--far {
+  bottom: 23vh;
+  height: 13vh;
+  background: linear-gradient(to top, rgba(168, 194, 232, 0.34), rgba(168, 194, 232, 0));
+  animation-duration: 74s;
+}
+.midnight__mist--mid {
+  bottom: 11vh;
+  height: 12vh;
+  background: linear-gradient(to top, rgba(152, 178, 222, 0.34), rgba(152, 178, 222, 0));
+  animation-duration: 58s;
+  animation-direction: reverse;
+}
+.midnight__mist--near {
+  bottom: -2vh;
+  height: 11vh;
+  background: linear-gradient(to top, rgba(138, 162, 206, 0.3), rgba(138, 162, 206, 0));
+  animation-duration: 92s;
+}
+@keyframes mist-drift {
+  0%, 100% { transform: translateX(-3%) scaleY(1); }
+  50% { transform: translateX(4%) scaleY(1.12); }
+}
+
+.midnight__haze {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 30vh;
+  background: linear-gradient(to top, rgba(2, 3, 8, 0.6), rgba(2, 3, 8, 0));
 }
 
 @media (max-width: 640px) {
-  /* Two layers instead of three, and softer: fewer big paints on a phone. */
-  .aurora__ribbon--3 {
+  /* No margin to park a bright disc in at this width, so the moon stays behind
+     cloud: the glow keeps lighting the scene, the disc itself goes. */
+  .midnight__moon-disc {
     display: none;
   }
-  .aurora__ribbon {
-    width: 150vw;
-    height: 56vh;
-    opacity: 0.85;
+  .midnight__moon {
+    right: 6vw;
+  }
+
+  /* one mist band instead of three: fewer big blurred paints on a phone */
+  .midnight__mist--far,
+  .midnight__mist--near {
+    display: none;
+  }
+  .midnight__ridge {
+    height: min(46vh, 380px);
+  }
+  .midnight__ridge--1 {
+    height: min(56vh, 440px);
+  }
+  .midnight__ridge--2 {
+    height: min(50vh, 410px);
   }
 }
 
@@ -277,7 +366,8 @@ a.project-card:hover .project-shot img {
   body {
     scroll-behavior: auto;
   }
-  .aurora__ribbon {
+  .midnight__stars span,
+  .midnight__mist {
     animation: none;
   }
   .project-card,

@@ -22,7 +22,7 @@ export default function Contact() {
       </ScrollReveal>
 
       <footer
-        className="mt-24 border-t pt-6 text-xs"
+        className="mt-24 border-t pb-10 pt-6 text-xs"
         style={{ borderColor: "var(--panel-border)", color: "var(--text-dim)" }}
       >
         © {new Date().getFullYear()} {site.name}

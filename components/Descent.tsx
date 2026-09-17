@@ -1399,9 +1399,12 @@ export default function Descent() {
   const scenes = [Space, Sky, Surface, Underground, Fossils, Core];
 
   return (
-    <div ref={hostRef}>
-    <svg
-      className="block h-auto w-full"
+    <div ref={hostRef} className="descent">
+      {/* The ribbon is narrower than the page, so the same vertical gradient is
+          repeated full-bleed behind it — no flat void beside the artwork. */}
+      <div className="descent__ambient" aria-hidden />
+      <svg
+      className="descent__strip block h-auto w-full"
       viewBox={`0 0 ${W} ${H}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"

@@ -27,10 +27,17 @@ export const BANDS: Band[] = [
 
 /** Where each copy block is anchored, in strip units. */
 export const ANCHORS = {
-  about: 1900,
-  work: 2880,
-  contact: 6180,
+  about: 2100, // sky, once the hero screen has cleared
+  work: 2800, // over the city
+  contact: 5880, // down in the core
 } as const;
 
 /** Strip units -> percentage of total height, for CSS `top`. */
 export const pct = (y: number) => `${((y / STRIP_H) * 100).toFixed(3)}%`;
+
+/**
+ * Strip units -> a `top` measured against the ARTWORK's height rather than the
+ * page box. The page can carry padding past the last scene without dragging
+ * every copy block off the scene it was written for.
+ */
+export const at = (y: number) => `calc(var(--art-h) * ${(y / STRIP_H).toFixed(4)})`;

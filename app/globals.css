@@ -6,9 +6,9 @@
 :root {
   --font-body: "Della Respira", Georgia, "Times New Roman", serif;
 
-  /* Fallback ground. The live sky is painted by SunriseSky and sits behind
+  /* Fallback ground. The live field is painted by AuroraField and sits behind
      everything; this is what shows before it mounts and under overscroll. */
-  --bg: #12102a;
+  --bg: #08070f;
 
   --text: #fbf7f4;
   --text-dim: #d8cfd6;
@@ -63,44 +63,81 @@ button {
   text-transform: uppercase;
 }
 
-/* =============================================================== SKY ===== */
-/* Fixed behind the page: four elements, all of them soft. */
-.sky {
+/* ============================================================ AURORA ===== */
+/* Fixed behind the page: ground, three ribbons of light, grain, haze. */
+.aurora {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
 }
-.sky__wash {
+.aurora__ground {
   position: absolute;
   inset: 0;
 }
-.sky__stars span {
+.aurora__ribbon {
   position: absolute;
-  border-radius: 50%;
-  background: #fff;
-}
-.sky__sun {
-  position: absolute;
-  width: clamp(120px, 20vw, 210px);
-  aspect-ratio: 1;
-  border-radius: 50%;
+  width: clamp(560px, 92vw, 1100px);
+  height: clamp(420px, 70vh, 760px);
   translate: -50% -50%;
-  /* the disc should read as light, not as a shape with an edge */
-  filter: blur(12px);
+  will-change: transform;
+  animation-duration: 58s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
-.sky__halo {
+/* three periods and directions, so the field never repeats a pose */
+.aurora__ribbon--1 {
+  animation-name: aurora-drift-a;
+}
+.aurora__ribbon--2 {
+  animation-name: aurora-drift-b;
+  animation-duration: 71s;
+}
+.aurora__ribbon--3 {
+  animation-name: aurora-drift-c;
+  animation-duration: 64s;
+  rotate: -6deg;
+}
+@keyframes aurora-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(3.5%, -2.5%) scale(1.06); }
+}
+@keyframes aurora-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1.04); }
+  50% { transform: translate(-4%, 2%) scale(1); }
+}
+@keyframes aurora-drift-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(2.5%, 3%) scale(1.08); }
+}
+
+/* Large soft gradients band on 8-bit displays; a little grain hides the steps. */
+.aurora__grain {
   position: absolute;
-  inset: -150%;
-  border-radius: 50%;
+  inset: 0;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+
 /* A little weight along the bottom so type never floats on empty colour. */
-.sky__haze {
+.aurora__haze {
   position: absolute;
   inset: auto 0 0 0;
-  height: 42vh;
-  background: linear-gradient(to top, rgba(10, 8, 26, 0.5), rgba(10, 8, 26, 0));
+  height: 36vh;
+  background: linear-gradient(to top, rgba(4, 4, 10, 0.42), rgba(4, 4, 10, 0));
+}
+
+@media (max-width: 640px) {
+  /* Two layers instead of three, and softer: fewer big paints on a phone. */
+  .aurora__ribbon--3 {
+    display: none;
+  }
+  .aurora__ribbon {
+    width: 150vw;
+    height: 56vh;
+    opacity: 0.85;
+  }
 }
 
 /* ======================================================== COMPONENTS ==== */
@@ -154,6 +191,17 @@ button {
 .btn--solid:hover {
   background: #ffc389;
   border-color: transparent;
+}
+
+@media (max-width: 430px) {
+  /* all three links have to sit on one row inside a 90vw column */
+  .btn {
+    gap: 0.35rem;
+    padding: 0.55rem 0.7rem;
+    min-height: 40px;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+  }
 }
 
 .cursor-glow {
@@ -228,6 +276,9 @@ a.project-card:hover .project-shot img {
   html,
   body {
     scroll-behavior: auto;
+  }
+  .aurora__ribbon {
+    animation: none;
   }
   .project-card,
   .project-shot img {

@@ -1,4 +1,4 @@
-import SunriseSky from "@/components/sunrise/SunriseSky";
+import AuroraField from "@/components/aurora/AuroraField";
 import SocialLinks from "@/components/SocialLinks";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -6,9 +6,9 @@ import Work from "@/components/Work";
 import { site } from "@/config/site";
 
 /**
- * One centred column over a fixed sky. The background can't collide with the
- * copy or add to the page's height, so the page is exactly as long as what's
- * written on it.
+ * One centred column over the fixed aurora field. The background can't collide
+ * with the copy or add to the page's height, so the page is exactly as long as
+ * what's written on it.
  */
 export default function Portfolio() {
   return (
@@ -17,7 +17,7 @@ export default function Portfolio() {
         Skip to content
       </a>
 
-      <SunriseSky />
+      <AuroraField />
 
       <main className="page">
         <header className="pt-10 sm:pt-14">

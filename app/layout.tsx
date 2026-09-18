@@ -22,7 +22,11 @@ export const metadata: Metadata = {
   title: "Sridhar Malladi",
   description: site.tagline,
   metadataBase: new URL("https://sridharmalladi.online"),
-  icons: { icon: "/icon.svg" },
+  // No icons entry on purpose. Setting one here writes a plain <link
+  // href="/icon.svg">, and a browser caches a favicon hard enough that a
+  // changed icon at an unchanged path never gets picked up. Left alone, Next
+  // finds app/icon.svg on its own and stamps the link with a hash of the file,
+  // so a new icon arrives at a new URL and shows up immediately.
   openGraph: {
     title: site.name,
     description: site.tagline,

@@ -184,6 +184,19 @@ const PETALS = [
   { left: 94, delay: 18, dur: 21, size: 8, drift: 46, spin: -240 },
 ];
 
+/**
+ * What the rabbit says. One line shows at a time, each for about four seconds,
+ * and the set comes round every minute. Kept short and kind: it is a small
+ * animal on a hill, not a chatbot.
+ */
+const ASIDES = [
+  "nice shirt",
+  "hi there",
+  "take your time",
+  "he made all of these",
+  "come back soon",
+];
+
 export default function Sky() {
   // Null until the browser has read the clock, so the markup rendered at build
   // time and the first client render agree.
@@ -289,56 +302,54 @@ export default function Sky() {
       {/* Sitting on the left summit of the near ridge, which the generator puts
           at x 146 of 1440 and y 238 of 360. He does nothing but breathe, flick
           his tail and look around now and then. */}
-      <svg className="sky__squirrel" viewBox="0 0 120 120" aria-hidden>
-        <g className="sky__critter">
-          {/* tail: one solid tapered sweep, curling forward over his back */}
-          <g className="sky__tail">
-            <path d="M66,99
-                     C 82,102 95,98 103,88
-                     C 111,78 113,66 111,56
-                     C 108,40 99,26 84,19
-                     C 74,14 62,17 60,24
-                     C 58,31 65,33 71,35
-                     C 82,40 89,50 89,63
-                     C 89,78 80,89 64,90 Z" />
-          </g>
+      <div className="sky__spot">
+        <div className="sky__bubble">
+          {ASIDES.map((line, i) => (
+            <span
+              key={line}
+              className="sky__aside"
+              style={{ animationDelay: `-${i * 12}s` }}
+            >
+              {line}
+            </span>
+          ))}
+        </div>
 
-          <g className="sky__body">
-            {/* haunch and back */}
-            <path d="M44,106 C 34,106 30,98 32,88 C 35,76 41,68 49,62
-                     C 58,56 68,62 69,73 C 70,86 66,100 59,106 Z" />
-            {/* back foot */}
-            <path d="M34,104 C 28,104 25,107 26,110 C 32,112 42,111 46,108 Z" />
-            {/* foreleg, down to what he is holding */}
-            <path d="M46,72 C 40,76 35,82 34,88 C 38,91 43,88 46,83 Z" />
-            {/* the acorn, held clear of the chest so it reads as a separate thing */}
-            <g className="sky__acorn">
-              <ellipse cx="29" cy="92" rx="7" ry="7.5" />
-              <path d="M21,88 C 23,83 35,83 37,88 C 35,91 23,91 21,88 Z" />
-              <path d="M29,82 L29,78" strokeWidth="2.2" strokeLinecap="round" stroke="currentColor" />
+        <svg className="sky__rabbit" viewBox="0 0 120 120" aria-hidden>
+          <g className="sky__critter">
+            <g className="sky__body">
+              {/* sitting, haunch to chest */}
+              <path d="M44,106 C 33,106 28,98 30,87 C 33,74 41,66 52,64
+                       C 64,62 73,70 73,83 C 73,95 67,105 58,106 Z" />
+              {/* front paws */}
+              <path d="M40,100 C 34,100 31,103 32,106 C 38,108 45,107 48,104 Z" />
+              {/* cotton tail */}
+              <circle cx="76" cy="92" r="8" />
             </g>
 
             <g className="sky__head">
+              {/* ears, behind the head so they read as set into it */}
+              <path className="sky__ear sky__ear--near"
+                    d="M46,54 C 40,44 36,28 39,16 C 41,8 48,8 51,16 C 55,28 54,44 52,54 Z" />
+              <path className="sky__ear sky__ear--far"
+                    d="M60,54 C 60,42 62,27 68,17 C 73,9 79,12 79,21 C 79,33 71,47 66,55 Z" />
+              <circle cx="56" cy="62" r="14" />
+
               {/* side on, which is how he sits most of the time */}
               <g className="sky__face sky__face--side">
-                <circle cx="52" cy="46" r="13" />
-                <ellipse cx="41" cy="50" rx="6.5" ry="5" />
-                <path className="sky__ear" d="M55,34 C 52,25 57,19 62,20 C 66,26 64,34 60,38 Z" />
-                <circle className="sky__eye" cx="46" cy="43" r="2.6" />
+                <ellipse cx="44" cy="67" rx="7" ry="5.5" />
+                <circle className="sky__eye" cx="50" cy="59" r="2.6" />
               </g>
               {/* and this is him turning to look straight at you */}
               <g className="sky__face sky__face--front">
-                <circle cx="49" cy="45" r="13" />
-                <path d="M39,33 C 35,25 39,19 45,20 C 48,26 47,33 44,37 Z" />
-                <path d="M59,33 C 63,25 59,19 53,20 C 50,26 51,33 54,37 Z" />
-                <ellipse cx="43" cy="55" rx="5" ry="4" />
-                <circle className="sky__eye" cx="44" cy="43" r="2.6" />
-                <circle className="sky__eye" cx="55" cy="43" r="2.6" />
+                <ellipse cx="56" cy="70" rx="6" ry="4.5" />
+                <circle className="sky__eye" cx="50" cy="60" r="2.6" />
+                <circle className="sky__eye" cx="62" cy="60" r="2.6" />
               </g>
             </g>
           </g>
-        </g>
-      </svg>
+        </svg>
+      </div>
 
       <div className="sky__scrim" />
 

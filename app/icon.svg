@@ -1,20 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <!-- One blossom petal, the same one that comes down the page from the tree in
-       the backdrop. Nothing behind it. At sixteen pixels it is just a soft mark
-       in the corner of the tab, which is the whole idea. The fill is a mid tone
-       on purpose, so it holds against a white tab strip and a dark one without
-       needing an outline. -->
-  <g transform="rotate(-16 32 34)">
-    <path d="M27.4 10.4
-             C 21.6 18.4, 18.4 25.6, 18.4 33.2
-             C 18.4 44.6, 24.6 53.8, 32 58
-             C 39.4 53.8, 45.6 44.6, 45.6 33.2
-             C 45.6 25.6, 42.4 18.4, 36.6 10.4
-             C 35.2 13.2, 33.7 14.8, 32 15.2
-             C 30.3 14.8, 28.8 13.2, 27.4 10.4 Z"
-          fill="#cfa3bd"/>
-    <!-- the crease, gone by the time it is a favicon, there when it is not -->
-    <path d="M32 17.6 C 30 28, 30.4 44, 32 55.6"
-          fill="none" stroke="#a9758f" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
-  </g>
+  <!-- The man walking emoji, set as text so the browser draws it with whatever
+       emoji font the machine has. That means it looks native on a Mac, on
+       Windows and on a phone, and it costs one line instead of a traced figure.
+       No background: the glyph sits on its own in the tab. -->
+  <text x="32" y="50" text-anchor="middle" font-size="54"
+        font-family="'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif">🚶‍♂️</text>
 </svg>

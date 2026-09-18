@@ -381,21 +381,19 @@ export default function Sky() {
         ))}
       </svg>
 
-      {/* the floor of the valley, behind the tree and the rabbit */}
+      {/* The floor, as two bands of cutout. Each band is its grass drawn first
+          and its ground drawn over the top, so the blades rise out of the edge
+          instead of standing on it with their feet showing. */}
       <svg className="sky__ground sky__ground--back" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
-        <defs>
-          <linearGradient id="ground-far" x1="0" y1="40" x2="0" y2="200" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" className="sky__stop sky__stop--mid" />
-            <stop offset="100%" className="sky__stop sky__stop--near" />
-          </linearGradient>
-        </defs>
-        <path className="sky__turf sky__turf--far" fill="url(#ground-far)" d={groundEdge(5150, 9, 96, 26)} />
-        <path className="sky__scrub" d={shrubs(2288, 8, 100, 14, 40)} />
-        <path className="sky__blades sky__blades--far" d={grass(7714, 120, 106, 7, 34, 2.6)} />
-        <path className="sky__turf sky__turf--near" d={groundEdge(9061, 7, 132, 18)} />
-        <path className="sky__stone" d={stones(3312, 7, 136)} />
-        <path className="sky__blades sky__blades--mid" d={grass(4491, 170, 140, 10, 38, 2.4)} />
-        <path className="sky__seed" d={seedHeads(8823, 26, 140, 26, 54)} />
+        <g className="sky__band sky__band--far">
+          <path className="sky__blades" d={grass(7714, 150, 98, 10, 30, 2.4)} />
+          <path className="sky__turf" d={groundEdge(5150, 8, 98, 20)} />
+        </g>
+        <g className="sky__band sky__band--mid">
+          <path className="sky__blades" d={grass(4491, 170, 140, 12, 34, 2.6)} />
+          <path className="sky__seed" d={seedHeads(8823, 20, 140, 30, 50)} />
+          <path className="sky__turf" d={groundEdge(9061, 6, 140, 16)} />
+        </g>
       </svg>
 
       <svg className="sky__tree" viewBox="0 0 280 300" aria-hidden>
@@ -473,10 +471,12 @@ export default function Sky() {
       </div>
 
       <svg className="sky__ground sky__ground--front" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
-        <path className="sky__turf sky__turf--front" d={groundEdge(4407, 6, 174, 15)} />
-        <g className="sky__tussock">
-          <path className="sky__blades sky__blades--near" d={grass(6180, 170, 178, 16, 46, 2.7)} />
-          <path className="sky__seed sky__seed--near" d={seedHeads(1177, 14, 178, 32, 56)} />
+        <g className="sky__band sky__band--near">
+          <g className="sky__tussock">
+            <path className="sky__blades" d={grass(6180, 180, 178, 14, 44, 2.8)} />
+            <path className="sky__seed" d={seedHeads(1177, 12, 178, 30, 52)} />
+          </g>
+          <path className="sky__turf" d={groundEdge(4407, 5, 178, 12)} />
         </g>
       </svg>
 

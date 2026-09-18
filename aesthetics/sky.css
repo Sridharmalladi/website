@@ -169,9 +169,11 @@
 }
 
 /* ---------------------------------------------------------------- floor --- */
-/* Ground, shrub, grass and a few stones, in two layers with the tree and the
-   rabbit standing between them. The near layer is darkest, which is what puts
-   it in front. */
+/* Three bands of cutout, back to front. Within each band the grass is drawn
+   first and the ground over it, so a blade grows out of the edge rather than
+   standing on top of it with its feet showing. Each band is a single flat
+   tone, darker than the one behind, which is the only thing telling them
+   apart: no outlines, no plates, nothing floating. */
 .sky__ground {
   position: absolute;
   left: 0;
@@ -185,25 +187,19 @@
 .sky__ground path {
   transition: fill 2s linear;
 }
-.sky__ground--back {
-  filter: brightness(0.92);
+.sky__band--far {
+  filter: brightness(0.95);
 }
-.sky__ground--front {
-  filter: brightness(0.58);
+.sky__band--mid {
+  filter: brightness(0.76);
 }
-
-.sky__turf--far { opacity: 0.85; }
-.sky__turf--near { opacity: 0.95; }
-.sky__scrub { opacity: 0.8; }
-.sky__blades--far { opacity: 0.75; }
-.sky__blades--mid { opacity: 0.9; }
-.sky__blades--near { opacity: 1; }
-.sky__seed { opacity: 0.6; }
-.sky__seed--near { opacity: 0.8; }
-/* stones catch a little more light than the ground they sit in */
-.sky__stone {
-  fill: var(--sky-ridge-mid);
-  opacity: 0.5;
+.sky__band--near {
+  filter: brightness(0.64);
+}
+/* the seed heads are the same tone as their band, only a touch lighter, so
+   they read as part of the planting rather than as dots on top of it */
+.sky__seed {
+  opacity: 0.75;
 }
 
 /* the near grass leans, slowly, all together, the way grass does */
@@ -213,8 +209,8 @@
   animation: grass-sway 11s ease-in-out infinite alternate;
 }
 @keyframes grass-sway {
-  from { transform: skewX(-1.4deg); }
-  to { transform: skewX(1.6deg); }
+  from { transform: skewX(-1.2deg); }
+  to { transform: skewX(1.4deg); }
 }
 
 /* --------------------------------------------------------------- rabbit --- */

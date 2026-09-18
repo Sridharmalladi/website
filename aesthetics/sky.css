@@ -228,15 +228,15 @@
    and looks straight out, and now and then he says something. */
 .sky__spot {
   position: absolute;
-  /* On the second summit of the near range rather than the first. The
-     generator puts that peak at x 642 of the 1440 wide ridge box and y 260 of
-     its 360, so this is 44.6% across and (1 - 260/360) of the ridge height up.
-     The first summit sits directly under the bottom row of tiles, which left
-     him nowhere to put a word in. His drawing is cropped to his feet, so he
-     lands on the crest rather than hovering over it. */
-  left: 44.6%;
-  bottom: calc(var(--ridge-h) * 0.278);
-  width: clamp(44px, 4.8vw, 80px);
+  /* On the crown of the left hand summit of the near range. The generator
+     puts that peak at x 146 of the 1440 wide ridge box and y 238 of its 360,
+     so this is 9% across and (1 - 238/360) of the ridge height up. His drawing
+     is cropped to his feet, so he lands on the crest rather than hovering over
+     it. He stays on the left because the middle of the valley is where more
+     projects will go. */
+  left: 9%;
+  bottom: calc(var(--ridge-h) * 0.338);
+  width: clamp(52px, 5.6vw, 92px);
   transform: translateX(-50%);
 }
 .sky__rabbit {
@@ -256,7 +256,8 @@
 }
 /* the eyes catch the sky rather than the ridge */
 .sky__eye {
-  fill: var(--sky-orb);
+  fill: #f4f7ff;
+  opacity: 0.92;
 }
 
 /* every part turns about its own join, not about the middle of the drawing */
@@ -334,9 +335,11 @@
    comes round once a minute and only one is ever up. */
 .sky__bubble {
   position: absolute;
-  /* beside him, over the open sky of the valley */
-  left: 88%;
-  bottom: 18%;
+  /* in the margin to his left, clear of the shelf, which is the one column of
+     the page that no project will ever be able to cover */
+  right: 34%;
+  bottom: 108%;
+  max-width: 12ch;
   width: max-content;
   max-width: 13ch;
   padding: 0.34rem 0.55rem;
@@ -361,8 +364,8 @@
 /* thought to himself: a round cloud that trails away in dots, nine seconds
    later, so the two are never up together and never look alike */
 .sky__bubble--think {
-  left: 94%;
-  bottom: 78%;
+  right: 26%;
+  bottom: 196%;
   border-radius: 999px;
   padding: 0.45rem 0.8rem;
   color: var(--text-dim);
@@ -384,7 +387,7 @@
 .sky__bubble::after {
   content: "";
   position: absolute;
-  left: 9%;
+  right: 12%;
   bottom: -5px;
   width: 6px;
   height: 6px;
@@ -394,7 +397,7 @@
   transform: rotate(45deg);
 }
 .sky__bubble--think::after {
-  left: 12%;
+  right: 16%;
   bottom: -11px;
   width: 7px;
   height: 7px;
@@ -404,8 +407,8 @@
   transform: none;
   /* a second, smaller dot below the first */
   box-shadow:
-    -6px 9px 0 -2px rgba(13, 15, 19, 0.82),
-    -6px 9px 0 -1px rgba(255, 255, 255, 0.12);
+    6px 9px 0 -2px rgba(13, 15, 19, 0.82),
+    6px 9px 0 -1px rgba(255, 255, 255, 0.12);
 }
 
 @keyframes critter-bubble {
@@ -427,7 +430,16 @@
   7.01%, 100% { opacity: 0; }
 }
 
-/* no room for any of this beside the shelf on a narrow screen */
+/* The bubbles live in the margin beside the shelf, and that margin is only
+   wide enough to hold a word once the window is past about 1300px. Under that
+   he keeps his hill and his idle life, and says nothing. */
+@media (max-width: 1300px) {
+  .sky__bubble {
+    display: none;
+  }
+}
+
+/* and there is no room for him at all beside a narrow shelf */
 @media (max-width: 720px) {
   .sky__spot {
     display: none;

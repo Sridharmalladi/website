@@ -295,20 +295,20 @@ const PETALS = [
  * animal on a hill, not a chatbot.
  */
 const ASIDES = [
-  "nice shirt",
-  "hi there",
+  "nice shirt today",
+  "hello there friend",
   "take your time",
-  "he made all of these",
+  "he built these",
   "come back soon",
 ];
 
 /** And what he thinks about when he forgets you are there. */
 const THOUGHTS = [
-  "where did I put that carrot",
-  "what is he even looking for",
-  "that hawk again, no thanks",
-  "grass is better on the far hill",
-  "I should dig a second door",
+  "where's my carrot",
+  "what's he looking for",
+  "hawk again, hide",
+  "better grass uphill",
+  "dig another door",
 ];
 
 export default function Sky() {
@@ -451,21 +451,21 @@ export default function Sky() {
             <g className="sky__head">
               {/* ears, behind the head so they read as set into it */}
               <path className="sky__ear sky__ear--near"
-                    d="M46,54 C 40,44 36,28 39,16 C 41,8 48,8 51,16 C 55,28 54,44 52,54 Z" />
+                    d="M45,55 C 38,44 33,26 36,12 C 38,3 48,3 51,12 C 56,26 55,44 53,55 Z" />
               <path className="sky__ear sky__ear--far"
-                    d="M60,54 C 60,42 62,27 68,17 C 73,9 79,12 79,21 C 79,33 71,47 66,55 Z" />
+                    d="M60,55 C 60,41 63,24 70,13 C 76,4 84,8 83,18 C 82,32 72,48 67,56 Z" />
               <circle cx="56" cy="62" r="14" />
 
               {/* side on, which is how he sits most of the time */}
               <g className="sky__face sky__face--side">
                 <ellipse cx="44" cy="67" rx="7" ry="5.5" />
-                <circle className="sky__eye" cx="50" cy="59" r="2.6" />
+                <circle className="sky__eye" cx="50" cy="59" r="3.4" />
               </g>
               {/* and this is him turning to look straight at you */}
               <g className="sky__face sky__face--front">
                 <ellipse cx="56" cy="70" rx="6" ry="4.5" />
-                <circle className="sky__eye" cx="50" cy="60" r="2.6" />
-                <circle className="sky__eye" cx="62" cy="60" r="2.6" />
+                <circle className="sky__eye" cx="50" cy="60" r="3.4" />
+                <circle className="sky__eye" cx="62" cy="60" r="3.4" />
               </g>
             </g>
           </g>

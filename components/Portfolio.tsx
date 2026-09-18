@@ -23,9 +23,7 @@ export default function Portfolio() {
 
         <header className="masthead">
           <span className="wordmark">
-            Sridhar
-            <br />
-            Malladi
+            sridhar<span className="wordmark__family">malladi</span>
           </span>
 
           <nav className="links" aria-label="Elsewhere">

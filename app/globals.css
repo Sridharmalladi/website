@@ -164,17 +164,22 @@ a {
 }
 
 /* the name sits in a block of colour, the way a marker pen leaves it */
+/* Set on one line, lower case, in a light weight, with the family name held
+   back a shade. The block of colour it used to sit in was the loudest thing on
+   the page, and the page is quiet everywhere else. */
 .wordmark {
-  display: inline-block;
-  padding: 0.35rem 0.6rem;
-  background: rgba(99, 196, 184, 0.16);
-  border-left: 3px solid var(--accent);
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.4em;
   color: var(--text);
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: clamp(1.5rem, 3.4vw, 2.15rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: 0.005em;
+}
+.wordmark__family {
+  color: var(--text-dim);
 }
 
 /* ============================================================== LINKS ==== */
@@ -292,7 +297,7 @@ a {
     transform 200ms ease,
     scale 200ms ease;
 }
-/* The teal stroke of the wordmark, cut to a short rule above the sentence. */
+/* A short teal rule that draws itself in above the sentence. */
 .cell__blurb::before {
   content: "";
   display: block;

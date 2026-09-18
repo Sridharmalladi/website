@@ -134,25 +134,33 @@
   right: 0;
   bottom: 0;
   width: 100%;
-  height: min(56vh, 520px);
+  height: min(46vh, 430px);
   display: block;
 }
-.sky__ridge {
-  transition: fill 2s linear;
+/* The gradient stops carry the colour now, so the paths only set how far back
+   each range sits: more blur and less weight the further away it is. */
+.sky__stop {
+  transition: stop-color 2s linear;
+}
+.sky__stop--far { stop-color: var(--sky-ridge-far); }
+.sky__stop--mid { stop-color: var(--sky-ridge-mid); }
+.sky__stop--near { stop-color: var(--sky-ridge-near); }
+/* every range dissolves into the same haze at its own feet */
+.sky__stop--haze {
+  stop-color: var(--sky-haze);
+  stop-opacity: 0;
 }
 .sky__ridge--far {
-  fill: var(--sky-ridge-far);
-  opacity: 0.34;
-  filter: blur(3.5px);
+  opacity: 0.5;
+  filter: blur(5px);
 }
 .sky__ridge--mid {
-  fill: var(--sky-ridge-mid);
-  opacity: 0.58;
-  filter: blur(1.5px);
+  opacity: 0.66;
+  filter: blur(2.5px);
 }
 .sky__ridge--near {
-  fill: var(--sky-ridge-near);
-  opacity: 0.9;
+  opacity: 0.88;
+  filter: blur(0.6px);
 }
 
 /* ------------------------------------------------------------ treeline --- */
@@ -171,13 +179,12 @@
   transition: fill 2s linear;
 }
 .sky__pines--far {
-  fill: var(--sky-ridge-mid);
-  opacity: 0.66;
-  filter: blur(1.2px);
+  opacity: 0.5;
+  filter: blur(2.6px);
 }
 .sky__pines--near {
-  fill: var(--sky-ridge-near);
-  opacity: 0.92;
+  opacity: 0.8;
+  filter: blur(0.9px);
 }
 
 /* ----------------------------------------------------------------- tree --- */

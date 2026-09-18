@@ -16,11 +16,18 @@ import { hourInChicago, orbAt, skyAt } from "./palette";
 /**
  * The ranges.
  *
- * Hand-placed cones came out looking like a row of tents: same width, same
- * spacing, same slope on both sides. These are generated from a fixed seed
- * instead, so every summit gets its own width, height, lean and shoulder, and
- * the valleys between them never drop to the same line twice. Same seed on the
- * server and in the browser, so the shape is stable and nothing re-renders.
+ * Flat triangles in a hard colour read as clip art no matter how the outline is
+ * drawn, so the work here is mostly in the rendering rather than the shape.
+ * Each range is filled with a gradient that dissolves into the haze near its
+ * own base, so the foot of every layer disappears into the mist instead of
+ * ending on a line. The layers behind sit in more blur and closer to the colour
+ * of the sky, which is what makes distance read.
+ *
+ * The outlines themselves are a few big masses rather than a row of identical
+ * spikes: four or five forms per range, each with its own width and lean, and
+ * the summits kept from rounding off by holding a point close on either side.
+ * Everything comes from a fixed seed, so the shape is the same on the server
+ * and in the browser.
  */
 const lcg = (seed: number) => () => {
   seed = (seed * 1664525 + 1013904223) % 4294967296;
@@ -29,59 +36,63 @@ const lcg = (seed: number) => () => {
 
 type Range = {
   seed: number;
+  /** how many masses across the whole width */
   count: number;
-  /** summits fall between these two heights */
+  /** summits land between these two heights */
   top: number;
   bottom: number;
-  /** the floor the valleys hang from */
+  /** the line the feet of the range sit on */
   base: number;
-  /** how deep the valleys cut back towards the floor */
-  cut: number;
 };
 
 const RANGES: { name: string; range: Range }[] = [
-  { name: "far", range: { seed: 20260918, count: 13, top: 84, bottom: 188, base: 296, cut: 78 } },
-  { name: "mid", range: { seed: 77731, count: 9, top: 150, bottom: 236, base: 330, cut: 62 } },
-  { name: "near", range: { seed: 4242, count: 6, top: 232, bottom: 288, base: 360, cut: 34 } },
+  { name: "far", range: { seed: 20260918, count: 6, top: 96, bottom: 176, base: 300 } },
+  { name: "mid", range: { seed: 77731, count: 5, top: 168, bottom: 232, base: 332 } },
+  { name: "near", range: { seed: 4242, count: 4, top: 236, bottom: 286, base: 360 } },
 ];
 
-const rangePath = ({ seed, count, top, bottom, base, cut }: Range) => {
+/** Catmull Rom through the points, written out as cubic curves. */
+const through = (pts: [number, number][]) => {
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < pts.length - 1; i += 1) {
+    const p0 = pts[i - 1] ?? pts[i];
+    const p1 = pts[i];
+    const p2 = pts[i + 1];
+    const p3 = pts[i + 2] ?? pts[i + 1];
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d;
+};
+
+const rangePath = ({ seed, count, top, bottom, base }: Range) => {
   const rand = lcg(seed);
-  const span = 1560 / count;
-  let x = -60;
-  let saddle = base - rand() * cut;
-  let d = `M-60,360 L-60,${saddle.toFixed(1)}`;
+  const span = 1600 / count;
+  const pts: [number, number][] = [[-80, base]];
+  let x = -80;
 
   for (let i = 0; i < count; i += 1) {
-    const w = span * (0.68 + rand() * 0.8);
+    const w = span * (0.72 + rand() * 0.6);
     const y = top + rand() * (bottom - top);
-    // summits sit off-centre, so the two flanks are never the same slope
-    const summit = x + w * (0.3 + rand() * 0.4);
-    const nextSaddle = base - rand() * cut;
-    const tip = w * 0.05;
+    const summit = x + w * (0.34 + rand() * 0.32);
+    const drop = base - y;
 
-    // a ledge partway up one flank, on about half of them
-    if (rand() < 0.5) {
-      const lx = x + (summit - x) * (0.4 + rand() * 0.3);
-      const ly = saddle - (saddle - y) * (0.3 + rand() * 0.25);
-      d += ` L${lx.toFixed(1)},${ly.toFixed(1)}`;
-    }
-
-    d += ` L${(summit - tip).toFixed(1)},${(y + 9).toFixed(1)}`;
-    d += ` Q${summit.toFixed(1)},${y.toFixed(1)} ${(summit + tip).toFixed(1)},${(y + 9).toFixed(1)}`;
-
-    if (rand() < 0.4) {
-      const rx = summit + (x + w - summit) * (0.35 + rand() * 0.3);
-      const ry = nextSaddle - (nextSaddle - y) * (0.25 + rand() * 0.3);
-      d += ` L${rx.toFixed(1)},${ry.toFixed(1)}`;
-    }
+    // the shoulders: held close to the summit so the curve stays a peak, and
+    // set at different heights so the two flanks never match
+    pts.push([summit - w * (0.2 + rand() * 0.1), y + drop * (0.34 + rand() * 0.2)]);
+    pts.push([summit, y]);
+    pts.push([summit + w * (0.2 + rand() * 0.12), y + drop * (0.36 + rand() * 0.22)]);
 
     x += w;
-    saddle = nextSaddle;
-    d += ` L${x.toFixed(1)},${saddle.toFixed(1)}`;
+    // the saddle, which never quite reaches the floor
+    pts.push([x, base - rand() * (drop * 0.18)]);
   }
 
-  return `${d} L1560,${saddle.toFixed(1)} L1560,360 Z`;
+  pts.push([1600, base]);
+  return `${through(pts)} L1600,380 L-80,380 Z`;
 };
 
 /**
@@ -97,7 +108,7 @@ const treelinePath = (seed: number, count: number, floor: number) => {
 
   for (let i = 0; i < count; i += 1) {
     const w = step * (0.6 + rand() * 0.9);
-    const h = 26 + rand() * 46;
+    const h = 16 + rand() * 28;
     const cx = x + w / 2;
     const top = floor - h;
     // a conifer: two steps down each flank rather than a plain triangle
@@ -216,18 +227,48 @@ export default function Sky() {
       <div className="sky__mist sky__mist--low" />
 
       <svg className="sky__ridges" viewBox="0 0 1440 360" preserveAspectRatio="none">
+        <defs>
+          {RANGES.map(({ name, range }) => (
+            <linearGradient
+              key={name}
+              id={`range-${name}`}
+              x1="0"
+              y1={range.top - 30}
+              x2="0"
+              y2={range.base + 10}
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop offset="0%" className={`sky__stop sky__stop--${name}`} />
+              <stop offset="58%" className={`sky__stop sky__stop--${name}`} />
+              <stop offset="100%" className="sky__stop sky__stop--haze" />
+            </linearGradient>
+          ))}
+        </defs>
         {RANGES.map((r) => (
           <path
             key={r.name}
             className={`sky__ridge sky__ridge--${r.name}`}
+            fill={`url(#range-${r.name})`}
             d={rangePath(r.range)}
           />
         ))}
       </svg>
 
       <svg className="sky__treeline" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden>
-        <path className="sky__pines sky__pines--far" d={treelinePath(9911, 46, 96)} />
-        <path className="sky__pines sky__pines--near" d={treelinePath(5522, 30, 130)} />
+        <defs>
+          {/* the forest fades into the same haze the ranges do */}
+          <linearGradient id="pines-far" x1="0" y1="52" x2="0" y2="118" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" className="sky__stop sky__stop--mid" />
+            <stop offset="100%" className="sky__stop sky__stop--haze" />
+          </linearGradient>
+          <linearGradient id="pines-near" x1="0" y1="92" x2="0" y2="150" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" className="sky__stop sky__stop--near" />
+            <stop offset="70%" className="sky__stop sky__stop--near" />
+            <stop offset="100%" className="sky__stop sky__stop--haze" />
+          </linearGradient>
+        </defs>
+        <path className="sky__pines sky__pines--far" fill="url(#pines-far)" d={treelinePath(9911, 64, 92)} />
+        <path className="sky__pines sky__pines--near" fill="url(#pines-near)" d={treelinePath(5522, 44, 126)} />
       </svg>
 
       <svg className="sky__tree" viewBox="0 0 280 300" aria-hidden>

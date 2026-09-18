@@ -99,13 +99,14 @@ a {
 }
 
 /* ============================================================ STATUS ===== */
-/* Sits above everything, on its own line. A dot that breathes, a quiet lead in,
-   and then the word, which keeps changing every few seconds while the block of
-   the day runs. */
+/* Sits in the top right, on the line above the links, so the name keeps the
+   left side to itself. A dot that breathes, a quiet lead in, and then the word,
+   which keeps changing every few seconds while the block of the day runs. */
 .status {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.55rem;
   margin: 0;
   padding-top: 1.6rem;

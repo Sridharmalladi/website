@@ -26,6 +26,8 @@
   /* the ridges are this tall, and the squirrel is placed against the same
      number so he stays on his summit at every window size */
   --ridge-h: min(46vh, 430px);
+  /* the floor of the valley, which the tree and the rabbit both stand on */
+  --ground-h: clamp(130px, 22vh, 240px);
 
   position: fixed;
   inset: 0;
@@ -166,28 +168,50 @@
   filter: blur(0.6px);
 }
 
-/* ------------------------------------------------------------ treeline --- */
-/* Two runs of conifers along the floor of the valley, the back one hazier, so
-   the bottom of the page reads as forest rather than as a flat dark band. */
-.sky__treeline {
+/* ---------------------------------------------------------------- floor --- */
+/* Ground, shrub, grass and a few stones, in two layers with the tree and the
+   rabbit standing between them. The near layer is darkest, which is what puts
+   it in front. */
+.sky__ground {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   width: 100%;
-  height: clamp(90px, 15vh, 170px);
+  height: var(--ground-h);
   display: block;
+  fill: var(--sky-ridge-near);
 }
-.sky__pines {
+.sky__ground path {
   transition: fill 2s linear;
 }
-.sky__pines--far {
-  opacity: 0.5;
-  filter: blur(2.6px);
+.sky__ground--back {
+  filter: brightness(0.92);
 }
-.sky__pines--near {
-  opacity: 0.8;
-  filter: blur(0.9px);
+.sky__ground--front {
+  filter: brightness(0.58);
+}
+
+.sky__turf--far { opacity: 0.85; }
+.sky__turf--near { opacity: 0.95; }
+.sky__scrub { opacity: 0.8; }
+.sky__blades--far { opacity: 0.75; }
+.sky__blades--near { opacity: 1; }
+/* stones catch a little more light than the ground they sit in */
+.sky__stone {
+  fill: var(--sky-ridge-mid);
+  opacity: 0.5;
+}
+
+/* the near grass leans, slowly, all together, the way grass does */
+.sky__tussock {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: grass-sway 11s ease-in-out infinite alternate;
+}
+@keyframes grass-sway {
+  from { transform: skewX(-1.4deg); }
+  to { transform: skewX(1.6deg); }
 }
 
 /* --------------------------------------------------------------- rabbit --- */
@@ -201,9 +225,10 @@
    and looks straight out, and now and then he says something. */
 .sky__spot {
   position: absolute;
-  left: 10.1%;
-  bottom: calc(var(--ridge-h) * 0.338);
-  width: clamp(30px, 3.6vw, 56px);
+  left: 12%;
+  /* on the grass line of the near ground, not up on a ridge in mid air */
+  bottom: calc(var(--ground-h) * 0.32);
+  width: clamp(64px, 7vw, 118px);
   transform: translateX(-50%);
 }
 .sky__rabbit {
@@ -212,7 +237,9 @@
   height: auto;
   color: var(--sky-ridge-near);
   fill: var(--sky-ridge-near);
-  filter: brightness(0.7);
+  /* darker than the ground behind him, lighter than the grass in front, which
+     is what puts him between the two */
+  filter: brightness(0.64);
 }
 .sky__rabbit path,
 .sky__rabbit circle,
@@ -301,20 +328,38 @@
   position: absolute;
   /* up and to his left, into the margin beside the shelf, because straight
      above him is where the bottom row of tiles sits */
-  right: 52%;
-  bottom: 88%;
+  right: 46%;
+  bottom: 86%;
   width: max-content;
   max-width: 13ch;
   padding: 0.34rem 0.55rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 6px;
   background: rgba(13, 15, 19, 0.82);
-  color: var(--text-dim);
-  font-size: clamp(0.56rem, 0.72vw, 0.7rem);
-  letter-spacing: 0.06em;
-  line-height: 1.35;
+  color: var(--text);
+  /* the page's own face, at the page's own weight: it should read as writing,
+     not as a label stuck on the artwork */
+  font-family: var(--font-body);
+  font-size: clamp(0.62rem, 0.78vw, 0.78rem);
+  font-weight: 300;
+  line-height: 1.4;
+  text-wrap: pretty;
   opacity: 0;
-  animation: critter-bubble 12s ease-in-out infinite;
+}
+/* spoken out loud, at the top of each cycle */
+.sky__bubble--say {
+  animation: critter-bubble 24s ease-in-out infinite;
+}
+/* and thought to himself, halfway through it, so the two never overlap */
+.sky__bubble--think {
+  right: 34%;
+  bottom: 112%;
+  color: var(--text-dim);
+  font-style: italic;
+  border-style: dashed;
+  border-radius: 12px;
+  animation: critter-bubble 24s ease-in-out infinite;
+  animation-delay: -12s;
 }
 /* the little stem, pointing back down at him */
 .sky__bubble::after {
@@ -329,23 +374,34 @@
   background: rgba(13, 15, 19, 0.82);
   transform: rotate(45deg);
 }
+.sky__bubble--think::after {
+  right: 16%;
+  bottom: -9px;
+  width: 5px;
+  height: 5px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  transform: none;
+  box-shadow: -3px 7px 0 -1px rgba(13, 15, 19, 0.82);
+}
+
 @keyframes critter-bubble {
   0% { opacity: 0; transform: translateY(4px) scale(0.94); }
-  6% { opacity: 1; transform: none; }
-  30% { opacity: 1; transform: none; }
-  36%, 100% { opacity: 0; transform: translateY(2px) scale(0.98); }
+  3% { opacity: 1; transform: none; }
+  15% { opacity: 1; transform: none; }
+  19%, 100% { opacity: 0; transform: translateY(2px) scale(0.98); }
 }
 .sky__aside {
   grid-area: 1 / 1;
   opacity: 0;
-  animation: critter-aside 60s step-end infinite;
+  animation: critter-aside 120s step-end infinite;
 }
 .sky__bubble {
   display: grid;
 }
 @keyframes critter-aside {
-  0%, 7% { opacity: 1; }
-  7.01%, 100% { opacity: 0; }
+  0%, 3.4% { opacity: 1; }
+  3.41%, 100% { opacity: 0; }
 }
 
 /* no room for any of this beside the shelf on a narrow screen */
@@ -360,8 +416,11 @@
    caption. Dark silhouette, blossom lit by whatever the sky is doing. */
 .sky__tree {
   position: absolute;
+  /* the mound under him is drawn wider than his box, so it can run off both
+     sides into the ground instead of ending on a cut edge */
+  overflow: visible;
   right: clamp(2vw, 7vw, 150px);
-  bottom: clamp(40px, 7vh, 90px);
+  bottom: calc(var(--ground-h) * 0.3);
   width: clamp(180px, 19vw, 290px);
   height: auto;
   display: block;
@@ -450,6 +509,7 @@
 @media (prefers-reduced-motion: reduce) {
   .sky__mist,
   .sky__petal,
+  .sky__tussock,
   .sky__body,
   .sky__head,
   .sky__ear,

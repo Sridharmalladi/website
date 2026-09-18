@@ -96,32 +96,109 @@ const rangePath = ({ seed, count, top, bottom, base }: Range) => {
 };
 
 /**
- * The treeline along the floor of the valley: a run of conifers of varied
- * height and width from the same seeded generator, drawn as one path so the
- * whole forest costs a single node.
+ * The floor of the valley.
+ *
+ * A row of identical conifers read as a saw blade, so the foreground is built
+ * the way the ranges are: a wavy ground edge, clumps of shrub sitting on it,
+ * and grass growing out of it, all from the same seeded generator so no two
+ * blades or bumps match. Nothing here is symmetric and nothing repeats.
+ *
+ * Coordinates are in a 1440x200 box with the ground running across it.
  */
-const treelinePath = (seed: number, count: number, floor: number) => {
-  const rand = lcg(seed);
-  const step = 1520 / count;
-  let d = `M-40,${floor}`;
-  let x = -40;
 
-  for (let i = 0; i < count; i += 1) {
-    const w = step * (0.6 + rand() * 0.9);
-    const h = 16 + rand() * 28;
-    const cx = x + w / 2;
-    const top = floor - h;
-    // a conifer: two steps down each flank rather than a plain triangle
-    d += ` L${(cx - w * 0.16).toFixed(1)},${(top + h * 0.34).toFixed(1)}`;
-    d += ` L${(cx - w * 0.07).toFixed(1)},${(top + h * 0.3).toFixed(1)}`;
-    d += ` L${cx.toFixed(1)},${top.toFixed(1)}`;
-    d += ` L${(cx + w * 0.07).toFixed(1)},${(top + h * 0.3).toFixed(1)}`;
-    d += ` L${(cx + w * 0.16).toFixed(1)},${(top + h * 0.34).toFixed(1)}`;
+/** A soft, uneven edge: the top of a band of ground. */
+const groundEdge = (seed: number, bumps: number, base: number, amp: number) => {
+  const rand = lcg(seed);
+  const step = 1560 / bumps;
+  let x = -60;
+  let d = `M-60,${(base + rand() * amp).toFixed(1)}`;
+
+  for (let i = 0; i < bumps; i += 1) {
+    const w = step * (0.6 + rand() * 0.8);
+    const crest = base - rand() * amp;
+    const dip = base + rand() * amp * 0.6;
+    d += ` Q${(x + w * 0.5).toFixed(1)},${crest.toFixed(1)} ${(x + w).toFixed(1)},${dip.toFixed(1)}`;
     x += w;
-    d += ` L${x.toFixed(1)},${floor}`;
   }
 
-  return `${d} L1520,${floor} L1520,${floor + 60} L-40,${floor + 60} Z`;
+  return `${d} L1560,${base} L1560,200 L-60,200 Z`;
+};
+
+/** Clumps of low shrub, sitting along the ground. */
+const shrubs = (seed: number, count: number, floor: number, low: number, high: number) => {
+  const rand = lcg(seed);
+  const step = 1560 / count;
+  let x = -60;
+  let d = "";
+
+  for (let i = 0; i < count; i += 1) {
+    const w = step * (0.45 + rand() * 1.1);
+    const h = low + rand() * (high - low);
+    const cx = x + w / 2;
+    // each clump sits at its own depth, so they stop reading as a row
+    const floorY = floor + (rand() - 0.4) * 14;
+    // three overlapping domes, so the clump has an uneven top
+    d += ` M${(cx - w * 0.5).toFixed(1)},${floorY.toFixed(1)}`;
+    d += ` Q${(cx - w * 0.34).toFixed(1)},${(floorY - h * 0.8).toFixed(1)} ${(cx - w * 0.1).toFixed(1)},${floorY.toFixed(1)}`;
+    d += ` M${(cx - w * 0.22).toFixed(1)},${floorY.toFixed(1)}`;
+    d += ` Q${cx.toFixed(1)},${(floorY - h).toFixed(1)} ${(cx + w * 0.24).toFixed(1)},${floorY.toFixed(1)}`;
+    d += ` M${(cx + w * 0.08).toFixed(1)},${floorY.toFixed(1)}`;
+    d += ` Q${(cx + w * 0.3).toFixed(1)},${(floorY - h * 0.62).toFixed(1)} ${(cx + w * 0.5).toFixed(1)},${floorY.toFixed(1)}`;
+    x += w;
+  }
+
+  return d.trim();
+};
+
+/** Blades of grass, each one leaning its own way. */
+const grass = (
+  seed: number,
+  count: number,
+  floor: number,
+  low: number,
+  high: number,
+  width: number,
+) => {
+  const rand = lcg(seed);
+  const step = 1560 / count;
+  let x = -60;
+  let d = "";
+
+  for (let i = 0; i < count; i += 1) {
+    const gap = step * (0.4 + rand() * 1.2);
+    const h = low + rand() * (high - low);
+    const lean = (rand() - 0.5) * h * 0.85;
+    const w = width * (0.6 + rand() * 0.8);
+    d += ` M${(x - w).toFixed(1)},${floor}`;
+    d += ` Q${(x + lean * 0.35).toFixed(1)},${(floor - h * 0.62).toFixed(1)} ${(x + lean).toFixed(1)},${(floor - h).toFixed(1)}`;
+    d += ` Q${(x + w * 0.4).toFixed(1)},${(floor - h * 0.45).toFixed(1)} ${(x + w).toFixed(1)},${floor}`;
+    d += " Z";
+    x += gap;
+  }
+
+  return d.trim();
+};
+
+/** A few stones, worn round, half sunk into the ground. */
+const stones = (seed: number, count: number, floor: number) => {
+  const rand = lcg(seed);
+  const step = 1560 / count;
+  let x = -60;
+  let d = "";
+
+  for (let i = 0; i < count; i += 1) {
+    const gap = step * (0.5 + rand() * 1);
+    const rx = 7 + rand() * 16;
+    const ry = rx * (0.45 + rand() * 0.25);
+    const cy = floor - ry * 0.45;
+    d += ` M${(x - rx).toFixed(1)},${cy.toFixed(1)}`;
+    d += ` Q${x.toFixed(1)},${(cy - ry).toFixed(1)} ${(x + rx).toFixed(1)},${cy.toFixed(1)}`;
+    d += ` Q${x.toFixed(1)},${(cy + ry * 0.5).toFixed(1)} ${(x - rx).toFixed(1)},${cy.toFixed(1)}`;
+    d += " Z";
+    x += gap;
+  }
+
+  return d.trim();
 };
 
 /**
@@ -197,6 +274,15 @@ const ASIDES = [
   "come back soon",
 ];
 
+/** And what he thinks about when he forgets you are there. */
+const THOUGHTS = [
+  "where did I put that carrot",
+  "what is he even looking for",
+  "that hawk again, no thanks",
+  "grass is better on the far hill",
+  "I should dig a second door",
+];
+
 export default function Sky() {
   // Null until the browser has read the clock, so the markup rendered at build
   // time and the first client render agree.
@@ -267,28 +353,29 @@ export default function Sky() {
         ))}
       </svg>
 
-      <svg className="sky__treeline" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden>
+      {/* the floor of the valley, behind the tree and the rabbit */}
+      <svg className="sky__ground sky__ground--back" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
         <defs>
-          {/* the forest fades into the same haze the ranges do */}
-          <linearGradient id="pines-far" x1="0" y1="52" x2="0" y2="118" gradientUnits="userSpaceOnUse">
+          <linearGradient id="ground-far" x1="0" y1="40" x2="0" y2="200" gradientUnits="userSpaceOnUse">
             <stop offset="0%" className="sky__stop sky__stop--mid" />
-            <stop offset="100%" className="sky__stop sky__stop--haze" />
-          </linearGradient>
-          <linearGradient id="pines-near" x1="0" y1="92" x2="0" y2="150" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" className="sky__stop sky__stop--near" />
-            <stop offset="70%" className="sky__stop sky__stop--near" />
-            <stop offset="100%" className="sky__stop sky__stop--haze" />
+            <stop offset="100%" className="sky__stop sky__stop--near" />
           </linearGradient>
         </defs>
-        <path className="sky__pines sky__pines--far" fill="url(#pines-far)" d={treelinePath(9911, 64, 92)} />
-        <path className="sky__pines sky__pines--near" fill="url(#pines-near)" d={treelinePath(5522, 44, 126)} />
+        <path className="sky__turf sky__turf--far" fill="url(#ground-far)" d={groundEdge(5150, 9, 96, 26)} />
+        <path className="sky__scrub" d={shrubs(2288, 8, 100, 14, 40)} />
+        <path className="sky__blades sky__blades--far" d={grass(7714, 120, 106, 7, 34, 2.6)} />
+        <path className="sky__turf sky__turf--near" d={groundEdge(9061, 7, 132, 18)} />
+        <path className="sky__stone" d={stones(3312, 7, 136)} />
       </svg>
 
       <svg className="sky__tree" viewBox="0 0 280 300" aria-hidden>
         {/* the ledge it stands on, running off both edges */}
         <path
           className="sky__rock"
-          d="M-10,300 L2,276 C34,262 78,254 132,256 C186,258 232,268 262,282 L272,300 Z"
+          d="M-60,300
+             C -20,292 10,274 52,264
+             C 96,254 150,254 198,262
+             C 246,270 290,282 340,300 Z"
         />
         {LIMBS.map((l, i) => (
           <path key={i} className="sky__limb" d={l.d} strokeWidth={l.w} />
@@ -303,19 +390,23 @@ export default function Sky() {
           at x 146 of 1440 and y 238 of 360. He does nothing but breathe, flick
           his tail and look around now and then. */}
       <div className="sky__spot">
-        <div className="sky__bubble">
+        <div className="sky__bubble sky__bubble--say">
           {ASIDES.map((line, i) => (
-            <span
-              key={line}
-              className="sky__aside"
-              style={{ animationDelay: `-${i * 12}s` }}
-            >
+            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 24}s` }}>
               {line}
             </span>
           ))}
         </div>
 
-        <svg className="sky__rabbit" viewBox="0 0 120 120" aria-hidden>
+        <div className="sky__bubble sky__bubble--think">
+          {THOUGHTS.map((line, i) => (
+            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 24}s` }}>
+              {line}
+            </span>
+          ))}
+        </div>
+
+        <svg className="sky__rabbit" viewBox="0 0 120 109" aria-hidden>
           <g className="sky__critter">
             <g className="sky__body">
               {/* sitting, haunch to chest */}
@@ -350,6 +441,13 @@ export default function Sky() {
           </g>
         </svg>
       </div>
+
+      <svg className="sky__ground sky__ground--front" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
+        <path className="sky__turf sky__turf--front" d={groundEdge(4407, 6, 174, 15)} />
+        <g className="sky__tussock">
+          <path className="sky__blades sky__blades--near" d={grass(6180, 150, 178, 20, 62, 2.9)} />
+        </g>
+      </svg>
 
       <div className="sky__scrim" />
 

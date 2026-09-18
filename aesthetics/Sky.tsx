@@ -286,6 +286,38 @@ export default function Sky() {
       </svg>
 
       {/* holds the page's contrast whatever the sky is doing */}
+      {/* Sitting on the left summit of the near ridge, which the generator puts
+          at x 146 of 1440 and y 238 of 360. He does nothing but breathe, flick
+          his tail and look around now and then. */}
+      <svg className="sky__squirrel" viewBox="0 0 100 112" aria-hidden>
+        <g className="sky__critter">
+          {/* the plume, curling up and over towards his ears */}
+          <g className="sky__tail">
+            <path d="M50,101
+                     C 76,104 93,89 92,64
+                     C 91,40 76,21 55,16
+                     C 47,14 43,21 49,25
+                     C 67,32 76,48 74,65
+                     C 71,84 61,93 47,92 Z" />
+          </g>
+          <g className="sky__body">
+            {/* haunch and back */}
+            <path d="M27,103
+                     C 19,102 17,93 21,83
+                     C 25,71 31,63 37,57
+                     C 45,50 56,52 60,62
+                     C 65,75 63,92 55,103 Z" />
+            {/* a paw held up at the chest */}
+            <path d="M34,62 C 30,63 28,66 29,69 C 32,71 36,70 38,67 Z" />
+            <g className="sky__head">
+              <ellipse cx="42" cy="41" rx="15" ry="14" />
+              <path d="M30,40 C 23,40 19,43 17,47 C 21,51 27,51 32,49 Z" />
+              <path className="sky__ear" d="M38,29 C 36,21 39,16 44,16 C 47,20 47,26 45,30 Z" />
+            </g>
+          </g>
+        </g>
+      </svg>
+
       <div className="sky__scrim" />
 
       <div className="sky__petals">

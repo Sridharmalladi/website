@@ -23,6 +23,9 @@
   --sky-orb-glow: #3c5a86;
   --sky-orb-x: 70%;
   --sky-orb-y: 26%;
+  /* the ridges are this tall, and the squirrel is placed against the same
+     number so he stays on his summit at every window size */
+  --ridge-h: min(46vh, 430px);
 
   position: fixed;
   inset: 0;
@@ -134,7 +137,7 @@
   right: 0;
   bottom: 0;
   width: 100%;
-  height: min(46vh, 430px);
+  height: var(--ridge-h);
   display: block;
 }
 /* The gradient stops carry the colour now, so the paths only set how far back
@@ -185,6 +188,85 @@
 .sky__pines--near {
   opacity: 0.8;
   filter: blur(0.9px);
+}
+
+/* ------------------------------------------------------------- squirrel --- */
+/* Sits on the left summit of the near ridge. That summit is at x 146 of the
+   1440 wide ridge box, and at y 238 of its 360, so he goes 10.1% across and
+   (1 - 238/360) of the ridge height up from the bottom. He is a silhouette,
+   slightly darker than the ridge he is on, and he never goes anywhere. */
+.sky__squirrel {
+  position: absolute;
+  left: 10.1%;
+  bottom: calc(var(--ridge-h) * 0.338);
+  width: clamp(24px, 2.9vw, 44px);
+  height: auto;
+  display: block;
+  transform: translateX(-52%);
+  fill: var(--sky-ridge-near);
+  filter: brightness(0.72);
+}
+.sky__squirrel path {
+  transition: fill 2s linear;
+}
+/* every part turns about its own join, not about the middle of the drawing */
+.sky__critter,
+.sky__tail,
+.sky__body,
+.sky__head,
+.sky__ear {
+  transform-box: fill-box;
+}
+
+/* breathing: slow, and barely there */
+.sky__body {
+  transform-origin: 50% 100%;
+  animation: critter-breathe 4.6s ease-in-out infinite alternate;
+}
+@keyframes critter-breathe {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(1.03); }
+}
+
+/* the tail sways from where it meets the body */
+.sky__tail {
+  transform-origin: 8% 96%;
+  animation: critter-tail 7.4s ease-in-out infinite alternate;
+}
+@keyframes critter-tail {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(5deg); }
+}
+
+/* a look around now and then, and nothing in between */
+.sky__head {
+  transform-origin: 62% 92%;
+  animation: critter-look 16s ease-in-out infinite;
+}
+@keyframes critter-look {
+  0%, 46% { transform: rotate(0deg); }
+  52%, 62% { transform: rotate(-9deg); }
+  68%, 84% { transform: rotate(4deg); }
+  90%, 100% { transform: rotate(0deg); }
+}
+
+/* one ear twitch per cycle, quick enough that you might miss it */
+.sky__ear {
+  transform-origin: 70% 100%;
+  animation: critter-ear 9.2s ease-in-out infinite;
+}
+@keyframes critter-ear {
+  0%, 88% { transform: rotate(0deg); }
+  91% { transform: rotate(-13deg); }
+  94% { transform: rotate(6deg); }
+  97%, 100% { transform: rotate(0deg); }
+}
+
+/* no room for him beside the shelf on a narrow screen */
+@media (max-width: 720px) {
+  .sky__squirrel {
+    display: none;
+  }
 }
 
 /* ----------------------------------------------------------------- tree --- */
@@ -281,7 +363,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .sky__mist,
-  .sky__petal {
+  .sky__petal,
+  .sky__body,
+  .sky__tail,
+  .sky__head,
+  .sky__ear {
     animation: none;
   }
   .sky__petal {

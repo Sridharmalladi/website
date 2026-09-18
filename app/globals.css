@@ -152,30 +152,17 @@ a {
 }
 
 /* =============================================================== GRID ==== */
+/* Small tiles of one fixed size, as many to a line as fit — five at full
+   width today. New products fill the line and then start another one, and
+   nothing ever stretches to cover a gap: every box stays the same size. */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(1.25rem, 2.4vw, 2rem);
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
 }
-/* An odd number of products would leave a gap in the last row. The straggler
-   takes the whole width instead and its art is cropped to a panorama, so the
-   row ends up roughly as tall as a half-width one and the shelf stays square
-   at the bottom. */
-.tiles > :last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-}
-.tiles > :last-child:nth-child(odd) .tile__shot {
-  aspect-ratio: 24 / 7;
-}
-
 @media (max-width: 620px) {
   .tiles {
-    grid-template-columns: 1fr;
-  }
-  /* Single column: every tile is already full width, so the panorama crop
-     would just make the last one a letterbox slot. Put it back. */
-  .tiles > :last-child:nth-child(odd) .tile__shot {
-    aspect-ratio: 16 / 10;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
 
@@ -184,11 +171,14 @@ a {
 .tile {
   position: relative;
   display: block;
+  /* Without this a long unbroken product name sets the column's min width and
+     pushes the whole grid past the page. */
+  min-width: 0;
   background: var(--bg-lift);
   border: 1px solid var(--line);
   outline: 1px solid rgba(255, 255, 255, 0.09);
-  outline-offset: 4px;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.45);
+  outline-offset: 3px;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
   text-decoration: none;
   color: inherit;
   transition:
@@ -198,12 +188,12 @@ a {
 }
 .tile:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
   border-color: rgba(99, 196, 184, 0.55);
 }
 .tile:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 .tile__shot {
   display: block;
@@ -231,20 +221,22 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.8rem 1rem;
+  gap: 0.5rem;
+  padding: 0.55rem 0.6rem;
   border-top: 1px solid var(--line);
   background: rgba(13, 15, 19, 0.85);
 }
 .tile__name {
-  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+  font-size: 0.58rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.09em;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 .tile__go {
   color: var(--text-dim);
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   transition: color 180ms ease;
 }
 .tile:hover .tile__go {

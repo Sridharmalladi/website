@@ -25,19 +25,19 @@ export const site = {
       name: "signup-conversion-model",
       href: "https://github.com/Sridharmalladi/signup-conversion-model",
       shot: "/shots/signup-conversion-model.jpg",
-      alt: "Two currents of smoke, one amber and one blue, winding through each other in the dark before parting",
+      alt: "Bar chart: actual conversion rate by predicted-risk decile, 0.4% in the highest-risk tenth up to 43% in the lowest",
     },
     {
       name: "RAGLens",
       href: "https://github.com/Sridharmalladi/RAGLens",
       shot: "/shots/raglens.jpg",
-      alt: "White light split into a band of colour against a dark wall",
+      alt: "RAGLens: the four retrieval configs side by side, from no RAG to hybrid with a cross-encoder rerank",
     },
     {
       name: "jobfinddaily",
       href: "https://github.com/Sridharmalladi/jobfinddaily",
       shot: "/shots/jobfinddaily.jpg",
-      alt: "A single amber filament of light sweeping across black",
+      alt: "The jobfinddaily MCP server answering tools/list with its ten job-hunting tools",
     },
   ] as {
     name: string;

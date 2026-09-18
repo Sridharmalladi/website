@@ -1,43 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#8a6550"/>
-      <stop offset="1" stop-color="#5d4231"/>
-    </linearGradient>
-  </defs>
+  <!-- Panda, no background. Drawn heavy on purpose: in a browser tab this is
+       sixteen pixels across, so the ears, the eye patches and the nose are the
+       only things that survive. The head carries a soft grey edge so it does
+       not disappear against a white tab strip. -->
 
-  <!-- rock the skull is set into -->
-  <path d="M31 2 C 44 2, 56 8, 60 19 C 64 30, 61 45, 51 55 C 41 64, 22 64, 12 56 C 2 48, -1 32, 3 20 C 7 8, 18 2, 31 2 Z" fill="url(#rock)"/>
-  <g fill="#9a7460" opacity="0.65">
-    <circle cx="13" cy="15" r="2"/>
-    <circle cx="52" cy="14" r="1.6"/>
-    <circle cx="9" cy="42" r="1.7"/>
-    <circle cx="54" cy="45" r="2.1"/>
-    <circle cx="30" cy="57" r="1.5"/>
-  </g>
+  <!-- ears, behind the head -->
+  <circle cx="16" cy="17" r="10" fill="#15161a"/>
+  <circle cx="48" cy="17" r="10" fill="#15161a"/>
 
-  <!-- cranium and upper jaw, snout to the left -->
-  <path d="M9 30 C 8 25, 14 20, 24 19 C 36 17, 48 19, 53 24 C 56 27, 56 31, 53 33
-           L44 35 L14 37 C 10 37, 9 34, 9 30 Z" fill="#f4efe3"/>
-  <!-- orbit and nostril -->
-  <ellipse cx="42" cy="26" rx="5" ry="4.4" fill="#5d4231" transform="rotate(-12 42 26)"/>
-  <ellipse cx="19" cy="26" rx="3" ry="2.2" fill="#5d4231" transform="rotate(-10 19 26)"/>
-  <ellipse cx="30" cy="25" rx="3.4" ry="2.6" fill="#5d4231" opacity="0.85" transform="rotate(-8 30 25)"/>
-  <!-- upper teeth -->
-  <g fill="#f4efe3">
-    <path d="M13 36 l2.4 6 l2.4 -6 Z"/>
-    <path d="M19 36 l2.4 6.4 l2.4 -6.4 Z"/>
-    <path d="M25 35.6 l2.4 6 l2.4 -6 Z"/>
-    <path d="M31 35.4 l2.2 5.4 l2.4 -5.4 Z"/>
-    <path d="M37 35.2 l2 4.6 l2.2 -4.6 Z"/>
-  </g>
+  <!-- head -->
+  <ellipse cx="32" cy="35" rx="25" ry="23" fill="#fbfbfa" stroke="#c7cbd2" stroke-width="1.4"/>
 
-  <!-- lower jaw, dropped open -->
-  <path d="M12 45 C 16 48, 34 47, 46 43 L50 45 L47 49 C 34 54, 16 53, 12 50 C 10 48.6, 10 46, 12 45 Z" fill="#f4efe3"/>
-  <g fill="#f4efe3">
-    <path d="M17 45.6 l2.2 -5.4 l2.2 5.4 Z"/>
-    <path d="M24 45.4 l2.2 -5.6 l2.2 5.6 Z"/>
-    <path d="M31 44.6 l2.2 -5.2 l2.2 5.2 Z"/>
-    <path d="M38 43 l2 -4.6 l2.2 4.6 Z"/>
-  </g>
+  <!-- eye patches, tilted in towards the nose -->
+  <ellipse cx="21" cy="31" rx="8.4" ry="10" fill="#15161a" transform="rotate(-20 21 31)"/>
+  <ellipse cx="43" cy="31" rx="8.4" ry="10" fill="#15161a" transform="rotate(20 43 31)"/>
+
+  <!-- eyes -->
+  <circle cx="22.5" cy="31.5" r="3.4" fill="#fbfbfa"/>
+  <circle cx="41.5" cy="31.5" r="3.4" fill="#fbfbfa"/>
+  <circle cx="23.2" cy="32" r="1.9" fill="#15161a"/>
+  <circle cx="40.8" cy="32" r="1.9" fill="#15161a"/>
+
+  <!-- nose and mouth -->
+  <path d="M27.4 43.2 C 29 41.6, 35 41.6, 36.6 43.2 C 35.4 46.6, 33.8 48, 32 48 C 30.2 48, 28.6 46.6, 27.4 43.2 Z" fill="#15161a"/>
+  <path d="M32 48.4 C 32 51, 29.4 52.4, 27.6 51" fill="none" stroke="#15161a" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M32 48.4 C 32 51, 34.6 52.4, 36.4 51" fill="none" stroke="#15161a" stroke-width="1.8" stroke-linecap="round"/>
 </svg>

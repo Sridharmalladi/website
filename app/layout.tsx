@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Lato } from "next/font/google";
 import { site } from "@/config/site";
+import Sky from "@/aesthetics/Sky";
+import Emergence from "@/aesthetics/Emergence";
 import "./globals.css";
+import "@/aesthetics/sky.css";
 
 /**
  * Lato. A plain grotesque to match the reference layout — the page is a grid of
@@ -41,7 +44,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={lato.variable}>
-      <body>{children}</body>
+      <body>
+        <Sky />
+        {children}
+        <Emergence />
+      </body>
     </html>
   );
 }

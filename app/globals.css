@@ -224,13 +224,19 @@ a {
   text-align: center;
   text-wrap: pretty;
   opacity: 0;
-  filter: blur(7px);
-  transform: translate(-50%, 16px);
+  /* Where it waits: on top of its own tile, small and out of focus. Emergence
+     writes --ox/--oy onto the cell as the pointer arrives. The fallbacks live
+     in the var() calls rather than in a declaration here — declared here, they
+     would be this element's own value and would beat the one it inherits. */
+  filter: blur(10px);
+  transform: translate(calc(-50% + var(--ox, 0px)), var(--oy, 18px));
+  scale: 0.62;
   pointer-events: none;
   transition:
-    opacity 200ms ease,
-    filter 200ms ease,
-    transform 200ms ease;
+    opacity 180ms ease,
+    filter 180ms ease,
+    transform 200ms ease,
+    scale 200ms ease;
 }
 /* The teal stroke of the wordmark, cut to a short rule above the sentence. */
 .cell__blurb::before {
@@ -249,11 +255,13 @@ a {
     opacity: 1;
     filter: blur(0);
     transform: translate(-50%, 0);
-    /* the pause before it lands is the whole trick */
+    scale: 1;
+    /* the pause before it leaves the tile is the whole trick */
     transition:
-      opacity 420ms ease 260ms,
-      filter 520ms cubic-bezier(0.16, 1, 0.3, 1) 260ms,
-      transform 560ms cubic-bezier(0.16, 1, 0.3, 1) 260ms;
+      opacity 360ms ease 220ms,
+      filter 620ms cubic-bezier(0.16, 1, 0.3, 1) 220ms,
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1) 220ms,
+      scale 700ms cubic-bezier(0.16, 1, 0.3, 1) 220ms;
   }
   .cell:hover .cell__blurb::before,
   .cell:focus-within .cell__blurb::before {
@@ -276,6 +284,7 @@ a {
     opacity: 1;
     filter: none;
     transform: none;
+    scale: 1;
   }
   .cell__blurb::before {
     display: none;
@@ -397,6 +406,7 @@ a {
   .cell:focus-within .cell__blurb {
     filter: none;
     transform: translate(-50%, 0);
+    scale: 1;
     transition: opacity 160ms linear 120ms;
   }
   .cell__blurb::before {

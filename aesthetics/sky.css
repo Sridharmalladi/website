@@ -1,0 +1,227 @@
+/* ==========================================================================
+   The valley behind the page.
+
+   Colours arrive as custom properties from Sky.tsx, mixed from the time in
+   America/Chicago. Until the browser has read the clock the sky holds a night
+   palette, which is what the page used to be anyway, so there is no flash.
+
+   Everything is transform and opacity, nothing here paints on scroll, and the
+   whole layer sits at low opacity so the tiles and the caption stay the
+   brightest things on screen.
+   ========================================================================== */
+
+.sky {
+  --sky-high: #04060f;
+  --sky-horizon: #0b1729;
+  --sky-haze: #132a44;
+  --sky-ridge-far: #13263c;
+  --sky-ridge-mid: #0d1c2e;
+  --sky-ridge-near: #070f1b;
+  --sky-cloud: #1b3550;
+  --sky-petal: #b9a6dc;
+  --sky-orb: #dfe6f5;
+  --sky-orb-glow: #3c5a86;
+  --sky-orb-x: 70%;
+  --sky-orb-y: 26%;
+
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* bright enough that noon looks like noon; the scrim below does the work of
+     keeping the page readable, rather than fading the whole valley to mud */
+  opacity: 0.92;
+  /* colours cross-fade rather than jump when the clock ticks over */
+  transition: opacity 600ms ease;
+}
+
+/* ------------------------------------------------------------------ sky --- */
+.sky__wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      120% 70% at var(--sky-orb-x) var(--sky-orb-y),
+      var(--sky-orb-glow) 0%,
+      transparent 62%
+    ),
+    linear-gradient(
+      to bottom,
+      var(--sky-high) 0%,
+      var(--sky-high) 34%,
+      var(--sky-horizon) 76%,
+      var(--sky-haze) 100%
+    );
+  transition: background 2s linear;
+}
+
+/* ------------------------------------------------------------ sun / moon --- */
+.sky__orb {
+  position: absolute;
+  left: var(--sky-orb-x);
+  top: var(--sky-orb-y);
+  width: 74px;
+  height: 74px;
+  margin: -37px 0 0 -37px;
+  border-radius: 50%;
+  background: var(--sky-orb);
+  box-shadow:
+    0 0 60px 24px var(--sky-orb-glow),
+    0 0 160px 70px var(--sky-orb-glow);
+  opacity: 0.5;
+  transition:
+    left 2s linear,
+    top 2s linear,
+    background 2s linear;
+}
+/* the moon is smaller, harder and cooler than the sun */
+.sky__orb--moon {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  opacity: 0.66;
+  box-shadow:
+    0 0 40px 12px var(--sky-orb-glow),
+    0 0 120px 46px var(--sky-orb-glow);
+}
+
+/* ----------------------------------------------------------------- mist --- */
+/* Two bands of cloud crossing at different speeds. Each is twice the width of
+   the screen and slides one screen's worth, so the loop never shows a seam. */
+.sky__mist {
+  position: absolute;
+  left: -50%;
+  width: 200%;
+  background-repeat: repeat-x;
+  opacity: 0.46;
+  filter: blur(6px);
+  will-change: transform;
+}
+.sky__mist--high {
+  top: 12%;
+  height: 26%;
+  background-image:
+    radial-gradient(40% 60% at 14% 60%, var(--sky-cloud) 0%, transparent 70%),
+    radial-gradient(30% 52% at 38% 44%, var(--sky-cloud) 0%, transparent 72%),
+    radial-gradient(46% 66% at 63% 58%, var(--sky-cloud) 0%, transparent 70%),
+    radial-gradient(28% 48% at 86% 46%, var(--sky-cloud) 0%, transparent 74%);
+  animation: sky-drift 150s linear infinite;
+}
+.sky__mist--low {
+  top: 52%;
+  height: 26%;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(52% 50% at 22% 62%, var(--sky-cloud) 0%, transparent 74%),
+    radial-gradient(38% 42% at 55% 52%, var(--sky-cloud) 0%, transparent 76%),
+    radial-gradient(48% 54% at 82% 64%, var(--sky-cloud) 0%, transparent 72%);
+  animation: sky-drift 96s linear infinite reverse;
+}
+@keyframes sky-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(50%, 0, 0);
+  }
+}
+
+/* --------------------------------------------------------------- ridges --- */
+.sky__ridges {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: min(56vh, 520px);
+  display: block;
+}
+.sky__ridge {
+  transition: fill 2s linear;
+}
+.sky__ridge--far {
+  fill: var(--sky-ridge-far);
+  opacity: 0.42;
+  filter: blur(2.5px);
+}
+.sky__ridge--mid {
+  fill: var(--sky-ridge-mid);
+  opacity: 0.66;
+  filter: blur(1px);
+}
+.sky__ridge--near {
+  fill: var(--sky-ridge-near);
+  opacity: 0.9;
+}
+
+/* ---------------------------------------------------------------- scrim --- */
+/* A dark wash over the valley, heaviest at the top where the masthead sits and
+   at the very bottom where the caption lands. This is what lets the sky go
+   pale at midday without the page going with it. */
+.sky__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 9, 13, 0.58) 0%,
+    rgba(7, 9, 13, 0.34) 28%,
+    rgba(7, 9, 13, 0.3) 56%,
+    rgba(7, 9, 13, 0.62) 100%
+  );
+}
+
+/* --------------------------------------------------------------- petals --- */
+.sky__petals {
+  position: absolute;
+  inset: -8% 0 0;
+}
+.sky__petal {
+  position: absolute;
+  top: -4%;
+  display: block;
+  background: var(--sky-petal);
+  border-radius: 60% 20% 60% 20%;
+  opacity: 0;
+  will-change: transform;
+  animation-name: sky-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes sky-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  8% {
+    opacity: 0.55;
+  }
+  88% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), 112vh, 0) rotate(var(--spin));
+  }
+}
+
+/* Narrow screens get the sky but not the blossom: it is the one thing here
+   that costs per-frame work, and there is no room for it anyway. */
+@media (max-width: 720px) {
+  .sky__petals {
+    display: none;
+  }
+  .sky {
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky__mist,
+  .sky__petal {
+    animation: none;
+  }
+  .sky__petal {
+    opacity: 0.35;
+  }
+}

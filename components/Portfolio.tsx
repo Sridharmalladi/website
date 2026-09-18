@@ -13,6 +13,10 @@ export default function Portfolio() {
         Skip to projects
       </a>
 
+      {/* Drops over the whole page while a product is hovered, so the one
+          under the cursor is the only thing still lit. */}
+      <div className="veil" aria-hidden />
+
       <main className="page">
         <header className="masthead">
           <span className="wordmark">

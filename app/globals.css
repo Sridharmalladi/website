@@ -17,7 +17,7 @@
   --line: rgba(255, 255, 255, 0.12);
   --panel: rgba(255, 255, 255, 0.045);
 
-  --column: min(92vw, 1080px);
+  --column: min(92vw, 1180px);
 }
 
 /* ============================================================== BASE ===== */
@@ -75,7 +75,28 @@ a {
   position: relative;
   width: var(--column);
   margin-inline: auto;
-  padding-bottom: 4rem;
+  /* the bottom row's caption drops below it, so leave it somewhere to go */
+  padding-bottom: 8.5rem;
+}
+
+/* ============================================================== VEIL ===== */
+/* Hovering one product pulls everything else down into the dark. The veil is
+   fixed, so the masthead and the rest of the shelf go under it together, and
+   the hovered cell is lifted over it. */
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(5, 7, 10, 0.86);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+}
+@media (hover: hover) {
+  body:has(.cell:hover) .veil,
+  body:has(.cell:focus-within) .veil {
+    opacity: 1;
+  }
 }
 
 /* ============================================================ HEADER ===== */
@@ -152,17 +173,81 @@ a {
 }
 
 /* =============================================================== GRID ==== */
-/* Small tiles of one fixed size, as many to a line as fit — five at full
-   width today. New products fill the line and then start another one, and
-   nothing ever stretches to cover a gap: every box stays the same size. */
+/* Tiles of one fixed size, as many to a line as fit — four at full width,
+   so the fifth starts a second line on its own. New products fill the line
+   and then start another; nothing ever stretches to cover a gap, so every
+   box stays the same size. */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: clamp(16px, 1.8vw, 24px);
 }
-@media (max-width: 620px) {
+@media (max-width: 720px) {
   .tiles {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+@media (max-width: 460px) {
+  .tiles {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The cell is the hover target: it holds the tile and the caption that
+   belongs to it. */
+.cell {
+  position: relative;
+  min-width: 0;
+}
+@media (hover: hover) {
+  .cell:hover,
+  .cell:focus-within {
+    z-index: 6;
+  }
+}
+
+/* The caption sits on the veil, directly under its own tile, so the eye goes
+   from the picture straight into the sentence. */
+.cell__blurb {
+  position: absolute;
+  top: calc(100% + 0.9rem);
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--accent);
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition:
+    opacity 220ms ease,
+    transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) {
+  .cell:hover .cell__blurb,
+  .cell:focus-within .cell__blurb {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 60ms;
+  }
+}
+/* No hover on a touch screen, so the captions would never be reachable.
+   Print them under their tiles instead. */
+@media (hover: none) {
+  .cell__blurb {
+    position: static;
+    width: auto;
+    margin-top: 0.8rem;
+    opacity: 1;
+    transform: none;
+  }
+  /* nothing drops out of the last row here, so the reserve is not needed */
+  .page {
+    padding-bottom: 4rem;
   }
 }
 
@@ -171,9 +256,6 @@ a {
 .tile {
   position: relative;
   display: block;
-  /* Without this a long unbroken product name sets the column's min width and
-     pushes the whole grid past the page. */
-  min-width: 0;
   background: var(--bg-lift);
   border: 1px solid var(--line);
   outline: 1px solid rgba(255, 255, 255, 0.09);
@@ -221,16 +303,16 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.55rem 0.6rem;
+  gap: 0.6rem;
+  padding: 0.7rem 0.8rem;
   border-top: 1px solid var(--line);
   background: rgba(13, 15, 19, 0.85);
 }
 .tile__name {
   overflow-wrap: anywhere;
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.11em;
   line-height: 1.35;
   text-transform: uppercase;
 }
@@ -278,6 +360,10 @@ a {
   .tile__shot img,
   .chip {
     transition: none;
+  }
+  .cell__blurb {
+    transform: none;
+    transition: opacity 120ms linear;
   }
   .tile:hover,
   .chip:hover,

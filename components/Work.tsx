@@ -1,6 +1,11 @@
 import { site } from "@/config/site";
 
-/** The shelf: one tile per product, each tile the whole link to the project. */
+/**
+ * The shelf: one cell per product. The cell holds the tile, which is the whole
+ * link, and a caption that stays hidden until the cell is hovered or focused.
+ * The caption sits outside the anchor on purpose — inside it, it would be read
+ * out as part of the link's name.
+ */
 export default function Work() {
   if (site.projects.length === 0) return null;
 
@@ -23,19 +28,21 @@ export default function Work() {
           </>
         );
 
-        return p.href ? (
-          <a
-            key={p.name}
-            className="tile"
-            href={p.href}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {body}
-          </a>
-        ) : (
-          <div key={p.name} className="tile">
-            {body}
+        return (
+          <div className="cell" key={p.name}>
+            {p.href ? (
+              <a
+                className="tile"
+                href={p.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {body}
+              </a>
+            ) : (
+              <div className="tile">{body}</div>
+            )}
+            <p className="cell__blurb">{p.blurb}</p>
           </div>
         );
       })}

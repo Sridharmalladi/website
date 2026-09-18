@@ -179,6 +179,34 @@ const grass = (
   return d.trim();
 };
 
+/** Taller stalks with a seed head on top, scattered through the grass. */
+const seedHeads = (seed: number, count: number, floor: number, low: number, high: number) => {
+  const rand = lcg(seed);
+  const step = 1560 / count;
+  let x = -60;
+  let d = "";
+
+  for (let i = 0; i < count; i += 1) {
+    const gap = step * (0.4 + rand() * 1.2);
+    const h = low + rand() * (high - low);
+    const lean = (rand() - 0.5) * h * 0.5;
+    const tipX = x + lean;
+    const tipY = floor - h;
+    // the stalk
+    d += ` M${(x - 0.9).toFixed(1)},${floor}`;
+    d += ` Q${(x + lean * 0.4).toFixed(1)},${(floor - h * 0.6).toFixed(1)} ${tipX.toFixed(1)},${tipY.toFixed(1)}`;
+    d += ` Q${(x + lean * 0.4 + 1.4).toFixed(1)},${(floor - h * 0.6).toFixed(1)} ${(x + 0.9).toFixed(1)},${floor} Z`;
+    // the head
+    const r = 1.6 + rand() * 1.4;
+    d += ` M${(tipX - r).toFixed(1)},${tipY.toFixed(1)}`;
+    d += ` Q${tipX.toFixed(1)},${(tipY - r * 2.4).toFixed(1)} ${(tipX + r).toFixed(1)},${tipY.toFixed(1)}`;
+    d += ` Q${tipX.toFixed(1)},${(tipY + r * 1.2).toFixed(1)} ${(tipX - r).toFixed(1)},${tipY.toFixed(1)} Z`;
+    x += gap;
+  }
+
+  return d.trim();
+};
+
 /** A few stones, worn round, half sunk into the ground. */
 const stones = (seed: number, count: number, floor: number) => {
   const rand = lcg(seed);
@@ -366,6 +394,8 @@ export default function Sky() {
         <path className="sky__blades sky__blades--far" d={grass(7714, 120, 106, 7, 34, 2.6)} />
         <path className="sky__turf sky__turf--near" d={groundEdge(9061, 7, 132, 18)} />
         <path className="sky__stone" d={stones(3312, 7, 136)} />
+        <path className="sky__blades sky__blades--mid" d={grass(4491, 170, 140, 10, 38, 2.4)} />
+        <path className="sky__seed" d={seedHeads(8823, 26, 140, 26, 54)} />
       </svg>
 
       <svg className="sky__tree" viewBox="0 0 280 300" aria-hidden>
@@ -392,7 +422,7 @@ export default function Sky() {
       <div className="sky__spot">
         <div className="sky__bubble sky__bubble--say">
           {ASIDES.map((line, i) => (
-            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 24}s` }}>
+            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 18}s` }}>
               {line}
             </span>
           ))}
@@ -400,7 +430,7 @@ export default function Sky() {
 
         <div className="sky__bubble sky__bubble--think">
           {THOUGHTS.map((line, i) => (
-            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 24}s` }}>
+            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 18}s` }}>
               {line}
             </span>
           ))}
@@ -445,7 +475,8 @@ export default function Sky() {
       <svg className="sky__ground sky__ground--front" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
         <path className="sky__turf sky__turf--front" d={groundEdge(4407, 6, 174, 15)} />
         <g className="sky__tussock">
-          <path className="sky__blades sky__blades--near" d={grass(6180, 150, 178, 20, 62, 2.9)} />
+          <path className="sky__blades sky__blades--near" d={grass(6180, 190, 178, 20, 66, 2.9)} />
+          <path className="sky__seed sky__seed--near" d={seedHeads(1177, 18, 178, 40, 74)} />
         </g>
       </svg>
 

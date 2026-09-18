@@ -416,14 +416,14 @@
 .sky__aside {
   grid-area: 1 / 1;
   opacity: 0;
-  animation: critter-aside 90s step-end infinite;
+  animation: critter-aside 108s step-end infinite;
 }
 .sky__bubble {
   display: grid;
 }
 @keyframes critter-aside {
-  0%, 7% { opacity: 1; }
-  7.01%, 100% { opacity: 0; }
+  0%, 5.5% { opacity: 1; }
+  5.51%, 100% { opacity: 0; }
 }
 
 /* The bubbles live in the margin beside the shelf, and that margin is only

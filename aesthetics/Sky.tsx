@@ -295,10 +295,11 @@ const PETALS = [
  * animal on a hill, not a chatbot.
  */
 const ASIDES = [
+  "you doing good?",
   "nice shirt today",
-  "hello there friend",
+  "you should smile",
+  "how's your day?",
   "take your time",
-  "he built these",
   "come back soon",
 ];
 
@@ -309,6 +310,7 @@ const THOUGHTS = [
   "hawk again, hide",
   "better grass uphill",
   "dig another door",
+  "nap after this",
 ];
 
 export default function Sky() {

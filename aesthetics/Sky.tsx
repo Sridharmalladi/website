@@ -430,7 +430,9 @@ export default function Sky() {
 
         <div className="sky__bubble sky__bubble--think">
           {THOUGHTS.map((line, i) => (
-            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 18}s` }}>
+            // the extra nine seconds matches the cloud's own offset, so the
+            // line is up while the cloud is up rather than while it is gone
+            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 18 + 9}s` }}>
               {line}
             </span>
           ))}
@@ -456,16 +458,19 @@ export default function Sky() {
                     d="M60,55 C 60,41 63,24 70,13 C 76,4 84,8 83,18 C 82,32 72,48 67,56 Z" />
               <circle cx="56" cy="62" r="14" />
 
-              {/* side on, which is how he sits most of the time */}
-              <g className="sky__face sky__face--side">
-                <ellipse cx="44" cy="67" rx="7" ry="5.5" />
-                <circle className="sky__eye" cx="50" cy="59" r="3.4" />
-              </g>
-              {/* and this is him turning to look straight at you */}
+              {/* facing you, which is how he sits most of the time */}
               <g className="sky__face sky__face--front">
                 <ellipse cx="56" cy="70" rx="6" ry="4.5" />
-                <circle className="sky__eye" cx="50" cy="60" r="3.4" />
-                <circle className="sky__eye" cx="62" cy="60" r="3.4" />
+                <circle className="sky__eye" cx="50" cy="60" r="3.6" />
+                <circle className="sky__eye" cx="62" cy="60" r="3.6" />
+                <circle className="sky__pupil" cx="50.6" cy="60.6" r="1.7" />
+                <circle className="sky__pupil" cx="62.6" cy="60.6" r="1.7" />
+              </g>
+              {/* and this is him turning away to look down the valley */}
+              <g className="sky__face sky__face--side">
+                <ellipse cx="44" cy="67" rx="7" ry="5.5" />
+                <circle className="sky__eye" cx="50" cy="59" r="3.6" />
+                <circle className="sky__pupil" cx="49.2" cy="59.4" r="1.7" />
               </g>
             </g>
           </g>

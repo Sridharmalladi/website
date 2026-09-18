@@ -255,6 +255,11 @@
   fill: #f4f7ff;
   opacity: 0.92;
 }
+/* without a pupil a white circle in a silhouette reads as a hole punched
+   through the head rather than as an eye */
+.sky__pupil {
+  fill: #10141c;
+}
 
 /* every part turns about its own join, not about the middle of the drawing */
 .sky__critter,
@@ -307,19 +312,19 @@
 
 /* the turn towards you: the side view fades out, the front view fades in, and
    he holds it a couple of seconds before going back to the view */
-.sky__face--side {
-  animation: critter-side 21s ease-in-out infinite;
-}
 .sky__face--front {
-  opacity: 0;
   animation: critter-front 21s ease-in-out infinite;
 }
-@keyframes critter-side {
+.sky__face--side {
+  opacity: 0;
+  animation: critter-side 21s ease-in-out infinite;
+}
+@keyframes critter-front {
   0%, 62% { opacity: 1; }
   66%, 78% { opacity: 0; }
   82%, 100% { opacity: 1; }
 }
-@keyframes critter-front {
+@keyframes critter-side {
   0%, 62% { opacity: 0; }
   66%, 78% { opacity: 1; }
   82%, 100% { opacity: 0; }
@@ -546,16 +551,20 @@
   .sky__body,
   .sky__head,
   .sky__ear,
-  .sky__face--side,
+  .sky__face--front,
   .sky__bubble,
   .sky__aside {
     animation: none;
   }
-  /* he stays side on and quiet rather than blinking between two faces */
-  .sky__face--front,
+  /* he keeps facing you, quietly, rather than blinking between two faces */
+  .sky__face--side,
   .sky__bubble {
     animation: none;
     opacity: 0;
+  }
+  .sky__face--front {
+    animation: none;
+    opacity: 1;
   }
   .sky__petal {
     opacity: 0.35;

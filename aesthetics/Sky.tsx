@@ -124,6 +124,28 @@ const groundEdge = (seed: number, bumps: number, base: number, amp: number) => {
   return `${d} L1560,${base} L1560,200 L-60,200 Z`;
 };
 
+/**
+ * The same edge as an open line, drawn from the same seed so it lands exactly
+ * on top of the filled one. Stroked, it becomes the light catching the crest,
+ * which is what separates one band from the next.
+ */
+const edgeLine = (seed: number, bumps: number, base: number, amp: number) => {
+  const rand = lcg(seed);
+  const step = 1560 / bumps;
+  let x = -60;
+  let d = `M-60,${(base + rand() * amp).toFixed(1)}`;
+
+  for (let i = 0; i < bumps; i += 1) {
+    const w = step * (0.6 + rand() * 0.8);
+    const crest = base - rand() * amp;
+    const dip = base + rand() * amp * 0.6;
+    d += ` Q${(x + w * 0.5).toFixed(1)},${crest.toFixed(1)} ${(x + w).toFixed(1)},${dip.toFixed(1)}`;
+    x += w;
+  }
+
+  return `${d} L1560,${base}`;
+};
+
 /** Clumps of low shrub, sitting along the ground. */
 const shrubs = (seed: number, count: number, floor: number, low: number, high: number) => {
   const rand = lcg(seed);
@@ -388,13 +410,15 @@ export default function Sky() {
           instead of standing on it with their feet showing. */}
       <svg className="sky__ground sky__ground--back" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
         <g className="sky__band sky__band--far">
-          <path className="sky__blades" d={grass(7714, 150, 98, 10, 30, 2.4)} />
+          <path className="sky__blades" d={grass(7714, 300, 98, 8, 26, 2.2)} />
           <path className="sky__turf" d={groundEdge(5150, 8, 98, 20)} />
+          <path className="sky__crest" d={edgeLine(5150, 8, 98, 20)} />
         </g>
         <g className="sky__band sky__band--mid">
-          <path className="sky__blades" d={grass(4491, 170, 140, 12, 34, 2.6)} />
-          <path className="sky__seed" d={seedHeads(8823, 20, 140, 30, 50)} />
+          <path className="sky__blades" d={grass(4491, 360, 140, 10, 32, 2.4)} />
+          <path className="sky__seed" d={seedHeads(8823, 22, 140, 28, 48)} />
           <path className="sky__turf" d={groundEdge(9061, 6, 140, 16)} />
+          <path className="sky__crest" d={edgeLine(9061, 6, 140, 16)} />
         </g>
       </svg>
 
@@ -480,10 +504,11 @@ export default function Sky() {
       <svg className="sky__ground sky__ground--front" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
         <g className="sky__band sky__band--near">
           <g className="sky__tussock">
-            <path className="sky__blades" d={grass(6180, 180, 178, 14, 44, 2.8)} />
-            <path className="sky__seed" d={seedHeads(1177, 12, 178, 30, 52)} />
+            <path className="sky__blades" d={grass(6180, 420, 178, 12, 40, 2.6)} />
+            <path className="sky__seed" d={seedHeads(1177, 14, 178, 26, 46)} />
           </g>
           <path className="sky__turf" d={groundEdge(4407, 5, 178, 12)} />
+          <path className="sky__crest" d={edgeLine(4407, 5, 178, 12)} />
         </g>
       </svg>
 

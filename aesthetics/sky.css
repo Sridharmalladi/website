@@ -187,14 +187,26 @@
 .sky__ground path {
   transition: fill 2s linear;
 }
+/* The three bands are told apart by tone, so the steps between them have to be
+   wide. The furthest sits above the colour of the ridge it meets, the nearest
+   well under it, and each one carries a lit line along its crest, which is what
+   stops the whole floor reading as one black mass. */
 .sky__band--far {
-  filter: brightness(0.95);
+  filter: brightness(1.42);
 }
 .sky__band--mid {
-  filter: brightness(0.76);
+  filter: brightness(0.92);
 }
 .sky__band--near {
-  filter: brightness(0.64);
+  filter: brightness(0.52);
+}
+.sky__crest {
+  fill: none;
+  stroke: var(--sky-haze);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  opacity: 0.36;
+  transition: stroke 2s linear;
 }
 /* the seed heads are the same tone as their band, only a touch lighter, so
    they read as part of the planting rather than as dots on top of it */
@@ -224,14 +236,14 @@
    and looks straight out, and now and then he says something. */
 .sky__spot {
   position: absolute;
-  /* On the crown of the left hand summit of the near range. The generator
-     puts that peak at x 146 of the 1440 wide ridge box and y 238 of its 360,
-     so this is 9% across and (1 - 238/360) of the ridge height up. His drawing
-     is cropped to his feet, so he lands on the crest rather than hovering over
-     it. He stays on the left because the middle of the valley is where more
-     projects will go. */
+  /* Standing on the ground rather than on a hill behind it: his feet are on
+     the crest of the furthest band of the floor, which the generator draws at
+     y 98 of that band's 200, so this is (1 - 98/200) of the ground height up.
+     His drawing is cropped to his feet, so he lands on the line rather than
+     hovering over it. He stays on the left because the middle of the valley is
+     where more projects will go. */
   left: 9%;
-  bottom: calc(var(--ridge-h) * 0.338);
+  bottom: calc(var(--ground-h) * 0.51);
   width: clamp(52px, 5.6vw, 92px);
   transform: translateX(-50%);
 }

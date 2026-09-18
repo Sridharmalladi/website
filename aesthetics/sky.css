@@ -228,10 +228,15 @@
    and looks straight out, and now and then he says something. */
 .sky__spot {
   position: absolute;
-  left: 12%;
-  /* on the grass line of the near ground, not up on a ridge in mid air */
-  bottom: calc(var(--ground-h) * 0.34);
-  width: clamp(64px, 7vw, 118px);
+  /* On the second summit of the near range rather than the first. The
+     generator puts that peak at x 642 of the 1440 wide ridge box and y 260 of
+     its 360, so this is 44.6% across and (1 - 260/360) of the ridge height up.
+     The first summit sits directly under the bottom row of tiles, which left
+     him nowhere to put a word in. His drawing is cropped to his feet, so he
+     lands on the crest rather than hovering over it. */
+  left: 44.6%;
+  bottom: calc(var(--ridge-h) * 0.278);
+  width: clamp(44px, 4.8vw, 80px);
   transform: translateX(-50%);
 }
 .sky__rabbit {
@@ -240,9 +245,9 @@
   height: auto;
   color: var(--sky-ridge-near);
   fill: var(--sky-ridge-near);
-  /* well darker than the turf he stands on, so he separates from it cleanly
-     instead of sinking into the shrubs behind */
-  filter: brightness(0.42);
+  /* darker than the ridge he stands on, lighter than the ground in front of
+     it, which is what sets him back at that distance */
+  filter: brightness(0.62);
 }
 .sky__rabbit path,
 .sky__rabbit circle,
@@ -329,10 +334,9 @@
    comes round once a minute and only one is ever up. */
 .sky__bubble {
   position: absolute;
-  /* beside him and low, over open grass. Above him and to his left is where
-     the bottom row of tiles lands, and the bubble was going in behind it */
-  left: 86%;
-  bottom: 16%;
+  /* beside him, over the open sky of the valley */
+  left: 88%;
+  bottom: 18%;
   width: max-content;
   max-width: 13ch;
   padding: 0.34rem 0.55rem;
@@ -357,8 +361,8 @@
 /* thought to himself: a round cloud that trails away in dots, nine seconds
    later, so the two are never up together and never look alike */
 .sky__bubble--think {
-  left: 96%;
-  bottom: 30%;
+  left: 94%;
+  bottom: 78%;
   border-radius: 999px;
   padding: 0.45rem 0.8rem;
   color: var(--text-dim);

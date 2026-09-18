@@ -157,9 +157,25 @@ a {
   grid-template-columns: repeat(2, 1fr);
   gap: clamp(1.25rem, 2.4vw, 2rem);
 }
+/* An odd number of products would leave a gap in the last row. The straggler
+   takes the whole width instead and its art is cropped to a panorama, so the
+   row ends up roughly as tall as a half-width one and the shelf stays square
+   at the bottom. */
+.tiles > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+.tiles > :last-child:nth-child(odd) .tile__shot {
+  aspect-ratio: 24 / 7;
+}
+
 @media (max-width: 620px) {
   .tiles {
     grid-template-columns: 1fr;
+  }
+  /* Single column: every tile is already full width, so the panorama crop
+     would just make the last one a letterbox slot. Put it back. */
+  .tiles > :last-child:nth-child(odd) .tile__shot {
+    aspect-ratio: 16 / 10;
   }
 }
 

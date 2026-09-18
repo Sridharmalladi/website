@@ -22,6 +22,12 @@ export const site = {
       alt: "dsbuddy landing page showing a live dataset analysis panel",
     },
     {
+      name: "signup-conversion-model",
+      href: "https://github.com/Sridharmalladi/signup-conversion-model",
+      shot: "/shots/signup-conversion-model.jpg",
+      alt: "Two currents of smoke, one amber and one blue, winding through each other in the dark before parting",
+    },
+    {
       name: "RAGLens",
       href: "https://github.com/Sridharmalladi/RAGLens",
       shot: "/shots/raglens.jpg",

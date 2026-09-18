@@ -53,9 +53,9 @@ export const site = {
       name: "RAGLens",
       blurb:
         "It asks one question in four ways at the same time. No search, dense search, hybrid, and hybrid with a reranker, all over a shelf of 50 papers. A second model then grades every answer. Each card opens up to show the exact chunks that were fed in, so you can see what the search step really bought you.",
-      href: "https://github.com/Sridharmalladi/RAGLens",
+      href: "https://huggingface.co/spaces/Malladi05/raglens",
       shot: "/shots/raglens.jpg",
-      alt: "RAGLens showing its four retrieval setups side by side, from no search up to hybrid search with a cross encoder rerank",
+      alt: "RAGLens running, with its four retrieval setups laid out side by side, from no search up to hybrid search with a cross encoder rerank",
     },
     {
       name: "jobfinddaily",

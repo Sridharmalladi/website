@@ -98,6 +98,61 @@ a {
   }
 }
 
+/* ============================================================ STATUS ===== */
+/* Sits above everything, on its own line. A dot that breathes, a quiet lead in,
+   and then the word, which keeps changing every few seconds while the block of
+   the day runs. */
+.status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding-top: 1.6rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+.status__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(99, 196, 184, 0.5);
+  animation: status-breathe 2.8s ease-out infinite;
+}
+@keyframes status-breathe {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 196, 184, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 9px rgba(99, 196, 184, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 196, 184, 0);
+  }
+}
+.status__lead {
+  color: var(--text-dim);
+}
+.status__word {
+  color: var(--accent);
+  font-weight: 600;
+  animation: status-arrive 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes status-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
 /* ============================================================ HEADER ===== */
 .masthead {
   display: flex;
@@ -105,7 +160,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 1.75rem;
-  padding-block: 2.25rem 2.75rem;
+  padding-block: 1.1rem 2.75rem;
 }
 
 /* the name sits in a block of colour, the way a marker pen leaves it */
@@ -395,6 +450,10 @@ a {
   html,
   body {
     scroll-behavior: auto;
+  }
+  .status__dot,
+  .status__word {
+    animation: none;
   }
   .tile,
   .tile__shot img,

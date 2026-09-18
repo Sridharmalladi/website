@@ -1,3 +1,4 @@
+import Status from "@/components/Status";
 import Work from "@/components/Work";
 import CopyEmail from "@/components/CopyEmail";
 import { site } from "@/config/site";
@@ -18,6 +19,8 @@ export default function Portfolio() {
       <div className="veil" aria-hidden />
 
       <main className="page">
+        <Status />
+
         <header className="masthead">
           <span className="wordmark">
             Sridhar

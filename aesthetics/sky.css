@@ -142,17 +142,73 @@
 }
 .sky__ridge--far {
   fill: var(--sky-ridge-far);
-  opacity: 0.42;
-  filter: blur(2.5px);
+  opacity: 0.34;
+  filter: blur(3.5px);
 }
 .sky__ridge--mid {
   fill: var(--sky-ridge-mid);
-  opacity: 0.66;
-  filter: blur(1px);
+  opacity: 0.58;
+  filter: blur(1.5px);
 }
 .sky__ridge--near {
   fill: var(--sky-ridge-near);
   opacity: 0.9;
+}
+
+/* ------------------------------------------------------------ treeline --- */
+/* Two runs of conifers along the floor of the valley, the back one hazier, so
+   the bottom of the page reads as forest rather than as a flat dark band. */
+.sky__treeline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: clamp(90px, 15vh, 170px);
+  display: block;
+}
+.sky__pines {
+  transition: fill 2s linear;
+}
+.sky__pines--far {
+  fill: var(--sky-ridge-mid);
+  opacity: 0.66;
+  filter: blur(1.2px);
+}
+.sky__pines--near {
+  fill: var(--sky-ridge-near);
+  opacity: 0.92;
+}
+
+/* ----------------------------------------------------------------- tree --- */
+/* Stands on its outcrop at the right edge, clear of the shelf and clear of the
+   caption. Dark silhouette, blossom lit by whatever the sky is doing. */
+.sky__tree {
+  position: absolute;
+  right: clamp(2vw, 7vw, 150px);
+  bottom: clamp(40px, 7vh, 90px);
+  width: clamp(180px, 19vw, 290px);
+  height: auto;
+  display: block;
+}
+.sky__rock {
+  fill: var(--sky-ridge-near);
+}
+.sky__limb {
+  fill: none;
+  stroke: var(--sky-ridge-near);
+  stroke-linecap: round;
+  transition: stroke 2s linear;
+}
+.sky__bloom {
+  fill: var(--sky-petal);
+  transition: fill 2s linear;
+}
+/* No room for it beside the shelf on a narrow screen. */
+@media (max-width: 900px) {
+  .sky__tree {
+    display: none;
+  }
 }
 
 /* ---------------------------------------------------------------- scrim --- */

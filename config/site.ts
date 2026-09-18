@@ -59,7 +59,7 @@ export const site = {
       blurb:
         "An MCP server your assistant talks to in plain English. It pulls remote AI/ML roles from HN Who Is Hiring, RemoteOK and Tavily, drops the senior and no-sponsorship ones with plain regex rather than an LLM, scores the rest, and tracks what you applied to.",
       href: "https://github.com/Sridharmalladi/jobfinddaily",
-      shot: "/shots/jobfinddaily.jpg",
+      shot: "/shots/jobfinddaily-mcp.jpg",
       alt: "How jobfinddaily is wired: Claude Desktop's MCP client on the left, the server over stdio, and the three things it does — find jobs, find people, track applications",
     },
   ] as {

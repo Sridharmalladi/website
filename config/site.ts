@@ -65,6 +65,38 @@ export const site = {
       shot: "/shots/jobfinddaily-mcp.jpg",
       alt: "How jobfinddaily is wired. The MCP client of the host app on the left, the server over stdio in the middle, and on the right the three things it does: find jobs, find people, track applications",
     },
+    {
+      name: "Scroll Miles",
+      blurb:
+        "A Chrome extension that counts how far you scroll and turns it into miles. It sits quietly in the background, keeps a dashboard of the day and the week, and hands out achievements as the miles add up. The point is not to stop you scrolling. It is to make an invisible habit visible.",
+      href: "https://chromewebstore.google.com/detail/scroll-miles/kdeibhcngffpofgiaglnbhfpiocffihh",
+      shot: "/shots/scroll-miles.jpg",
+      alt: "The Scroll Miles site, with the extension logo, the line about turning scrolling into meaningful metrics, and the store badges",
+    },
+    {
+      name: "focado",
+      blurb:
+        "A pomodoro timer for macOS that sits on your desktop as a small pixel avocado. Press enter and it starts a 25 minute block, then a break, and the time left shows in the pit. Written in Swift with the art drawn pixel by pixel in code, so it is one little window and nothing else.",
+      href: "https://github.com/Sridharmalladi/focado",
+      shot: "/shots/focado.jpg",
+      alt: "The focado avocado timer on a desktop, showing 25:00 and a start prompt in its pit",
+    },
+    {
+      name: "HungerHeal",
+      blurb:
+        "Restaurants, bakeries and grocery stores post the food they have left over, with the place, the quantity and the time it goes bad. NGOs, shelters and neighbours find it on a live map and go and collect it. A post deletes itself once it expires, so nobody turns up for food that is already gone.",
+      href: "https://github.com/Sridharmalladi/healhunger",
+      shot: "/shots/hungerheal.jpg",
+      alt: "How HungerHeal works: a donor posts surplus food, it appears on a live map with its expiry, and an NGO, shelter or neighbour collects it",
+    },
+    {
+      name: "prepify",
+      blurb:
+        "Practice for an interview against an AI that plays the interviewer. Give it the role, the company, your resume and the job description, pick how long you want to sit for, and it runs the whole interview and scores you at the end. Past attempts are kept, so you can see if you are actually improving.",
+      href: "https://github.com/Sridharmalladi/prepify",
+      shot: "/shots/prepify.jpg",
+      alt: "The prepify dashboard, showing past interview counts and scores above the form that starts a new practice interview",
+    },
   ] as {
     name: string;
     blurb: string;

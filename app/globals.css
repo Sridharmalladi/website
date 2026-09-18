@@ -75,8 +75,7 @@ a {
   position: relative;
   width: var(--column);
   margin-inline: auto;
-  /* the bottom row's caption drops below it, so leave it somewhere to go */
-  padding-bottom: 8.5rem;
+  padding-bottom: 4.5rem;
 }
 
 /* ============================================================== VEIL ===== */
@@ -206,33 +205,60 @@ a {
   }
 }
 
-/* The caption sits on the veil, directly under its own tile, so the eye goes
-   from the picture straight into the sentence. */
+/* The caption does not sit with its tile. It arrives low on the veil, in the
+   same place every time, a beat after the dark falls — you go looking at the
+   picture and the sentence turns up somewhere else entirely. It surfaces out
+   of a blur rather than sliding, which is what makes it feel like an arrival
+   instead of a tooltip. */
 .cell__blurb {
-  position: absolute;
-  top: calc(100% + 0.9rem);
-  left: 0;
-  width: 100%;
+  position: fixed;
+  left: 50%;
+  bottom: 9vh;
+  z-index: 7;
+  width: min(54ch, 86vw);
   margin: 0;
-  padding-left: 0.85rem;
-  border-left: 2px solid var(--accent);
   color: var(--text);
-  font-size: 0.8rem;
-  line-height: 1.65;
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  font-weight: 300;
+  line-height: 1.75;
+  text-align: center;
   text-wrap: pretty;
   opacity: 0;
-  transform: translateY(-4px);
+  filter: blur(7px);
+  transform: translate(-50%, 16px);
   pointer-events: none;
   transition:
-    opacity 220ms ease,
-    transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 200ms ease,
+    filter 200ms ease,
+    transform 200ms ease;
+}
+/* The teal stroke of the wordmark, cut to a short rule above the sentence. */
+.cell__blurb::before {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin: 0 auto 1.1rem;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) {
   .cell:hover .cell__blurb,
   .cell:focus-within .cell__blurb {
     opacity: 1;
-    transform: translateY(0);
-    transition-delay: 60ms;
+    filter: blur(0);
+    transform: translate(-50%, 0);
+    /* the pause before it lands is the whole trick */
+    transition:
+      opacity 420ms ease 260ms,
+      filter 520ms cubic-bezier(0.16, 1, 0.3, 1) 260ms,
+      transform 560ms cubic-bezier(0.16, 1, 0.3, 1) 260ms;
+  }
+  .cell:hover .cell__blurb::before,
+  .cell:focus-within .cell__blurb::before {
+    transform: scaleX(1);
+    transition-delay: 380ms;
   }
 }
 /* No hover on a touch screen, so the captions would never be reachable.
@@ -242,12 +268,17 @@ a {
     position: static;
     width: auto;
     margin-top: 0.8rem;
+    padding-left: 0.85rem;
+    border-left: 2px solid var(--accent);
+    font-size: 0.8rem;
+    line-height: 1.65;
+    text-align: left;
     opacity: 1;
+    filter: none;
     transform: none;
   }
-  /* nothing drops out of the last row here, so the reserve is not needed */
-  .page {
-    padding-bottom: 4rem;
+  .cell__blurb::before {
+    display: none;
   }
 }
 
@@ -361,9 +392,16 @@ a {
   .chip {
     transition: none;
   }
-  .cell__blurb {
-    transform: none;
-    transition: opacity 120ms linear;
+  .cell__blurb,
+  .cell:hover .cell__blurb,
+  .cell:focus-within .cell__blurb {
+    filter: none;
+    transform: translate(-50%, 0);
+    transition: opacity 160ms linear 120ms;
+  }
+  .cell__blurb::before {
+    transform: scaleX(1);
+    transition: none;
   }
   .tile:hover,
   .chip:hover,

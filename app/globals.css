@@ -181,6 +181,11 @@ a {
 .wordmark__family {
   color: var(--text-dim);
 }
+/* Both initials are capitals, set a shade larger than the letters after them.
+   They sit on the same baseline as the rest of the word. */
+.wordmark__initial {
+  font-size: 1.18em;
+}
 
 /* ============================================================== LINKS ==== */
 .links {

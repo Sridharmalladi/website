@@ -23,7 +23,14 @@ export default function Portfolio() {
 
         <header className="masthead">
           <span className="wordmark">
-            sridhar<span className="wordmark__family">malladi</span>
+            {/* one flex item per word, or the gap between them lands between the
+                initial and the rest of the word */}
+            <span>
+              <span className="wordmark__initial">S</span>ridhar
+            </span>
+            <span className="wordmark__family">
+              <span className="wordmark__initial">M</span>alladi
+            </span>
           </span>
 
           <nav className="links" aria-label="Elsewhere">

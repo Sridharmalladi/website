@@ -193,28 +193,42 @@
 /* ------------------------------------------------------------- squirrel --- */
 /* Sits on the left summit of the near ridge. That summit is at x 146 of the
    1440 wide ridge box, and at y 238 of its 360, so he goes 10.1% across and
-   (1 - 238/360) of the ridge height up from the bottom. He is a silhouette,
-   slightly darker than the ridge he is on, and he never goes anywhere. */
+   (1 - 238/360) of the ridge height up from the bottom.
+
+   He is a silhouette, a little darker than the ridge he is on. Everything he
+   does is slow, and no two movements share a period, so it never reads as a
+   loop: he breathes, his tail sways, he turns the acorn over, and every twenty
+   seconds or so he looks up and straight out at whoever is watching. */
 .sky__squirrel {
   position: absolute;
   left: 10.1%;
   bottom: calc(var(--ridge-h) * 0.338);
-  width: clamp(24px, 2.9vw, 44px);
+  width: clamp(30px, 3.6vw, 56px);
   height: auto;
   display: block;
-  transform: translateX(-52%);
+  transform: translateX(-50%);
+  color: var(--sky-ridge-near);
   fill: var(--sky-ridge-near);
-  filter: brightness(0.72);
+  filter: brightness(0.7);
 }
-.sky__squirrel path {
+.sky__squirrel path,
+.sky__squirrel circle,
+.sky__squirrel ellipse {
   transition: fill 2s linear;
 }
+/* the eyes catch the sky rather than the ridge */
+.sky__eye {
+  fill: var(--sky-orb);
+}
+
 /* every part turns about its own join, not about the middle of the drawing */
 .sky__critter,
 .sky__tail,
 .sky__body,
 .sky__head,
-.sky__ear {
+.sky__ear,
+.sky__acorn,
+.sky__face {
   transform-box: fill-box;
 }
 
@@ -228,26 +242,59 @@
   to { transform: scaleY(1.03); }
 }
 
-/* the tail sways from where it meets the body */
+/* the tail sways from where it meets the haunch */
 .sky__tail {
-  transform-origin: 8% 96%;
+  transform-origin: 6% 94%;
   animation: critter-tail 7.4s ease-in-out infinite alternate;
 }
 @keyframes critter-tail {
   from { transform: rotate(-4deg); }
-  to { transform: rotate(5deg); }
+  to { transform: rotate(6deg); }
 }
 
-/* a look around now and then, and nothing in between */
+/* he turns the acorn over in his paws now and then */
+.sky__acorn {
+  transform-origin: 50% 40%;
+  animation: critter-acorn 11s ease-in-out infinite;
+}
+@keyframes critter-acorn {
+  0%, 58% { transform: rotate(0deg); }
+  66% { transform: rotate(-11deg); }
+  76% { transform: rotate(9deg); }
+  86%, 100% { transform: rotate(0deg); }
+}
+
+/* a look around, and a nibble, between the times he looks up */
 .sky__head {
   transform-origin: 62% 92%;
   animation: critter-look 16s ease-in-out infinite;
 }
 @keyframes critter-look {
-  0%, 46% { transform: rotate(0deg); }
-  52%, 62% { transform: rotate(-9deg); }
-  68%, 84% { transform: rotate(4deg); }
-  90%, 100% { transform: rotate(0deg); }
+  0%, 30% { transform: rotate(0deg); }
+  36%, 44% { transform: rotate(7deg); }
+  50% { transform: rotate(0deg); }
+  56%, 60% { transform: rotate(-8deg); }
+  66%, 100% { transform: rotate(0deg); }
+}
+
+/* the turn towards you: the side view fades out, the front view fades in, and
+   he holds it for a couple of seconds before going back to his acorn */
+.sky__face--side {
+  animation: critter-side 21s ease-in-out infinite;
+}
+.sky__face--front {
+  opacity: 0;
+  animation: critter-front 21s ease-in-out infinite;
+}
+@keyframes critter-side {
+  0%, 62% { opacity: 1; }
+  66%, 78% { opacity: 0; }
+  82%, 100% { opacity: 1; }
+}
+@keyframes critter-front {
+  0%, 62% { opacity: 0; }
+  66%, 78% { opacity: 1; }
+  82%, 100% { opacity: 0; }
 }
 
 /* one ear twitch per cycle, quick enough that you might miss it */
@@ -367,8 +414,15 @@
   .sky__body,
   .sky__tail,
   .sky__head,
-  .sky__ear {
+  .sky__ear,
+  .sky__acorn,
+  .sky__face--side {
     animation: none;
+  }
+  /* he stays side on rather than blinking between two faces */
+  .sky__face--front {
+    animation: none;
+    opacity: 0;
   }
   .sky__petal {
     opacity: 0.35;

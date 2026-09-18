@@ -85,9 +85,9 @@ export const site = {
       name: "HungerHeal",
       blurb:
         "Restaurants, bakeries and grocery stores post the food they have left over, with the place, the quantity and the time it goes bad. NGOs, shelters and neighbours find it on a live map and go and collect it. A post deletes itself once it expires, so nobody turns up for food that is already gone.",
-      href: "https://github.com/Sridharmalladi/healhunger",
+      href: "https://healhunger.streamlit.app/",
       shot: "/shots/hungerheal.jpg",
-      alt: "How HungerHeal works: a donor posts surplus food, it appears on a live map with its expiry, and an NGO, shelter or neighbour collects it",
+      alt: "HungerHeal running, with its three tabs and the figures on how much food the world throws away",
     },
     {
       name: "prepify",

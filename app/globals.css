@@ -92,8 +92,7 @@ a {
   transition: opacity 260ms ease;
 }
 @media (hover: hover) {
-  body:has(.cell:hover) .veil,
-  body:has(.cell:focus-within) .veil {
+  body.has-lit .veil {
     opacity: 1;
   }
 }
@@ -255,8 +254,7 @@ a {
   min-width: 0;
 }
 @media (hover: hover) {
-  .cell:hover,
-  .cell:focus-within {
+  .cell.is-lit {
     z-index: 6;
   }
 }
@@ -306,8 +304,7 @@ a {
   transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) {
-  .cell:hover .cell__blurb,
-  .cell:focus-within .cell__blurb {
+  .cell.is-lit .cell__blurb {
     opacity: 1;
     filter: blur(0);
     transform: translate(-50%, 0);
@@ -319,8 +316,7 @@ a {
       transform 700ms cubic-bezier(0.16, 1, 0.3, 1) 220ms,
       scale 700ms cubic-bezier(0.16, 1, 0.3, 1) 220ms;
   }
-  .cell:hover .cell__blurb::before,
-  .cell:focus-within .cell__blurb::before {
+  .cell.is-lit .cell__blurb::before {
     transform: scaleX(1);
     transition-delay: 380ms;
   }
@@ -364,7 +360,7 @@ a {
     box-shadow 180ms ease,
     border-color 180ms ease;
 }
-.tile:hover {
+.cell.is-lit .tile {
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
   border-color: rgba(99, 196, 184, 0.55);
@@ -391,7 +387,7 @@ a {
     transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
     filter 260ms ease;
 }
-.tile:hover .tile__shot img {
+.cell.is-lit .tile__shot img {
   transform: scale(1.05);
   filter: saturate(1.05) brightness(1);
 }
@@ -417,7 +413,7 @@ a {
   font-size: 0.7rem;
   transition: color 180ms ease;
 }
-.tile:hover .tile__go {
+.cell.is-lit .tile__go {
   color: var(--accent);
 }
 
@@ -462,8 +458,7 @@ a {
     transition: none;
   }
   .cell__blurb,
-  .cell:hover .cell__blurb,
-  .cell:focus-within .cell__blurb {
+  .cell.is-lit .cell__blurb {
     filter: none;
     transform: translate(-50%, 0);
     scale: 1;
@@ -473,9 +468,9 @@ a {
     transform: scaleX(1);
     transition: none;
   }
-  .tile:hover,
+  .cell.is-lit .tile,
   .chip:hover,
-  .tile:hover .tile__shot img {
+  .cell.is-lit .tile__shot img {
     transform: none;
   }
 }

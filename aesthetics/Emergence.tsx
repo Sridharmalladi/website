@@ -3,17 +3,21 @@
 import { useEffect } from "react";
 
 /**
- * Tells each caption where its tile is, so the sentence looks like it came out
- * of the picture you are pointing at.
+ * Runs the focus effect: which product is lit, and where its caption flies in
+ * from.
  *
- * The caption lives at a fixed spot low on the screen. Before it is shown, this
- * parks it on top of its own tile — small, blurred, out of focus — by writing
- * the offset between the two onto the cell as custom properties. The CSS does
- * the rest: on hover it travels back to zero, which reads as the text leaving
- * the tile and settling into place.
+ * This used to be plain CSS :hover, which latches. If the pointer leaves the
+ * window without crossing the edge of a tile, which is what happens when you
+ * switch tab, click through to a project, or use the keyboard, the browser
+ * keeps the last hover state and the page stays dark until you go back and
+ * wave the pointer over that tile again. So the state is explicit instead: a
+ * class on the cell, a class on the body, and every way out of the page clears
+ * both.
  *
- * Measured on hover rather than on load, so scrolling and resizing need no
- * listeners and nothing is recalculated while the page sits still.
+ * It also parks the caption on top of the tile before it is shown, by writing
+ * the gap between the tile and the caption's resting place onto the cell, which
+ * is what makes the sentence look like it came out of the picture. Measured on
+ * hover, so there are no scroll or resize listeners.
  */
 export default function Emergence() {
   useEffect(() => {
@@ -21,11 +25,9 @@ export default function Emergence() {
     if (!shelf) return;
     if (!window.matchMedia("(hover: hover)").matches) return;
 
-    const aim = (event: Event) => {
-      const target = event.target as HTMLElement | null;
-      const cell = target?.closest<HTMLElement>(".cell");
-      if (!cell) return;
+    let lit: HTMLElement | null = null;
 
+    const aim = (cell: HTMLElement) => {
       const tile = cell.querySelector<HTMLElement>(".tile");
       const blurb = cell.querySelector<HTMLElement>(".cell__blurb");
       if (!tile || !blurb) return;
@@ -39,11 +41,57 @@ export default function Emergence() {
       cell.style.setProperty("--oy", `${Math.round(box.top + box.height / 2 - restY)}px`);
     };
 
-    shelf.addEventListener("pointerover", aim);
-    shelf.addEventListener("focusin", aim);
+    const clear = () => {
+      if (lit) lit.classList.remove("is-lit");
+      lit = null;
+      document.body.classList.remove("has-lit");
+    };
+
+    const light = (cell: HTMLElement) => {
+      if (lit === cell) return;
+      if (lit) lit.classList.remove("is-lit");
+      lit = cell;
+      aim(cell);
+      cell.classList.add("is-lit");
+      document.body.classList.add("has-lit");
+    };
+
+    const onEnter = (event: Event) => {
+      const cell = (event.target as HTMLElement | null)?.closest<HTMLElement>(".cell");
+      // the gaps between tiles count as leaving
+      if (cell) light(cell);
+      else clear();
+    };
+
+    const onLeaveFocus = (event: FocusEvent) => {
+      const next = event.relatedTarget as Node | null;
+      if (!next || !shelf.contains(next)) clear();
+    };
+
+    const onHidden = () => {
+      if (document.hidden) clear();
+    };
+
+    shelf.addEventListener("pointerover", onEnter);
+    shelf.addEventListener("pointerleave", clear);
+    shelf.addEventListener("focusin", onEnter);
+    shelf.addEventListener("focusout", onLeaveFocus as EventListener);
+    // every way the pointer can leave without crossing a tile edge
+    document.addEventListener("mouseleave", clear);
+    document.addEventListener("visibilitychange", onHidden);
+    window.addEventListener("blur", clear);
+    window.addEventListener("pageshow", clear);
+
     return () => {
-      shelf.removeEventListener("pointerover", aim);
-      shelf.removeEventListener("focusin", aim);
+      shelf.removeEventListener("pointerover", onEnter);
+      shelf.removeEventListener("pointerleave", clear);
+      shelf.removeEventListener("focusin", onEnter);
+      shelf.removeEventListener("focusout", onLeaveFocus as EventListener);
+      document.removeEventListener("mouseleave", clear);
+      document.removeEventListener("visibilitychange", onHidden);
+      window.removeEventListener("blur", clear);
+      window.removeEventListener("pageshow", clear);
+      clear();
     };
   }, []);
 

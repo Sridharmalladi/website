@@ -29,7 +29,7 @@ export default function Portfolio() {
               <span className="wordmark__initial">S</span>ridhar
             </span>
             <span className="wordmark__family">
-              <span className="wordmark__initial">M</span>alladi
+              <span className="wordmark__lower">m</span>alladi
             </span>
           </span>
 

@@ -455,7 +455,9 @@
      sides into the ground instead of ending on a cut edge */
   overflow: visible;
   right: clamp(2vw, 7vw, 150px);
-  bottom: calc(var(--ground-h) * 0.3);
+  /* clear of the near grass, so the trunk meets its own ground instead of
+     disappearing into a bank of blades */
+  bottom: calc(var(--ground-h) * 0.52);
   width: clamp(180px, 19vw, 290px);
   height: auto;
   display: block;

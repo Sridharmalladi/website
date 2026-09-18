@@ -256,19 +256,19 @@ const LIMBS: { d: string; w: number }[] = [
 
 /** cx, cy, rx, ry, opacity — an irregular mass, widest through the middle. */
 const CANOPY: [number, number, number, number, number][] = [
-  [140, 131, 104, 42, 0.3],
-  [82, 143, 58, 30, 0.26],
-  [198, 139, 60, 30, 0.26],
-  [112, 111, 62, 30, 0.28],
-  [172, 115, 56, 28, 0.26],
-  [140, 97, 46, 24, 0.22],
-  [48, 157, 34, 19, 0.2],
-  [232, 153, 32, 18, 0.19],
-  [96, 165, 40, 19, 0.21],
-  [186, 163, 38, 18, 0.2],
-  [140, 155, 70, 23, 0.19],
-  [66, 127, 28, 16, 0.17],
-  [214, 123, 26, 15, 0.17],
+  [140, 131, 104, 42, 0.58],
+  [82, 143, 58, 30, 0.51],
+  [198, 139, 60, 30, 0.51],
+  [112, 111, 62, 30, 0.55],
+  [172, 115, 56, 28, 0.51],
+  [140, 97, 46, 24, 0.43],
+  [48, 157, 34, 19, 0.39],
+  [232, 153, 32, 18, 0.37],
+  [96, 165, 40, 19, 0.41],
+  [186, 163, 38, 18, 0.39],
+  [140, 155, 70, 23, 0.37],
+  [66, 127, 28, 16, 0.33],
+  [214, 123, 26, 15, 0.33],
 ];
 
 /**
@@ -475,8 +475,8 @@ export default function Sky() {
       <svg className="sky__ground sky__ground--front" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
         <path className="sky__turf sky__turf--front" d={groundEdge(4407, 6, 174, 15)} />
         <g className="sky__tussock">
-          <path className="sky__blades sky__blades--near" d={grass(6180, 190, 178, 20, 66, 2.9)} />
-          <path className="sky__seed sky__seed--near" d={seedHeads(1177, 18, 178, 40, 74)} />
+          <path className="sky__blades sky__blades--near" d={grass(6180, 170, 178, 16, 46, 2.7)} />
+          <path className="sky__seed sky__seed--near" d={seedHeads(1177, 14, 178, 32, 56)} />
         </g>
       </svg>
 

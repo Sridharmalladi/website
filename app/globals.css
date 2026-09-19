@@ -99,25 +99,23 @@ a {
 
 /* ============================================================ STATUS ===== */
 /* Sits centered above the masthead, filling the quiet gap between the name
-   and the rest of the page. A dot that breathes, a quiet lead in on its own
-   line, and below it the word, which keeps changing every few seconds while
-   the block of the day runs. The lead never moves; only the word does. */
+   and the rest of the page, all on one line. A dot that breathes, a lead in
+   that never moves, and a word that types itself out, holds, and backspaces
+   into the next one for as long as the block of the day runs. The word gets
+   a reserved width, the widest of the block's own words, so the line's
+   center does not drift sideways as the typing grows and shrinks it; only
+   the cursor end of the word actually moves. */
 .status {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
   margin: 0;
-  padding-block: 2.6rem 1.6rem;
-  text-align: center;
+  padding-block: 2rem 1.6rem;
+  font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: lowercase;
-}
-.status__top {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-size: 0.72rem;
 }
 .status__dot {
   width: 7px;
@@ -143,23 +141,26 @@ a {
 }
 .status__word {
   display: inline-block;
-  text-align: center;
+  text-align: left;
   color: var(--accent);
   font-weight: 600;
-  font-size: 1.3rem;
-  letter-spacing: 0.04em;
-  animation: status-arrive 520ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-@keyframes status-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-    filter: blur(3px);
-  }
-  to {
+.status__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.9em;
+  margin-left: 2px;
+  vertical-align: -0.1em;
+  background: var(--accent);
+  animation: status-blink 1s step-end infinite;
+}
+@keyframes status-blink {
+  0%,
+  100% {
     opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
+  }
+  50% {
+    opacity: 0;
   }
 }
 
@@ -385,9 +386,9 @@ body.info-top .status {
   display: block;
   margin-bottom: 0.6rem;
   color: var(--accent);
-  font-size: 0.62rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -426,7 +427,7 @@ body.info-top .status {
   }
   .cell__why-label {
     margin-bottom: 0.3rem;
-    font-size: 0.56rem;
+    font-size: 0.7rem;
   }
   /* the big headline size is for the fixed side by side layout; stacked above
      its own tile it goes back to reading like a line of text */
@@ -560,7 +561,7 @@ body.info-top .status {
     scroll-behavior: auto;
   }
   .status__dot,
-  .status__word {
+  .status__cursor {
     animation: none;
   }
   .tile,

@@ -14,10 +14,9 @@ import { useEffect } from "react";
  * class on the cell, a class on the body, and every way out of the page clears
  * both.
  *
- * It also parks the caption on top of the tile before it is shown, by writing
- * the gap between the tile and the caption's resting place onto the cell, which
- * is what makes the sentence look like it came out of the picture. Measured on
- * hover, so there are no scroll or resize listeners.
+ * It used to measure the gap between a tile and the caption's resting place as
+ * well, so the sentence could fly out of the picture. The words arrive at once
+ * now, so there is nothing left to measure.
  */
 export default function Emergence() {
   useEffect(() => {
@@ -26,20 +25,6 @@ export default function Emergence() {
     if (!window.matchMedia("(hover: hover)").matches) return;
 
     let lit: HTMLElement | null = null;
-
-    const aim = (cell: HTMLElement) => {
-      const tile = cell.querySelector<HTMLElement>(".tile");
-      const blurb = cell.querySelector<HTMLElement>(".cell__blurb");
-      if (!tile || !blurb) return;
-
-      const box = tile.getBoundingClientRect();
-      // where the caption comes to rest: centred, and 9vh off the bottom
-      const restX = window.innerWidth / 2;
-      const restY = window.innerHeight * 0.91 - blurb.offsetHeight / 2;
-
-      cell.style.setProperty("--ox", `${Math.round(box.left + box.width / 2 - restX)}px`);
-      cell.style.setProperty("--oy", `${Math.round(box.top + box.height / 2 - restY)}px`);
-    };
 
     const clear = () => {
       if (lit) lit.classList.remove("is-lit");
@@ -51,7 +36,6 @@ export default function Emergence() {
       if (lit === cell) return;
       if (lit) lit.classList.remove("is-lit");
       lit = cell;
-      aim(cell);
       cell.classList.add("is-lit");
       document.body.classList.add("has-lit");
     };

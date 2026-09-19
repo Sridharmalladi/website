@@ -2,9 +2,10 @@ import { site } from "@/config/site";
 
 /**
  * The shelf: one cell per product. The cell holds the tile, which is the whole
- * link, and a caption that stays hidden until the cell is hovered or focused.
- * The caption sits outside the anchor on purpose — inside it, it would be read
- * out as part of the link's name.
+ * link, and two lines that stay hidden until the cell is hovered or focused:
+ * why the thing was built, which goes to the top of the screen, and what it is,
+ * which goes to the bottom. Both sit outside the anchor on purpose. Inside it,
+ * they would be read out as part of the link's name.
  */
 export default function Work() {
   if (site.projects.length === 0) return null;
@@ -42,6 +43,10 @@ export default function Work() {
             ) : (
               <div className="tile">{body}</div>
             )}
+            <p className="cell__why">
+              <span className="cell__why-label">what inspired this</span>
+              {p.inspiration}
+            </p>
             <p className="cell__blurb">{p.blurb}</p>
           </div>
         );

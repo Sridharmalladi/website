@@ -95,6 +95,16 @@ a {
   body.has-lit .veil {
     opacity: 1;
   }
+  /* the top of the page is the name, the status and the links. While a product
+     is lit they step back and let the reason it was built sit there instead */
+  body.has-lit .masthead,
+  body.has-lit .status {
+    opacity: 0.1;
+  }
+}
+.masthead,
+.status {
+  transition: opacity 160ms ease;
 }
 
 /* ============================================================ STATUS ===== */
@@ -292,20 +302,13 @@ a {
   line-height: 1.75;
   text-align: center;
   text-wrap: pretty;
+  /* on a short window the shelf runs past the fold, so a fixed line can land
+     over a tile. The shadow keeps it readable wherever it lands. */
+  text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
   opacity: 0;
-  /* Where it waits: on top of its own tile, small and out of focus. Emergence
-     writes --ox/--oy onto the cell as the pointer arrives. The fallbacks live
-     in the var() calls rather than in a declaration here — declared here, they
-     would be this element's own value and would beat the one it inherits. */
-  filter: blur(10px);
-  transform: translate(calc(-50% + var(--ox, 0px)), var(--oy, 18px));
-  scale: 0.62;
+  transform: translate(-50%, 0);
   pointer-events: none;
-  transition:
-    opacity 180ms ease,
-    filter 180ms ease,
-    transform 200ms ease,
-    scale 200ms ease;
+  transition: opacity 120ms ease;
 }
 /* A short teal rule that draws itself in above the sentence. */
 .cell__blurb::before {
@@ -319,26 +322,72 @@ a {
   transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) {
-  .cell.is-lit .cell__blurb {
+  /* both lines are simply there the moment the pointer lands */
+  .cell.is-lit .cell__blurb,
+  .cell.is-lit .cell__why {
     opacity: 1;
-    filter: blur(0);
-    transform: translate(-50%, 0);
-    scale: 1;
-    /* the pause before it leaves the tile is the whole trick */
-    transition:
-      opacity 360ms ease 220ms,
-      filter 620ms cubic-bezier(0.16, 1, 0.3, 1) 220ms,
-      transform 700ms cubic-bezier(0.16, 1, 0.3, 1) 220ms,
-      scale 700ms cubic-bezier(0.16, 1, 0.3, 1) 220ms;
   }
   .cell.is-lit .cell__blurb::before {
     transform: scaleX(1);
-    transition-delay: 380ms;
   }
 }
+/* Why the thing was built, at the top of the screen. The same sentence
+   treatment as the caption, a size down, with a label over it so it is clear
+   this is the reason rather than the description. Held well clear of the name
+   and the links above it. */
+.cell__why {
+  position: fixed;
+  left: 50%;
+  top: 6vh;
+  z-index: 7;
+  width: min(52ch, 84vw);
+  margin: 0;
+  color: var(--text-dim);
+  font-size: clamp(0.88rem, 1.15vw, 1.02rem);
+  font-weight: 300;
+  line-height: 1.7;
+  text-align: center;
+  text-wrap: pretty;
+  /* on a short window the shelf runs past the fold, so a fixed line can land
+     over a tile. The shadow keeps it readable wherever it lands. */
+  text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
+  opacity: 0;
+  transform: translate(-50%, 0);
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+.cell__why-label {
+  display: block;
+  margin-bottom: 0.7rem;
+  color: var(--accent);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
 /* No hover on a touch screen, so the captions would never be reachable.
    Print them under their tiles instead. */
 @media (hover: none) {
+  .cell__why {
+    position: static;
+    order: -1;
+    width: auto;
+    margin: 0 0 0.7rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    text-align: left;
+    opacity: 1;
+    transform: none;
+  }
+  .cell {
+    display: flex;
+    flex-direction: column;
+  }
+  .cell__why-label {
+    margin-bottom: 0.3rem;
+    font-size: 0.56rem;
+  }
   .cell__blurb {
     position: static;
     width: auto;
@@ -473,11 +522,11 @@ a {
     transition: none;
   }
   .cell__blurb,
-  .cell.is-lit .cell__blurb {
-    filter: none;
+  .cell__why,
+  .cell.is-lit .cell__blurb,
+  .cell.is-lit .cell__why {
     transform: translate(-50%, 0);
-    scale: 1;
-    transition: opacity 160ms linear 120ms;
+    transition: opacity 100ms linear;
   }
   .cell__blurb::before {
     transform: scaleX(1);

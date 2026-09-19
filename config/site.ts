@@ -27,6 +27,8 @@ export const site = {
   projects: [
     {
       name: "Judge Loop",
+      inspiration:
+        "Model council features in today's top AI products got me thinking. Let several LLMs take a topic, argue it out, judge each other, and land on a better answer than any one of them gives alone.",
       blurb:
         "One model writes an answer. A second model scores it. Then the first one tries again, and this keeps going round after round. You can pick self refinement, judging across models, or prompt tuning. Every round streams live, so you can see the exact point where it stops getting better.",
       href: "https://judge-loop.netlify.app/",
@@ -35,6 +37,8 @@ export const site = {
     },
     {
       name: "dsbuddy",
+      inspiration:
+        "Most data science work is monotonous. Profiling, the same charts, the same models fitted again. I wanted a buddy that does the repeat work so the time goes on taking calls instead.",
       blurb:
         "Pick a dataset and tell it which column matters. It runs about two hundred checks on the data, trains real models, and scores them on a fifth of the rows they never saw. Claude reads all of that, writes a plain summary, and warns you about leakage. Say drop that column and the whole thing runs again for real.",
       href: "https://www.dsbuddy.com/",
@@ -43,6 +47,8 @@ export const site = {
     },
     {
       name: "signup-conversion-model",
+      inspiration:
+        "This was part of my work. I found it interesting how changing one variable, or how you split the data, surfaces things that look impossible to see at first.",
       blurb:
         "This predicts who will not finish signing up. Taking out one leaky feature pulled the score from 0.93 down to 0.78, and splitting the data by time pulled it down to 0.68. The real lesson is that 84 percent do not convert anyway, so knowing who will not convert is only 1.19 times better than picking people at random.",
       href: "https://github.com/Sridharmalladi/signup-conversion-model",
@@ -51,6 +57,8 @@ export const site = {
     },
     {
       name: "RAGLens",
+      inspiration:
+        "I wanted to put one prompt through every retrieval setup at once and see the outputs side by side, from no search to hybrid with a reranker, rather than guessing which one was helping.",
       blurb:
         "It asks one question in four ways at the same time. No search, dense search, hybrid, and hybrid with a reranker, all over a shelf of 50 papers. A second model then grades every answer. Each card opens up to show the exact chunks that were fed in, so you can see what the search step really bought you.",
       href: "https://huggingface.co/spaces/Malladi05/raglens",
@@ -59,14 +67,18 @@ export const site = {
     },
     {
       name: "jobfinddaily",
+      inspiration:
+        "Job hunting is repetitive. I wanted a server my assistant could talk to that finds the roles, finds the people hiring, and remembers what I applied to, using Tavily, Firecrawl and the rest.",
       blurb:
-        "This is an MCP server that your assistant talks to in plain English. It pulls remote AI and ML jobs from HN Who Is Hiring, RemoteOK and Tavily, throws out the senior roles and the ones without visa sponsorship using plain regex instead of an LLM, scores whatever is left, and keeps track of what you applied to.",
+        "This is an MCP server that your assistant talks to in plain English. It pulls remote AI and ML jobs from HN Who Is Hiring, RemoteOK, Tavily and Firecrawl, throws out the senior roles and the ones without visa sponsorship using plain regex instead of an LLM, scores whatever is left, and keeps track of what you applied to.",
       href: "https://github.com/Sridharmalladi/jobfinddaily",
       shot: "/shots/jobfinddaily-mcp.jpg",
       alt: "How jobfinddaily is wired. The MCP client of the host app on the left, the server over stdio in the middle, and on the right the three things it does: find jobs, find people, track applications",
     },
     {
       name: "Scroll Miles",
+      inspiration:
+        "People are addicted to scrolling. I moved the measuring to the browser so you can actually see how far you have gone in a day.",
       blurb:
         "A Chrome extension that counts how far you scroll and turns it into miles. It sits quietly in the background, keeps a dashboard of the day and the week, and hands out achievements as the miles add up. The point is not to stop you scrolling. It is to make an invisible habit visible.",
       href: "https://chromewebstore.google.com/detail/scroll-miles/kdeibhcngffpofgiaglnbhfpiocffihh",
@@ -75,6 +87,8 @@ export const site = {
     },
     {
       name: "focado",
+      inspiration:
+        "I was having a hard time focusing. Keeping the timer on the desktop rather than the phone was the whole point, because the phone is the thing you are trying to get away from.",
       blurb:
         "A pomodoro timer for macOS that sits on your desktop as a small pixel avocado. Press enter and it starts a 25 minute block, then a break, and the time left shows in the pit. Written in Swift with the art drawn pixel by pixel in code, so it is one little window and nothing else.",
       href: "https://github.com/Sridharmalladi/focado",
@@ -83,22 +97,27 @@ export const site = {
     },
     {
       name: "HungerHeal",
+      inspiration:
+        "Built in a hackathon about social impact using simple tech. Post the food you cannot use, with details and an identification, and let someone nearby find it on a map and collect it before it expires.",
       blurb:
-        "Restaurants, bakeries and grocery stores post the food they have left over, with the place, the quantity and the time it goes bad. NGOs, shelters and neighbours find it on a live map and go and collect it. A post deletes itself once it expires, so nobody turns up for food that is already gone.",
+        "Restaurants, bakeries and grocery stores post the food they have left over, with the place, the quantity and the time it goes bad. Every posting is scored, and NGOs, shelters and neighbours find it on a live map and go and collect it. A post deletes itself once it expires, so nobody turns up for food that is already gone.",
       href: "https://healhunger.streamlit.app/",
       shot: "/shots/hungerheal.jpg",
       alt: "HungerHeal running, with its three tabs and the figures on how much food the world throws away",
     },
     {
       name: "prepify",
+      inspiration:
+        "A hackathon project with a friend. An interview buddy with a digital avatar that plays the interviewer, using text to speech and speech to text, so it asks relevant questions and follows up on your answers. We wanted a coding round in it too, but that got dropped.",
       blurb:
-        "Practice for an interview against an AI that plays the interviewer. Give it the role, the company, your resume and the job description, pick how long you want to sit for, and it runs the whole interview and scores you at the end. Past attempts are kept, so you can see if you are actually improving.",
+        "Practice for an interview against a digital avatar that plays the interviewer, listening and speaking back to you. Give it the role, the company, your resume and the job description, and it runs the whole interview, follows up on your answers, and scores you at the end. Past attempts are kept, so you can see if you are actually improving.",
       href: "https://github.com/Sridharmalladi/prepify",
       shot: "/shots/prepify.jpg",
       alt: "The prepify dashboard, showing past interview counts and scores above the form that starts a new practice interview",
     },
   ] as {
     name: string;
+    inspiration: string;
     blurb: string;
     href?: string;
     shot?: string;

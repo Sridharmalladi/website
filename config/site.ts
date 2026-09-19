@@ -31,7 +31,7 @@ export const site = {
         "Policy criteria interlock in ways flat retrieval cannot untangle, so I built a graph instead.",
       blurb:
         "Checks whether a clinical note satisfies a published Medicare coverage policy, and names the exact clause blocking it. The policy becomes a tree of true, false and unknown criteria, and the note becomes structured facts, evaluated together instead of matched by similar looking text. On its own eval it gets every decision right, and names the correct blocking clause on 6 of 8 denials, which is the part plain retrieval has no way to do at all.",
-      href: "https://github.com/Sridharmalladi/prior-auth-criteria-engine",
+      href: "https://sridharmalladi.github.io/prior-auth-criteria-engine/",
       shot: "/shots/prior-auth-criteria-engine.jpg",
       alt: "The Prior Auth Criteria Engine running: a criteria tree on the left with satisfied clauses lit green, the clinical note with its evidence underlined in the middle, and the verdict with a full breakdown on the right",
     },

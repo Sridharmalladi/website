@@ -317,12 +317,12 @@ const PETALS = [
  * animal on a hill, not a chatbot.
  */
 const ASIDES = [
-  "you doing good?",
-  "nice shirt today",
-  "you should smile",
-  "how's your day?",
-  "take your time",
-  "come back soon",
+  "you have good instincts",
+  "sharp eyes, you",
+  "you found the good part",
+  "this suits you",
+  "you're exactly on time",
+  "you notice things, don't you",
 ];
 
 /** And what he thinks about when he forgets you are there. */
@@ -466,35 +466,45 @@ export default function Sky() {
           <g className="sky__critter">
             <g className="sky__body">
               {/* sitting, haunch to chest */}
-              <path d="M44,106 C 33,106 28,98 30,87 C 33,74 41,66 52,64
+              <path className="sky__pelt" d="M44,106 C 33,106 28,98 30,87 C 33,74 41,66 52,64
                        C 64,62 73,70 73,83 C 73,95 67,105 58,106 Z" />
+              {/* a soft patch of belly, the one un-outlined thing on him, so he
+                  reads as fluffy rather than moulded from one solid piece */
+              }
+              <ellipse className="sky__belly" cx="51" cy="90" rx="10" ry="13" />
               {/* front paws */}
-              <path d="M40,100 C 34,100 31,103 32,106 C 38,108 45,107 48,104 Z" />
-              {/* cotton tail */}
-              <circle cx="76" cy="92" r="8" />
+              <path className="sky__pelt" d="M40,100 C 34,100 31,103 32,106 C 38,108 45,107 48,104 Z" />
+              {/* cotton tail, extra round, the way a kid would draw it */}
+              <circle className="sky__pelt" cx="77" cy="91" r="9.5" />
             </g>
 
             <g className="sky__head">
-              {/* ears, behind the head so they read as set into it */}
-              <path className="sky__ear sky__ear--near"
-                    d="M45,55 C 38,44 33,26 36,12 C 38,3 48,3 51,12 C 56,26 55,44 53,55 Z" />
-              <path className="sky__ear sky__ear--far"
-                    d="M60,55 C 60,41 63,24 70,13 C 76,4 84,8 83,18 C 82,32 72,48 67,56 Z" />
-              <circle cx="56" cy="62" r="14" />
+              {/* ears, behind the head so they read as set into it, tips
+                  rounded rather than pointed so he reads soft, not foxy */}
+              <path className="sky__ear sky__ear--near sky__pelt"
+                    d="M45,55 C 38,44 32,27 35,14 C 36,6 47,4 50,12 C 55,26 55,44 53,55 Z" />
+              <path className="sky__ear sky__ear--far sky__pelt"
+                    d="M60,55 C 60,41 62,25 69,14 C 74,5 85,7 84,17 C 83,32 72,48 67,56 Z" />
+              <circle className="sky__pelt" cx="56" cy="62" r="14" />
 
               {/* facing you, which is how he sits most of the time */}
               <g className="sky__face sky__face--front">
-                <ellipse cx="56" cy="70" rx="6" ry="4.5" />
-                <circle className="sky__eye" cx="50" cy="60" r="3.6" />
-                <circle className="sky__eye" cx="62" cy="60" r="3.6" />
-                <circle className="sky__pupil" cx="50.6" cy="60.6" r="1.7" />
-                <circle className="sky__pupil" cx="62.6" cy="60.6" r="1.7" />
+                <ellipse className="sky__muzzle" cx="56" cy="69" rx="7.5" ry="5.6" />
+                <circle className="sky__nose" cx="56" cy="65.5" r="1.5" />
+                <circle className="sky__eye" cx="49.5" cy="59.5" r="4.4" />
+                <circle className="sky__eye" cx="62.5" cy="59.5" r="4.4" />
+                <circle className="sky__pupil" cx="50.3" cy="60.3" r="2.1" />
+                <circle className="sky__pupil" cx="63.3" cy="60.3" r="2.1" />
+                <circle className="sky__glint" cx="49" cy="58.5" r="0.9" />
+                <circle className="sky__glint" cx="62" cy="58.5" r="0.9" />
               </g>
               {/* and this is him turning away to look down the valley */}
               <g className="sky__face sky__face--side">
-                <ellipse cx="44" cy="67" rx="7" ry="5.5" />
-                <circle className="sky__eye" cx="50" cy="59" r="3.6" />
-                <circle className="sky__pupil" cx="49.2" cy="59.4" r="1.7" />
+                <ellipse className="sky__muzzle" cx="43" cy="67" rx="7.5" ry="5.8" />
+                <circle className="sky__nose" cx="38.5" cy="65" r="1.4" />
+                <circle className="sky__eye" cx="49.5" cy="58.5" r="4.4" />
+                <circle className="sky__pupil" cx="48.5" cy="59.3" r="2.1" />
+                <circle className="sky__glint" cx="50.3" cy="57.3" r="0.9" />
               </g>
             </g>
           </g>

@@ -302,7 +302,12 @@ a {
   text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 120ms ease;
+  /* no transition here on purpose: hiding is instant. Moving the pointer from
+     a tile whose words sit at the bottom to one whose words sit at the top
+     used to cross-fade the two, so the old sentence lingered at the bottom
+     for a beat while the new one was already fading in at the top, which
+     read as a flicker. The transition lives only on the is-lit rule below, so
+     it plays going in and never going out. */
 }
 /* A short teal rule that draws itself in above the sentence, from the left
    edge now that the paragraph itself is left aligned. */
@@ -315,16 +320,19 @@ a {
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* same reasoning: draws in on arrival, snaps back instantly on the way out */
 }
 @media (hover: hover) {
-  /* both lines are simply there the moment the pointer lands */
+  /* both lines are simply there the moment the pointer lands, and only the
+     arrival is animated */
   .cell.is-lit .cell__blurb,
   .cell.is-lit .cell__why {
     opacity: 1;
+    transition: opacity 120ms ease;
   }
   .cell.is-lit .cell__blurb::before {
     transform: scaleX(1);
+    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 }
 
@@ -551,7 +559,9 @@ body.info-top .status {
     transition: none;
   }
   .cell__blurb,
-  .cell__why,
+  .cell__why {
+    transition: none;
+  }
   .cell.is-lit .cell__blurb,
   .cell.is-lit .cell__why {
     transition: opacity 100ms linear;

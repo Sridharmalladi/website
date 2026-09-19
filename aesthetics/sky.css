@@ -275,6 +275,36 @@
 .sky__pupil {
   fill: #10141c;
 }
+/* a speck of light in the eye, the one thing that makes a flat circle read as
+   alive rather than as a button sewn onto a toy */
+.sky__glint {
+  fill: #ffffff;
+  opacity: 0.85;
+}
+/* a soft patch of fur, a shade lighter than the rest of him, which is what a
+   muzzle needs to read as a muzzle and not just another bump on the head */
+.sky__muzzle {
+  fill: var(--sky-orb);
+  opacity: 0.5;
+}
+.sky__nose {
+  fill: #10141c;
+}
+/* the one un-outlined patch on him, so he reads as fluffy rather than carved
+   from a single flat piece */
+.sky__belly {
+  fill: var(--sky-orb);
+  opacity: 0.16;
+}
+/* a thin rim of light along the silhouette. Little, on purpose: this is the
+   difference between a shape and a drawn animal, not a cartoon border */
+.sky__pelt {
+  stroke: var(--sky-orb);
+  stroke-width: 1.1;
+  stroke-opacity: 0.4;
+  stroke-linejoin: round;
+  transition: fill 2s linear, stroke 2s linear;
+}
 
 /* every part turns about its own join, not about the middle of the drawing */
 .sky__critter,
@@ -355,7 +385,6 @@
      the page that no project will ever be able to cover */
   right: 34%;
   bottom: 108%;
-  max-width: 12ch;
   width: max-content;
   max-width: 13ch;
   padding: 0.34rem 0.55rem;

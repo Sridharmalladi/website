@@ -33,6 +33,14 @@ import { useEffect } from "react";
  * jumping from the bottom to the top on its own, with no second hover to
  * explain it. The shelf's own bounds do not move for reasons like that, so
  * the half a tile is in stays decided the moment it is decided.
+ *
+ * The gap between tiles is not part of any cell, so crossing it while moving
+ * from one tile to the next fires a real "nothing hovered" event before the
+ * next tile's own hover event arrives — two separate browser events, with a
+ * paint able to land in between. Clearing immediately on that gap event used
+ * to show the resting (bottom) position for a single frame between two tiles
+ * that both belong at the top, which read as a flicker. So the clear waits a
+ * frame, and a light() for the next tile cancels it before it ever runs.
  */
 export default function Emergence() {
   useEffect(() => {
@@ -41,15 +49,32 @@ export default function Emergence() {
     if (!window.matchMedia("(hover: hover)").matches) return;
 
     let lit: HTMLElement | null = null;
+    let pendingClear: number | null = null;
 
-    const clear = () => {
+    const cancelPendingClear = () => {
+      if (pendingClear !== null) {
+        window.cancelAnimationFrame(pendingClear);
+        pendingClear = null;
+      }
+    };
+
+    const clearNow = () => {
       if (lit) lit.classList.remove("is-lit");
       lit = null;
       document.body.classList.remove("has-lit");
       document.body.classList.remove("info-top");
     };
 
+    const clear = () => {
+      cancelPendingClear();
+      pendingClear = window.requestAnimationFrame(() => {
+        pendingClear = null;
+        clearNow();
+      });
+    };
+
     const light = (cell: HTMLElement) => {
+      cancelPendingClear();
       if (lit === cell) return;
       if (lit) lit.classList.remove("is-lit");
       lit = cell;
@@ -102,7 +127,8 @@ export default function Emergence() {
       document.removeEventListener("visibilitychange", onHidden);
       window.removeEventListener("blur", clear);
       window.removeEventListener("pageshow", clear);
-      clear();
+      cancelPendingClear();
+      clearNow();
     };
   }, []);
 

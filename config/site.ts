@@ -56,6 +56,16 @@ export const site = {
       alt: "dsbuddy landing page with a live dataset analysis panel",
     },
     {
+      name: "PartyCam",
+      inspiration:
+        "Wanted to see how much fun computer vision could be with nothing but the browser.",
+      blurb:
+        "Pinch a slice of pizza and take a bite, purse your lips to blow out birthday candles, or spark up a pixel cigarette, all with your face and hands. MediaPipe reads your hands and face right there in the browser tab, on your own device, and nothing is uploaded anywhere. It turns a webcam into a party trick, no app to install and no server watching.",
+      href: "https://sridharmalladi.github.io/partycam/",
+      shot: "/shots/partycam.jpg",
+      alt: "PartyCam start screen, the pizza, candle and cigarette gestures listed above the start camera button",
+    },
+    {
       name: "signup-conversion-model",
       inspiration:
         "Curious what changing one variable reveals in the data.",

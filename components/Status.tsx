@@ -50,12 +50,18 @@ export default function Status() {
   if (!block) return null;
 
   const word = block.words[at % block.words.length];
+  const widest = Math.max(...block.words.map((w) => w.length));
 
   return (
     <p className="status">
       <span className="status__dot" aria-hidden />
       <span className="status__lead">right now sridhar is probably</span>
-      <span className="status__word" key={`${block.from}-${at}`} aria-hidden>
+      <span
+        className="status__word"
+        key={`${block.from}-${at}`}
+        style={{ minWidth: `${widest}ch` }}
+        aria-hidden
+      >
         {word}
       </span>
       <span className="sr-only">{block.label}</span>

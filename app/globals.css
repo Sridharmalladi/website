@@ -281,8 +281,12 @@ a {
    instead of a tooltip. */
 .cell__blurb {
   position: fixed;
-  /* right column of the bottom row: the reason sits to its left */
+  /* right column of the row: the reason sits to its left. bottom by default,
+     since a tile in the top half of the shelf gets its words down here, clear
+     of the tile itself. body.info-top flips both lines up instead, for a tile
+     in the bottom half, so the words never land back on top of the shelf. */
   left: 52%;
+  top: auto;
   bottom: 9vh;
   z-index: 7;
   width: min(42ch, 44vw);
@@ -323,6 +327,24 @@ a {
     transform: scaleX(1);
   }
 }
+
+/* A tile in the bottom half of the shelf gets its words up here instead, in
+   the gap between the links and the first row of tiles. The masthead and the
+   status line step back a little so the words have clean room to sit in,
+   rather than landing across the name. */
+body.info-top .cell__blurb,
+body.info-top .cell__why {
+  top: 6vh;
+  bottom: auto;
+}
+body.info-top .masthead,
+body.info-top .status {
+  opacity: 0.15;
+}
+.masthead,
+.status {
+  transition: opacity 160ms ease;
+}
 /* Why the thing was built: the left column of the same bottom row the
    description sits in. This is the one meant to fill the space, so the
    sentence itself is the biggest thing in its half of the row, sized to the
@@ -331,6 +353,7 @@ a {
 .cell__why {
   position: fixed;
   right: 52%;
+  top: auto;
   bottom: 9vh;
   z-index: 7;
   width: min(30vw, 460px);

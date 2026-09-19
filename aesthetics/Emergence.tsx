@@ -16,7 +16,14 @@ import { useEffect } from "react";
  *
  * It used to measure the gap between a tile and the caption's resting place as
  * well, so the sentence could fly out of the picture. The words arrive at once
- * now, so there is nothing left to measure.
+ * now, so there is nothing left to measure there.
+ *
+ * It does still measure one thing: which half of the screen the hovered tile
+ * sits in, so the two lines of text never land on top of the shelf. A tile in
+ * the top half gets its words at the bottom of the screen. A tile in the
+ * bottom half gets them at the top. A tile sitting across the middle counts as
+ * top, since the words go to the bottom by default and only flip up once the
+ * tile has actually crossed into the lower half.
  */
 export default function Emergence() {
   useEffect(() => {
@@ -30,6 +37,7 @@ export default function Emergence() {
       if (lit) lit.classList.remove("is-lit");
       lit = null;
       document.body.classList.remove("has-lit");
+      document.body.classList.remove("info-top");
     };
 
     const light = (cell: HTMLElement) => {
@@ -38,6 +46,12 @@ export default function Emergence() {
       lit = cell;
       cell.classList.add("is-lit");
       document.body.classList.add("has-lit");
+
+      // the tile's own centre decides which half it is in, not the pointer,
+      // so the text does not jump around as the pointer moves inside one tile
+      const box = cell.getBoundingClientRect();
+      const inBottomHalf = box.top + box.height / 2 > window.innerHeight / 2;
+      document.body.classList.toggle("info-top", inBottomHalf);
     };
 
     const onEnter = (event: Event) => {

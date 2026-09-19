@@ -243,7 +243,10 @@
      hovering over it. He stays on the left because the middle of the valley is
      where more projects will go. */
   left: 9%;
-  bottom: calc(var(--ground-h) * 0.51);
+  /* raised clear of the ground band's own dark fill, so the whole body reads
+     as a silhouette against open sky rather than blending into ground that is
+     nearly his own colour. He still stands right at the crest of it. */
+  bottom: calc(var(--ground-h) * 0.66);
   width: clamp(52px, 5.6vw, 92px);
   transform: translateX(-50%);
 }

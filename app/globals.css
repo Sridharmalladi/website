@@ -324,37 +324,43 @@ a {
   }
 }
 /* Why the thing was built: the left column of the same bottom row the
-   description sits in, one line, a size down, in the dimmer voice. A label
-   above it marks it as the reason rather than the description. */
+   description sits in. This is the one meant to fill the space, so the
+   sentence itself is the biggest thing in its half of the row, sized to the
+   column rather than to running text. The small caps label is the only quiet
+   part of it. */
 .cell__why {
   position: fixed;
   right: 52%;
   bottom: 9vh;
   z-index: 7;
-  width: min(34ch, 40vw);
+  width: min(30vw, 460px);
   margin: 0;
-  color: var(--text-dim);
-  font-size: clamp(0.78rem, 0.98vw, 0.9rem);
-  font-weight: 300;
-  line-height: 1.5;
   text-align: right;
-  /* short by what it says rather than by force: the lines themselves are
-     trimmed to under a dozen words, so this sits on one line at typical
-     widths without gambling on an ellipsis cutting a sentence in half */
-  text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
   opacity: 0;
   pointer-events: none;
   transition: opacity 120ms ease;
 }
 .cell__why-label {
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
   color: var(--accent);
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+.cell__why-text {
+  display: block;
+  color: var(--text);
+  /* scales with the column: a phrase at this size fills the rectangle the way
+     a headline fills a card, rather than sitting in it like a caption */
+  font-size: clamp(1.55rem, 2.5vw, 2.35rem);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(4, 6, 10, 0.94), 0 0 4px rgba(4, 6, 10, 0.85);
 }
 
 /* No hover on a touch screen, so the captions would never be reachable.
@@ -380,6 +386,14 @@ a {
   .cell__why-label {
     margin-bottom: 0.3rem;
     font-size: 0.56rem;
+  }
+  /* the big headline size is for the fixed side by side layout; stacked above
+     its own tile it goes back to reading like a line of text */
+  .cell__why-text {
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-shadow: none;
   }
   .cell__blurb {
     position: static;

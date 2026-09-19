@@ -45,7 +45,7 @@ export default function Work() {
             )}
             <p className="cell__why">
               <span className="cell__why-label">what inspired this</span>
-              {p.inspiration}
+              <span className="cell__why-text">{p.inspiration}</span>
             </p>
             <p className="cell__blurb">{p.blurb}</p>
           </div>

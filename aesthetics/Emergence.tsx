@@ -18,12 +18,21 @@ import { useEffect } from "react";
  * well, so the sentence could fly out of the picture. The words arrive at once
  * now, so there is nothing left to measure there.
  *
- * It does still measure one thing: which half of the screen the hovered tile
- * sits in, so the two lines of text never land on top of the shelf. A tile in
- * the top half gets its words at the bottom of the screen. A tile in the
- * bottom half gets them at the top. A tile sitting across the middle counts as
- * top, since the words go to the bottom by default and only flip up once the
- * tile has actually crossed into the lower half.
+ * It does still measure one thing: which half of the shelf the hovered tile
+ * sits in, so the two lines of text never land back on top of the shelf
+ * itself. A tile in the top half gets its words at the bottom of the screen.
+ * A tile in the bottom half gets them at the top. A tile sitting across the
+ * middle counts as top half, so the words stay at the bottom by default and
+ * only flip up once the tile has genuinely crossed into the lower half.
+ *
+ * This is measured against the shelf's own top and bottom, not the browser
+ * window's. Measuring against the window means the halfway line moves every
+ * time the window is resized or the page scrolls, and on some pages a late
+ * layout shift, such as a web font swapping in a moment after first paint,
+ * can nudge a tile across that line on its own — which reads as the caption
+ * jumping from the bottom to the top on its own, with no second hover to
+ * explain it. The shelf's own bounds do not move for reasons like that, so
+ * the half a tile is in stays decided the moment it is decided.
  */
 export default function Emergence() {
   useEffect(() => {
@@ -48,9 +57,13 @@ export default function Emergence() {
       document.body.classList.add("has-lit");
 
       // the tile's own centre decides which half it is in, not the pointer,
-      // so the text does not jump around as the pointer moves inside one tile
+      // so the text does not jump around as the pointer moves inside one
+      // tile. Measured against the shelf's own bounds, not the window's; see
+      // the note above this function for why.
       const box = cell.getBoundingClientRect();
-      const inBottomHalf = box.top + box.height / 2 > window.innerHeight / 2;
+      const shelfBox = shelf.getBoundingClientRect();
+      const shelfMid = shelfBox.top + shelfBox.height / 2;
+      const inBottomHalf = box.top + box.height / 2 > shelfMid;
       document.body.classList.toggle("info-top", inBottomHalf);
     };
 

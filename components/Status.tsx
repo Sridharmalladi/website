@@ -5,7 +5,8 @@ import { blockAt, type Block } from "@/config/day";
 import { hourInChicago } from "@/aesthetics/palette";
 
 /**
- * The line at the top of the page that says what I am probably doing.
+ * The two lines centered above the masthead that say what I am probably
+ * doing: a static lead in, and below it the word that keeps changing.
  *
  * It picks the block of the day from the clock in Chicago, then keeps cycling
  * through that block's words till the block ends. The word changes on a timer
@@ -54,8 +55,10 @@ export default function Status() {
 
   return (
     <p className="status">
-      <span className="status__dot" aria-hidden />
-      <span className="status__lead">right now sridhar is probably</span>
+      <span className="status__top">
+        <span className="status__dot" aria-hidden />
+        <span className="status__lead">right now sridhar is probably</span>
+      </span>
       <span
         className="status__word"
         key={`${block.from}-${at}`}

@@ -95,16 +95,6 @@ a {
   body.has-lit .veil {
     opacity: 1;
   }
-  /* the top of the page is the name, the status and the links. While a product
-     is lit they step back and let the reason it was built sit there instead */
-  body.has-lit .masthead,
-  body.has-lit .status {
-    opacity: 0.1;
-  }
-}
-.masthead,
-.status {
-  transition: opacity 160ms ease;
 }
 
 /* ============================================================ STATUS ===== */
@@ -291,34 +281,36 @@ a {
    instead of a tooltip. */
 .cell__blurb {
   position: fixed;
-  left: 50%;
+  /* right column of the bottom row: the reason sits to its left */
+  left: 52%;
   bottom: 9vh;
   z-index: 7;
-  width: min(54ch, 86vw);
+  width: min(42ch, 44vw);
   margin: 0;
   color: var(--text);
-  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  font-size: clamp(0.94rem, 1.2vw, 1.1rem);
   font-weight: 300;
-  line-height: 1.75;
-  text-align: center;
+  line-height: 1.7;
+  text-align: left;
   text-wrap: pretty;
   /* on a short window the shelf runs past the fold, so a fixed line can land
      over a tile. The shadow keeps it readable wherever it lands. */
   text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
   opacity: 0;
-  transform: translate(-50%, 0);
   pointer-events: none;
   transition: opacity 120ms ease;
 }
-/* A short teal rule that draws itself in above the sentence. */
+/* A short teal rule that draws itself in above the sentence, from the left
+   edge now that the paragraph itself is left aligned. */
 .cell__blurb::before {
   content: "";
   display: block;
   width: 34px;
   height: 2px;
-  margin: 0 auto 1.1rem;
+  margin: 0 0 1.1rem;
   background: var(--accent);
   transform: scaleX(0);
+  transform-origin: left;
   transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 @media (hover: hover) {
@@ -331,39 +323,38 @@ a {
     transform: scaleX(1);
   }
 }
-/* Why the thing was built, at the top of the screen. The same sentence
-   treatment as the caption, a size down, with a label over it so it is clear
-   this is the reason rather than the description. Held well clear of the name
-   and the links above it. */
+/* Why the thing was built: the left column of the same bottom row the
+   description sits in, one line, a size down, in the dimmer voice. A label
+   above it marks it as the reason rather than the description. */
 .cell__why {
   position: fixed;
-  left: 50%;
-  top: 6vh;
+  right: 52%;
+  bottom: 9vh;
   z-index: 7;
-  width: min(52ch, 84vw);
+  width: min(34ch, 40vw);
   margin: 0;
   color: var(--text-dim);
-  font-size: clamp(0.88rem, 1.15vw, 1.02rem);
+  font-size: clamp(0.78rem, 0.98vw, 0.9rem);
   font-weight: 300;
-  line-height: 1.7;
-  text-align: center;
-  text-wrap: pretty;
-  /* on a short window the shelf runs past the fold, so a fixed line can land
-     over a tile. The shadow keeps it readable wherever it lands. */
+  line-height: 1.5;
+  text-align: right;
+  /* short by what it says rather than by force: the lines themselves are
+     trimmed to under a dozen words, so this sits on one line at typical
+     widths without gambling on an ellipsis cutting a sentence in half */
   text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
   opacity: 0;
-  transform: translate(-50%, 0);
   pointer-events: none;
   transition: opacity 120ms ease;
 }
 .cell__why-label {
   display: block;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.4rem;
   color: var(--accent);
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* No hover on a touch screen, so the captions would never be reachable.
@@ -377,8 +368,10 @@ a {
     font-size: 0.78rem;
     line-height: 1.6;
     text-align: left;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
     opacity: 1;
-    transform: none;
   }
   .cell {
     display: flex;
@@ -399,7 +392,6 @@ a {
     text-align: left;
     opacity: 1;
     filter: none;
-    transform: none;
     scale: 1;
   }
   .cell__blurb::before {
@@ -525,7 +517,6 @@ a {
   .cell__why,
   .cell.is-lit .cell__blurb,
   .cell.is-lit .cell__why {
-    transform: translate(-50%, 0);
     transition: opacity 100ms linear;
   }
   .cell__blurb::before {

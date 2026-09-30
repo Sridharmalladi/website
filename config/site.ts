@@ -26,6 +26,16 @@ export const site = {
   // added next.
   projects: [
     {
+      name: "CityFit",
+      inspiration:
+        "Wanted to explore where to live without limiting the search to big cities.",
+      blurb:
+        "Explore 32,333 US places by changing priorities for rent, commute, air quality and climate. Census, EPA and NOAA data feed a transparent ranking, while a trained model finds similar places and estimates missing rent. Each place shows how its rank changes with your priorities, where the data is uncertain, and how old the numbers are. The rent model averages $188 error on places in states held out from training, against $320 for the median baseline.",
+      href: "https://sridharmalladi.github.io/cityfit/",
+      shot: "/shots/cityfit.png",
+      alt: "CityFit running with the US map, sliders for personal priorities, and ranked places with rent, commute and climate data",
+    },
+    {
       name: "Prior Auth Criteria Engine",
       inspiration:
         "Policy criteria interlock in ways flat retrieval cannot untangle, so I built a graph instead.",

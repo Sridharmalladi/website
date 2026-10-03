@@ -1,548 +1,74 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { hourInChicago, orbAt, skyAt } from "./palette";
-
-/**
- * The valley behind the page: a sky that changes with the clock in
- * America/Chicago, a sun or moon riding its arc across it, mist drifting
- * sideways, three ridges receding into haze, and blossom coming down.
- *
- * Everything is a div or a path — no images, no canvas, no library. The whole
- * thing is painted at low opacity and sits behind the shelf, so it reads as
- * weather rather than as a picture competing with the work.
- */
-
-/**
- * The ranges.
- *
- * Flat triangles in a hard colour read as clip art no matter how the outline is
- * drawn, so the work here is mostly in the rendering rather than the shape.
- * Each range is filled with a gradient that dissolves into the haze near its
- * own base, so the foot of every layer disappears into the mist instead of
- * ending on a line. The layers behind sit in more blur and closer to the colour
- * of the sky, which is what makes distance read.
- *
- * The outlines themselves are a few big masses rather than a row of identical
- * spikes: four or five forms per range, each with its own width and lean, and
- * the summits kept from rounding off by holding a point close on either side.
- * Everything comes from a fixed seed, so the shape is the same on the server
- * and in the browser.
- */
-const lcg = (seed: number) => () => {
-  seed = (seed * 1664525 + 1013904223) % 4294967296;
-  return seed / 4294967296;
-};
-
-type Range = {
-  seed: number;
-  /** how many masses across the whole width */
-  count: number;
-  /** summits land between these two heights */
-  top: number;
-  bottom: number;
-  /** the line the feet of the range sit on */
-  base: number;
-};
-
-const RANGES: { name: string; range: Range }[] = [
-  { name: "far", range: { seed: 20260918, count: 6, top: 96, bottom: 176, base: 300 } },
-  { name: "mid", range: { seed: 77731, count: 5, top: 168, bottom: 232, base: 332 } },
-  { name: "near", range: { seed: 4242, count: 4, top: 236, bottom: 286, base: 360 } },
-];
-
-/** Catmull Rom through the points, written out as cubic curves. */
-const through = (pts: [number, number][]) => {
-  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
-  for (let i = 0; i < pts.length - 1; i += 1) {
-    const p0 = pts[i - 1] ?? pts[i];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[i + 2] ?? pts[i + 1];
-    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
-    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
-    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
-    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
-    d += ` C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
-  }
-  return d;
-};
-
-const rangePath = ({ seed, count, top, bottom, base }: Range) => {
-  const rand = lcg(seed);
-  const span = 1600 / count;
-  const pts: [number, number][] = [[-80, base]];
-  let x = -80;
-
-  for (let i = 0; i < count; i += 1) {
-    const w = span * (0.72 + rand() * 0.6);
-    const y = top + rand() * (bottom - top);
-    const summit = x + w * (0.34 + rand() * 0.32);
-    const drop = base - y;
-
-    // the shoulders: held close to the summit so the curve stays a peak, and
-    // set at different heights so the two flanks never match
-    pts.push([summit - w * (0.2 + rand() * 0.1), y + drop * (0.34 + rand() * 0.2)]);
-    pts.push([summit, y]);
-    pts.push([summit + w * (0.2 + rand() * 0.12), y + drop * (0.36 + rand() * 0.22)]);
-
-    x += w;
-    // the saddle, which never quite reaches the floor
-    pts.push([x, base - rand() * (drop * 0.18)]);
-  }
-
-  pts.push([1600, base]);
-  return `${through(pts)} L1600,380 L-80,380 Z`;
-};
-
-/**
- * The floor of the valley.
- *
- * A row of identical conifers read as a saw blade, so the foreground is built
- * the way the ranges are: a wavy ground edge, clumps of shrub sitting on it,
- * and grass growing out of it, all from the same seeded generator so no two
- * blades or bumps match. Nothing here is symmetric and nothing repeats.
- *
- * Coordinates are in a 1440x200 box with the ground running across it.
- */
-
-/** A soft, uneven edge: the top of a band of ground. */
-const groundEdge = (seed: number, bumps: number, base: number, amp: number) => {
-  const rand = lcg(seed);
-  const step = 1560 / bumps;
-  let x = -60;
-  let d = `M-60,${(base + rand() * amp).toFixed(1)}`;
-
-  for (let i = 0; i < bumps; i += 1) {
-    const w = step * (0.6 + rand() * 0.8);
-    const crest = base - rand() * amp;
-    const dip = base + rand() * amp * 0.6;
-    d += ` Q${(x + w * 0.5).toFixed(1)},${crest.toFixed(1)} ${(x + w).toFixed(1)},${dip.toFixed(1)}`;
-    x += w;
-  }
-
-  return `${d} L1560,${base} L1560,200 L-60,200 Z`;
-};
-
-/**
- * The same edge as an open line, drawn from the same seed so it lands exactly
- * on top of the filled one. Stroked, it becomes the light catching the crest,
- * which is what separates one band from the next.
- */
-const edgeLine = (seed: number, bumps: number, base: number, amp: number) => {
-  const rand = lcg(seed);
-  const step = 1560 / bumps;
-  let x = -60;
-  let d = `M-60,${(base + rand() * amp).toFixed(1)}`;
-
-  for (let i = 0; i < bumps; i += 1) {
-    const w = step * (0.6 + rand() * 0.8);
-    const crest = base - rand() * amp;
-    const dip = base + rand() * amp * 0.6;
-    d += ` Q${(x + w * 0.5).toFixed(1)},${crest.toFixed(1)} ${(x + w).toFixed(1)},${dip.toFixed(1)}`;
-    x += w;
-  }
-
-  return `${d} L1560,${base}`;
-};
-
-/** Clumps of low shrub, sitting along the ground. */
-const shrubs = (seed: number, count: number, floor: number, low: number, high: number) => {
-  const rand = lcg(seed);
-  const step = 1560 / count;
-  let x = -60;
-  let d = "";
-
-  for (let i = 0; i < count; i += 1) {
-    const w = step * (0.45 + rand() * 1.1);
-    const h = low + rand() * (high - low);
-    const cx = x + w / 2;
-    // each clump sits at its own depth, so they stop reading as a row
-    const floorY = floor + (rand() - 0.4) * 14;
-    // three overlapping domes, so the clump has an uneven top
-    d += ` M${(cx - w * 0.5).toFixed(1)},${floorY.toFixed(1)}`;
-    d += ` Q${(cx - w * 0.34).toFixed(1)},${(floorY - h * 0.8).toFixed(1)} ${(cx - w * 0.1).toFixed(1)},${floorY.toFixed(1)}`;
-    d += ` M${(cx - w * 0.22).toFixed(1)},${floorY.toFixed(1)}`;
-    d += ` Q${cx.toFixed(1)},${(floorY - h).toFixed(1)} ${(cx + w * 0.24).toFixed(1)},${floorY.toFixed(1)}`;
-    d += ` M${(cx + w * 0.08).toFixed(1)},${floorY.toFixed(1)}`;
-    d += ` Q${(cx + w * 0.3).toFixed(1)},${(floorY - h * 0.62).toFixed(1)} ${(cx + w * 0.5).toFixed(1)},${floorY.toFixed(1)}`;
-    x += w;
-  }
-
-  return d.trim();
-};
-
-/** Blades of grass, each one leaning its own way. */
-const grass = (
-  seed: number,
-  count: number,
-  floor: number,
-  low: number,
-  high: number,
-  width: number,
-) => {
-  const rand = lcg(seed);
-  const step = 1560 / count;
-  let x = -60;
-  let d = "";
-
-  for (let i = 0; i < count; i += 1) {
-    const gap = step * (0.4 + rand() * 1.2);
-    const h = low + rand() * (high - low);
-    const lean = (rand() - 0.5) * h * 0.85;
-    const w = width * (0.6 + rand() * 0.8);
-    d += ` M${(x - w).toFixed(1)},${floor}`;
-    d += ` Q${(x + lean * 0.35).toFixed(1)},${(floor - h * 0.62).toFixed(1)} ${(x + lean).toFixed(1)},${(floor - h).toFixed(1)}`;
-    d += ` Q${(x + w * 0.4).toFixed(1)},${(floor - h * 0.45).toFixed(1)} ${(x + w).toFixed(1)},${floor}`;
-    d += " Z";
-    x += gap;
-  }
-
-  return d.trim();
-};
-
-/** Taller stalks with a seed head on top, scattered through the grass. */
-const seedHeads = (seed: number, count: number, floor: number, low: number, high: number) => {
-  const rand = lcg(seed);
-  const step = 1560 / count;
-  let x = -60;
-  let d = "";
-
-  for (let i = 0; i < count; i += 1) {
-    const gap = step * (0.4 + rand() * 1.2);
-    const h = low + rand() * (high - low);
-    const lean = (rand() - 0.5) * h * 0.5;
-    const tipX = x + lean;
-    const tipY = floor - h;
-    // the stalk
-    d += ` M${(x - 0.9).toFixed(1)},${floor}`;
-    d += ` Q${(x + lean * 0.4).toFixed(1)},${(floor - h * 0.6).toFixed(1)} ${tipX.toFixed(1)},${tipY.toFixed(1)}`;
-    d += ` Q${(x + lean * 0.4 + 1.4).toFixed(1)},${(floor - h * 0.6).toFixed(1)} ${(x + 0.9).toFixed(1)},${floor} Z`;
-    // the head
-    const r = 1.6 + rand() * 1.4;
-    d += ` M${(tipX - r).toFixed(1)},${tipY.toFixed(1)}`;
-    d += ` Q${tipX.toFixed(1)},${(tipY - r * 2.4).toFixed(1)} ${(tipX + r).toFixed(1)},${tipY.toFixed(1)}`;
-    d += ` Q${tipX.toFixed(1)},${(tipY + r * 1.2).toFixed(1)} ${(tipX - r).toFixed(1)},${tipY.toFixed(1)} Z`;
-    x += gap;
-  }
-
-  return d.trim();
-};
-
-/** A few stones, worn round, half sunk into the ground. */
-const stones = (seed: number, count: number, floor: number) => {
-  const rand = lcg(seed);
-  const step = 1560 / count;
-  let x = -60;
-  let d = "";
-
-  for (let i = 0; i < count; i += 1) {
-    const gap = step * (0.5 + rand() * 1);
-    const rx = 7 + rand() * 16;
-    const ry = rx * (0.45 + rand() * 0.25);
-    const cy = floor - ry * 0.45;
-    d += ` M${(x - rx).toFixed(1)},${cy.toFixed(1)}`;
-    d += ` Q${x.toFixed(1)},${(cy - ry).toFixed(1)} ${(x + rx).toFixed(1)},${cy.toFixed(1)}`;
-    d += ` Q${x.toFixed(1)},${(cy + ry * 0.5).toFixed(1)} ${(x - rx).toFixed(1)},${cy.toFixed(1)}`;
-    d += " Z";
-    x += gap;
-  }
-
-  return d.trim();
-};
-
-/**
- * The tree on the outcrop — the one thing in those scenes you actually
- * remember. Drawn as strokes rather than filled outlines: a trunk that thickens
- * towards the root and leans out over the drop, limbs spreading wide and
- * thinning as they go, and a canopy of overlapping blossom that is far wider
- * than it is tall and sags at the edges. The petals coming down the page fall
- * from it.
- *
- * Coordinates are in a 280x300 box, ground at the bottom.
- */
-const LIMBS: { d: string; w: number }[] = [
-  // trunk, root to crown
-  { d: "M138,300 C132,262 126,232 132,202 C136,182 142,168 150,152", w: 19 },
-  // the two that carry the canopy
-  { d: "M133,214 C110,204 88,196 62,190", w: 10 },
-  { d: "M136,196 C162,186 190,178 216,174", w: 10 },
-  // upper limbs
-  { d: "M143,172 C126,156 112,146 94,138", w: 7 },
-  { d: "M147,162 C167,146 187,138 208,132", w: 7 },
-  { d: "M150,152 C150,138 149,128 145,116", w: 6 },
-  // twigs
-  { d: "M100,196 C88,184 78,176 66,170", w: 4 },
-  { d: "M190,180 C202,170 212,164 224,160", w: 4 },
-];
-
-/** cx, cy, rx, ry, opacity — an irregular mass, widest through the middle. */
-const CANOPY: [number, number, number, number, number][] = [
-  [140, 131, 104, 42, 0.58],
-  [82, 143, 58, 30, 0.51],
-  [198, 139, 60, 30, 0.51],
-  [112, 111, 62, 30, 0.55],
-  [172, 115, 56, 28, 0.51],
-  [140, 97, 46, 24, 0.43],
-  [48, 157, 34, 19, 0.39],
-  [232, 153, 32, 18, 0.37],
-  [96, 165, 40, 19, 0.41],
-  [186, 163, 38, 18, 0.39],
-  [140, 155, 70, 23, 0.37],
-  [66, 127, 28, 16, 0.33],
-  [214, 123, 26, 15, 0.33],
-];
-
-/**
- * Blossom. Fixed values rather than random ones, so the server and the browser
- * draw the same petals and nothing has to be re-rendered on hydration.
- */
-const PETALS = [
-  { left: 4, delay: 0, dur: 19, size: 9, drift: 60, spin: 200 },
-  { left: 13, delay: 6, dur: 24, size: 7, drift: -48, spin: -260 },
-  { left: 22, delay: 12, dur: 21, size: 10, drift: 74, spin: 180 },
-  { left: 31, delay: 3, dur: 27, size: 6, drift: -66, spin: 300 },
-  { left: 40, delay: 16, dur: 20, size: 8, drift: 52, spin: -220 },
-  { left: 49, delay: 9, dur: 25, size: 11, drift: -80, spin: 240 },
-  { left: 58, delay: 20, dur: 22, size: 7, drift: 68, spin: -180 },
-  { left: 67, delay: 2, dur: 28, size: 9, drift: -54, spin: 280 },
-  { left: 76, delay: 14, dur: 23, size: 6, drift: 84, spin: -300 },
-  { left: 85, delay: 8, dur: 26, size: 10, drift: -62, spin: 210 },
-  { left: 94, delay: 18, dur: 21, size: 8, drift: 46, spin: -240 },
-];
-
-/**
- * What the rabbit says. One line shows at a time, each for about four seconds,
- * and the set comes round every minute. Kept short and kind: it is a small
- * animal on a hill, not a chatbot.
- */
-const ASIDES = [
-  "you have good instincts",
-  "sharp eyes, you",
-  "you found the good part",
-  "this suits you",
-  "you're exactly on time",
-  "you notice things, don't you",
-];
-
-/** And what he thinks about when he forgets you are there. */
-const THOUGHTS = [
-  "where's my carrot",
-  "what's he looking for",
-  "hawk again, hide",
-  "better grass uphill",
-  "dig another door",
-  "nap after this",
-];
-
+import { useEffect, useId, useState } from "react";
+import { hourInCentral, paletteAt } from "./palette";
+const stars = Array.from({ length: 76 }, (_, i) => ({
+  x: 35 + ((i * 277 + i * i * 41) % 1530),
+  y: 28 + ((i * 113 + i * i * 17) % 335),
+  radius: i % 9 === 0 ? 1.55 : i % 3 === 0 ? 1.05 : .65,
+}));
 export default function Sky() {
-  // Null until the browser has read the clock, so the markup rendered at build
-  // time and the first client render agree.
-  const [vars, setVars] = useState<React.CSSProperties | undefined>(undefined);
-  const [moon, setMoon] = useState(true);
-
-  useEffect(() => {
-    const paint = () => {
-      const hour = hourInChicago();
-      const sky = skyAt(hour);
-      const orb = orbAt(hour);
-      setMoon(orb.moon);
-      setVars({
-        "--sky-high": sky.high,
-        "--sky-horizon": sky.horizon,
-        "--sky-haze": sky.haze,
-        "--sky-ridge-far": sky.ridgeFar,
-        "--sky-ridge-mid": sky.ridgeMid,
-        "--sky-ridge-near": sky.ridgeNear,
-        "--sky-cloud": sky.cloud,
-        "--sky-petal": sky.petal,
-        "--sky-orb": sky.orb,
-        "--sky-orb-glow": sky.orbGlow,
-        "--sky-orb-x": `${orb.x}%`,
-        "--sky-orb-y": `${orb.y}%`,
-      } as React.CSSProperties);
-    };
-
-    paint();
-    // A minute is plenty: the slowest thing here is the sun, and it takes
-    // thirteen hours to cross.
-    const tick = window.setInterval(paint, 60_000);
-    return () => window.clearInterval(tick);
-  }, []);
-
-  return (
-    <div className="sky" style={vars} data-lit={vars ? "yes" : "no"} aria-hidden>
-      <div className="sky__wash" />
-      <div className={`sky__orb${moon ? " sky__orb--moon" : ""}`} />
-      <div className="sky__mist sky__mist--high" />
-      <div className="sky__mist sky__mist--low" />
-
-      <svg className="sky__ridges" viewBox="0 0 1440 360" preserveAspectRatio="none">
-        <defs>
-          {RANGES.map(({ name, range }) => (
-            <linearGradient
-              key={name}
-              id={`range-${name}`}
-              x1="0"
-              y1={range.top - 30}
-              x2="0"
-              y2={range.base + 10}
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop offset="0%" className={`sky__stop sky__stop--${name}`} />
-              <stop offset="58%" className={`sky__stop sky__stop--${name}`} />
-              <stop offset="100%" className="sky__stop sky__stop--haze" />
-            </linearGradient>
-          ))}
-        </defs>
-        {RANGES.map((r) => (
-          <path
-            key={r.name}
-            className={`sky__ridge sky__ridge--${r.name}`}
-            fill={`url(#range-${r.name})`}
-            d={rangePath(r.range)}
-          />
-        ))}
-      </svg>
-
-      {/* The floor, as two bands of cutout. Each band is its grass drawn first
-          and its ground drawn over the top, so the blades rise out of the edge
-          instead of standing on it with their feet showing. */}
-      <svg className="sky__ground sky__ground--back" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
-        <g className="sky__band sky__band--far">
-          <path className="sky__blades" d={grass(7714, 300, 98, 8, 26, 2.2)} />
-          <path className="sky__turf" d={groundEdge(5150, 8, 98, 20)} />
-          <path className="sky__crest" d={edgeLine(5150, 8, 98, 20)} />
-        </g>
-        <g className="sky__band sky__band--mid">
-          <path className="sky__blades" d={grass(4491, 360, 140, 10, 32, 2.4)} />
-          <path className="sky__seed" d={seedHeads(8823, 22, 140, 28, 48)} />
-          <path className="sky__turf" d={groundEdge(9061, 6, 140, 16)} />
-          <path className="sky__crest" d={edgeLine(9061, 6, 140, 16)} />
-        </g>
-      </svg>
-
-      <svg className="sky__tree" viewBox="0 0 280 300" aria-hidden>
-        {/* the ledge it stands on, running off both edges */}
-        <path
-          className="sky__rock"
-          d="M-60,300
-             C -20,292 10,274 52,264
-             C 96,254 150,254 198,262
-             C 246,270 290,282 340,300 Z"
-        />
-        {LIMBS.map((l, i) => (
-          <path key={i} className="sky__limb" d={l.d} strokeWidth={l.w} />
-        ))}
-        {CANOPY.map(([cx, cy, rx, ry, o], i) => (
-          <ellipse key={i} className="sky__bloom" cx={cx} cy={cy} rx={rx} ry={ry} opacity={o} />
-        ))}
-      </svg>
-
-      {/* holds the page's contrast whatever the sky is doing */}
-      {/* Sitting on the left summit of the near ridge, which the generator puts
-          at x 146 of 1440 and y 238 of 360. He does nothing but breathe, flick
-          his tail and look around now and then. */}
-      <div className="sky__spot">
-        <div className="sky__bubble sky__bubble--say">
-          {ASIDES.map((line, i) => (
-            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 18}s` }}>
-              {line}
-            </span>
-          ))}
-        </div>
-
-        <div className="sky__bubble sky__bubble--think">
-          {THOUGHTS.map((line, i) => (
-            // the extra nine seconds matches the cloud's own offset, so the
-            // line is up while the cloud is up rather than while it is gone
-            <span key={line} className="sky__aside" style={{ animationDelay: `-${i * 18 + 9}s` }}>
-              {line}
-            </span>
-          ))}
-        </div>
-
-        <svg className="sky__rabbit" viewBox="0 0 120 109" aria-hidden>
-          <g className="sky__critter">
-            <g className="sky__body">
-              {/* sitting, haunch to chest */}
-              <path className="sky__pelt" d="M44,106 C 33,106 28,98 30,87 C 33,74 41,66 52,64
-                       C 64,62 73,70 73,83 C 73,95 67,105 58,106 Z" />
-              {/* a soft patch of belly, the one un-outlined thing on him, so he
-                  reads as fluffy rather than moulded from one solid piece */
-              }
-              <ellipse className="sky__belly" cx="51" cy="90" rx="10" ry="13" />
-              {/* front paws */}
-              <path className="sky__pelt" d="M40,100 C 34,100 31,103 32,106 C 38,108 45,107 48,104 Z" />
-              {/* cotton tail, extra round, the way a kid would draw it */}
-              <circle className="sky__pelt" cx="77" cy="91" r="9.5" />
-            </g>
-
-            <g className="sky__head">
-              {/* ears, behind the head so they read as set into it, tips
-                  rounded rather than pointed so he reads soft, not foxy */}
-              <path className="sky__ear sky__ear--near sky__pelt"
-                    d="M45,55 C 38,44 32,27 35,14 C 36,6 47,4 50,12 C 55,26 55,44 53,55 Z" />
-              <path className="sky__ear sky__ear--far sky__pelt"
-                    d="M60,55 C 60,41 62,25 69,14 C 74,5 85,7 84,17 C 83,32 72,48 67,56 Z" />
-              <circle className="sky__pelt" cx="56" cy="62" r="14" />
-
-              {/* facing you, which is how he sits most of the time */}
-              <g className="sky__face sky__face--front">
-                <ellipse className="sky__muzzle" cx="56" cy="69" rx="7.5" ry="5.6" />
-                <circle className="sky__nose" cx="56" cy="65.5" r="1.5" />
-                <circle className="sky__eye" cx="49.5" cy="59.5" r="4.4" />
-                <circle className="sky__eye" cx="62.5" cy="59.5" r="4.4" />
-                <circle className="sky__pupil" cx="50.3" cy="60.3" r="2.1" />
-                <circle className="sky__pupil" cx="63.3" cy="60.3" r="2.1" />
-                <circle className="sky__glint" cx="49" cy="58.5" r="0.9" />
-                <circle className="sky__glint" cx="62" cy="58.5" r="0.9" />
+ const [now,setNow] = useState<Date|null>(null);
+ const id=useId();
+ useEffect(()=>{const update=()=>setNow(new Date());update();const timer=setInterval(update,60000);return()=>clearInterval(timer);},[]);
+ const hour=now?hourInCentral(now):21;
+ const night=hour<6.5||hour>=19.5;
+ const colors=paletteAt(hour);
+ return <figure className="sky" aria-hidden="true"><div className={`sky__frame${night?" sky__frame--night":""}`}>
+        <svg className="sky__art" viewBox="220 0 1160 1000" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id={`${id}-sky`} x2="0" y2="1"><stop stopColor={colors.high}/><stop offset="1" stopColor={colors.horizon}/></linearGradient>
+            <radialGradient id={`${id}-glow`}><stop stopColor={colors.light} stopOpacity=".18"/><stop offset="1" stopColor={colors.light} stopOpacity="0"/></radialGradient>
+            <linearGradient id={`${id}-mist`} x2="0" y2="1"><stop stopColor={colors.horizon} stopOpacity="0"/><stop offset=".5" stopColor={colors.horizon} stopOpacity=".22"/><stop offset="1" stopColor={colors.horizon} stopOpacity="0"/></linearGradient>
+            <g id={`${id}-tree`}>
+              <g fill="none" stroke={colors.ground} strokeLinecap="round">
+                <path d="M116 330Q100 231 127 145L144 93" strokeWidth="13"/>
+                <path d="M115 265Q73 224 34 189M114 233Q179 206 217 157M126 168Q92 141 68 122M128 169Q176 126 176 91" strokeWidth="6"/>
+                <path d="M77 230L64 182M169 210L177 174M142 112L125 82" strokeWidth="3"/>
               </g>
-              {/* and this is him turning away to look down the valley */}
-              <g className="sky__face sky__face--side">
-                <ellipse className="sky__muzzle" cx="43" cy="67" rx="7.5" ry="5.8" />
-                <circle className="sky__nose" cx="38.5" cy="65" r="1.4" />
-                <circle className="sky__eye" cx="49.5" cy="58.5" r="4.4" />
-                <circle className="sky__pupil" cx="48.5" cy="59.3" r="2.1" />
-                <circle className="sky__glint" cx="50.3" cy="57.3" r="0.9" />
+              <g fill={colors.blossom}>
+                <ellipse cx="116" cy="90" rx="53" ry="20" opacity=".69"/><ellipse cx="165" cy="80" rx="46" ry="22" opacity=".76"/>
+                <ellipse cx="72" cy="123" rx="57" ry="24" opacity=".8"/><ellipse cx="154" cy="117" rx="80" ry="28" opacity=".65"/>
+                <ellipse cx="204" cy="149" rx="60" ry="23" opacity=".84"/><ellipse cx="58" cy="165" rx="53" ry="23" opacity=".75"/>
+                <ellipse cx="119" cy="158" rx="65" ry="24" opacity=".72"/><ellipse cx="33" cy="184" rx="39" ry="15" opacity=".79"/>
               </g>
+              <g fill={colors.light} opacity=".22"><ellipse cx="143" cy="72" rx="27" ry="7"/><ellipse cx="62" cy="111" rx="23" ry="6"/><ellipse cx="213" cy="137" rx="25" ry="6"/></g>
             </g>
+          </defs>
+          <path fill={`url(#${id}-sky)`} d="M0 0h1600v1000H0z"/>
+          <circle cx="1190" cy="215" r="190" fill={`url(#${id}-glow)`}/>
+          <circle cx="1190" cy="215" r={night ? 26 : 36} fill={colors.light} opacity=".86"/>
+          {night && <g className="sky__stars" fill={colors.light}>{stars.map((star,i) => <circle key={i} cx={star.x} cy={star.y} r={star.radius} style={{ animationDelay: `${-i * 3}s` }}/>)}</g>}
+          {night && <path className="sky__comet" d="M470 185l-31 13" fill="none" stroke={colors.light} strokeWidth="1" strokeLinecap="round" opacity=".35"/>}
+          {!night && <g transform="translate(610 315)" opacity=".56">
+            <g className="sky__creature" fill={colors.light}>
+              <path d="M-43 0Q-24-12 1-6Q19-15 34-5Q43-2 48 4Q30 10 14 7Q-11 14-32 5L-44 14L-42 3L-47-8Z"/>
+              <path d="M-9-4Q-16-26 9-29Q18-23 14-7Z" opacity=".7"/>
+              <circle cx="27" cy="-1" r="1.2" fill={colors.ground}/>
+            </g>
+          </g>}
+          <g transform="translate(800 258)" opacity={night ? ".76" : ".76"}>
+            <g className="sky__ufo">
+              {night && <path d="M-15 12L-37 105Q0 117 37 105L15 12Z" fill={colors.light} opacity=".045"/>}
+              <path d="M-17 1Q0-19 17 1Z" fill={colors.middle} stroke={colors.light} strokeWidth="1.2"/>
+              <ellipse cy="5" rx="34" ry="8" fill={colors.far} stroke={colors.light} strokeWidth="1.2"/>
+              <path d="M-23 6Q0 17 23 6" fill="none" stroke={colors.light} strokeWidth="1" opacity=".55"/>
+              {night && <g fill={colors.light} opacity=".75"><circle cx="-17" cy="9" r="1.3"/><circle cx="0" cy="12" r="1.3"/><circle cx="17" cy="9" r="1.3"/></g>}
+            </g>
+          </g>
+          <g transform="translate(1160 322) scale(.38)" opacity=".35"><g className="sky__ufo sky__ufo--far"><path d="M-17 1Q0-19 17 1Z" fill={colors.middle} stroke={colors.light} strokeWidth="1.2"/><ellipse cy="5" rx="34" ry="8" fill={colors.far} stroke={colors.light} strokeWidth="1.2"/></g></g>
+          <g className="sky__cloud" fill="none" stroke={colors.light} strokeWidth="1" opacity=".12"><path d="M940 300Q1110 281 1300 297M80 245Q230 229 385 242"/></g>
+          <path d="M0 490Q95 453 182 474T347 432Q439 367 512 414T699 390Q790 322 875 388T1044 398Q1146 342 1250 412T1435 376Q1526 355 1600 391V1000H0Z" fill={colors.far}/>
+          <path d="M0 560Q112 466 225 523T410 495Q510 450 629 539T832 501Q943 427 1042 498T1214 483Q1329 420 1450 493T1600 462V1000H0Z" fill={colors.middle}/>
+          <path d="M0 492H1600V690H0Z" fill={`url(#${id}-mist)`} className="sky__mist"/>
+          <path d="M0 635Q118 575 255 640T510 594Q658 546 784 625T1040 590Q1188 541 1307 603T1600 566V1000H0Z" fill={colors.near}/>
+          <use href={`#${id}-tree`} transform="translate(1090 415) scale(.55)" opacity=".58"/>
+          <path d="M0 784Q172 651 367 751T741 748Q947 642 1145 714T1600 692V1000H0Z" fill={colors.ground}/>
+          <use href={`#${id}-tree`} transform="translate(1300 370) scale(1.25)"/>
+          <use href={`#${id}-tree`} transform="translate(-115 493) scale(1.35)" opacity=".85"/>
+          <g fill="none" stroke={colors.blossom} strokeWidth="1" opacity=".13"><path d="M0 817Q178 702 335 765M1090 755Q1310 829 1600 731M49 914Q183 870 310 902M1150 913Q1360 850 1540 886"/></g>
+          <g className="sky__birds" fill="none" stroke={colors.light} strokeWidth="1.6" strokeLinecap="round" opacity=".48">
+            <path d="M0 0q7-6 14 0 7-6 14 0"/><path d="M-40 17q6-5 12 0 6-5 12 0"/><path d="M35 25q5-4 10 0 5-4 10 0"/>
           </g>
         </svg>
-      </div>
-
-      <svg className="sky__ground sky__ground--front" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden>
-        <g className="sky__band sky__band--near">
-          <g className="sky__tussock">
-            <path className="sky__blades" d={grass(6180, 420, 178, 12, 40, 2.6)} />
-            <path className="sky__seed" d={seedHeads(1177, 14, 178, 26, 46)} />
-          </g>
-          <path className="sky__turf" d={groundEdge(4407, 5, 178, 12)} />
-          <path className="sky__crest" d={edgeLine(4407, 5, 178, 12)} />
-        </g>
-      </svg>
-
-      <div className="sky__scrim" />
-
-      <div className="sky__petals">
-        {PETALS.map((p, i) => (
-          <span
-            key={i}
-            className="sky__petal"
-            style={
-              {
-                left: `${p.left}%`,
-                width: `${p.size}px`,
-                height: `${p.size * 0.72}px`,
-                animationDelay: `-${p.delay}s`,
-                animationDuration: `${p.dur}s`,
-                "--drift": `${p.drift}px`,
-                "--spin": `${p.spin}deg`,
-              } as React.CSSProperties
-            }
-          />
-        ))}
-      </div>
-    </div>
-  );
+</div></figure>;
 }

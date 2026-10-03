@@ -1,535 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 
-/* ============================================================= TOKENS ==== */
 :root {
-  --font-body: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
-
-  --bg: #0d0f13;
-  --bg-lift: #14171d;
-  --text: #edeff4;
-  --text-dim: #a3abb9;
-  --accent: #63c4b8;
-  --accent-ink: #06201d;
-  --mark: #ff8f7a;
-  --mark-ink: #2a0d07;
-  --line: rgba(255, 255, 255, 0.12);
-  --panel: rgba(255, 255, 255, 0.045);
-
-  --column: min(88vw, 1100px);
+  color-scheme: dark;
+  --bg: #111916;
+  --text: #eeeee4;
+  --muted: #c3d0c0;
+  --accent: #bed3b4;
 }
 
-/* ============================================================== BASE ===== */
-* {
-  box-sizing: border-box;
-}
-
-html,
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  padding: 0;
+  background: #15241f;
   color: var(--text);
-  font-family: var(--font-body);
+  font-family: "DM Sans", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
 }
-
-/* Dark speckled paper. The grain is fine turbulence held at a very low alpha —
-   an earlier pass used baseFrequency 0.028, which is a blob pattern, not a
-   grain. The specks are a separate sparse dot grid on top. */
-body {
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(rgba(220, 232, 255, 0.16) 0.6px, transparent 0.7px),
-    radial-gradient(rgba(200, 216, 245, 0.1) 0.5px, transparent 0.6px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
-  background-size:
-    137px 129px,
-    83px 91px,
-    180px 180px;
-  background-position:
-    0 0,
-    41px 23px,
-    0 0;
-  /* Tiled down the page rather than pinned to the viewport: a fixed texture
-     only ever covers one screen, so anything below the fold loses its grain. */
-  background-attachment: scroll;
-}
-
-::selection {
-  background: var(--accent);
-  color: var(--accent-ink);
-}
-
-button {
-  font-family: inherit;
-}
-
-a {
-  color: var(--accent);
-}
-
-.page {
-  position: relative;
-  width: var(--column);
-  margin-inline: auto;
-  padding-bottom: 4.5rem;
-}
-
-/* ============================================================== VEIL ===== */
-/* Hovering one product pulls everything else down into the dark. The veil is
-   fixed, so the masthead and the rest of the shelf go under it together, and
-   the hovered cell is lifted over it. */
-.veil {
+body::before {
+  content: "";
   position: fixed;
   inset: 0;
-  z-index: 5;
-  background: rgba(5, 7, 10, 0.86);
-  opacity: 0;
+  z-index: -1;
   pointer-events: none;
-  transition: opacity 260ms ease;
+  background: linear-gradient(90deg, rgba(8,20,17,.8), rgba(8,20,17,.46) 58%, rgba(8,20,17,.36)),
+    linear-gradient(0deg, rgba(8,20,17,.48), transparent 45%);
 }
-@media (hover: hover) {
-  body.has-lit .veil {
-    opacity: 1;
-  }
-}
-
-/* ============================================================ STATUS ===== */
-/* Sits centered above the masthead, filling the quiet gap between the name
-   and the rest of the page, all on one line. A dot that breathes, a lead in
-   that never moves, and a word that types itself out, holds, and backspaces
-   into the next one for as long as the block of the day runs. The word gets
-   a reserved width, the widest of the block's own words, so the line's
-   center does not drift sideways as the typing grows and shrinks it; only
-   the cursor end of the word actually moves. */
-.status {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.55rem;
-  margin: 0;
-  padding-block: 2rem 1.6rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: lowercase;
-}
-.status__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 0 rgba(99, 196, 184, 0.5);
-  animation: status-breathe 2.8s ease-out infinite;
-}
-@keyframes status-breathe {
-  0% {
-    box-shadow: 0 0 0 0 rgba(99, 196, 184, 0.45);
-  }
-  70% {
-    box-shadow: 0 0 0 9px rgba(99, 196, 184, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(99, 196, 184, 0);
-  }
-}
-.status__lead {
-  color: var(--text-dim);
-}
-.status__word {
-  display: inline-block;
-  text-align: left;
-  color: var(--accent);
-  font-weight: 600;
-}
-.status__cursor {
-  display: inline-block;
-  width: 2px;
-  height: 0.9em;
-  margin-left: 2px;
-  vertical-align: -0.1em;
-  background: var(--accent);
-  animation: status-blink 1s step-end infinite;
-}
-@keyframes status-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-/* ============================================================ HEADER ===== */
-.masthead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.75rem;
-  padding-block: 1.1rem 2.75rem;
-}
-
-/* the name sits in a block of colour, the way a marker pen leaves it */
-/* Set on one line, lower case, in a light weight, with the family name held
-   back a shade. The block of colour it used to sit in was the loudest thing on
-   the page, and the page is quiet everywhere else. */
-.wordmark {
-  display: inline-flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0 0.4em;
-  color: var(--text);
-  font-size: clamp(1.5rem, 3.4vw, 2.15rem);
-  font-weight: 300;
-  line-height: 1.15;
-  letter-spacing: 0.005em;
-}
-.wordmark__family {
-  color: var(--text-dim);
-}
-/* The given name opens on a capital, set a shade larger than the letters after
-   it. The family name opens on a lower case m instead, because the capital in
-   this face comes to two sharp peaks. It is scaled up further so it still reads
-   as the start of the word, and both sit on the same baseline. */
-.wordmark__initial {
-  font-size: 1.18em;
-}
-.wordmark__lower {
-  font-size: 1.5em;
-}
-
-/* ============================================================== LINKS ==== */
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-/* Rustic double box: an outer rule, a second rule set in from it, and a hard
-   offset shadow underneath — a printed label nailed to the page, not a
-   soft-blurred web button. Pressing one drives it into its own shadow. */
-.chip {
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  outline: 1px solid rgba(255, 255, 255, 0.09);
-  outline-offset: 3px;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
-  color: var(--text-dim);
-  font: inherit;
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    transform 140ms ease,
-    box-shadow 140ms ease,
-    border-color 140ms ease,
-    color 140ms ease;
-}
-.chip:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
-  border-color: rgba(99, 196, 184, 0.55);
-  color: var(--accent);
-}
-.chip:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
-}
-.chip:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-
-/* =============================================================== GRID ==== */
-/* Tiles of one fixed size, as many to a line as fit — four at full width,
-   so the fifth starts a second line on its own. New products fill the line
-   and then start another; nothing ever stretches to cover a gap, so every
-   box stays the same size. */
-.tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: clamp(16px, 1.8vw, 24px);
-}
-@media (max-width: 720px) {
-  .tiles {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-}
-@media (max-width: 460px) {
-  .tiles {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* The cell is the hover target: it holds the tile and the caption that
-   belongs to it. */
-.cell {
-  position: relative;
-  min-width: 0;
-}
-@media (hover: hover) {
-  .cell.is-lit {
-    z-index: 6;
-  }
-}
-
-/* The caption does not sit with its tile. It arrives low on the veil, in the
-   same place every time, a beat after the dark falls — you go looking at the
-   picture and the sentence turns up somewhere else entirely. It surfaces out
-   of a blur rather than sliding, which is what makes it feel like an arrival
-   instead of a tooltip. */
-.cell__blurb {
-  position: fixed;
-  /* right column of the row: the reason sits to its left. bottom by default,
-     since a tile in the top half of the shelf gets its words down here, clear
-     of the tile itself. body.info-top flips both lines up instead, for a tile
-     in the bottom half, so the words never land back on top of the shelf. */
-  left: 52%;
-  top: auto;
-  bottom: 9vh;
-  z-index: 7;
-  width: min(42ch, 44vw);
-  margin: 0;
-  color: var(--text);
-  font-size: clamp(0.94rem, 1.2vw, 1.1rem);
-  font-weight: 300;
-  line-height: 1.7;
-  text-align: left;
-  text-wrap: pretty;
-  /* on a short window the shelf runs past the fold, so a fixed line can land
-     over a tile. The shadow keeps it readable wherever it lands. */
-  text-shadow: 0 2px 16px rgba(4, 6, 10, 0.92), 0 0 3px rgba(4, 6, 10, 0.8);
-  opacity: 0;
-  pointer-events: none;
-  /* no transition here on purpose: hiding is instant. Moving the pointer from
-     a tile whose words sit at the bottom to one whose words sit at the top
-     used to cross-fade the two, so the old sentence lingered at the bottom
-     for a beat while the new one was already fading in at the top, which
-     read as a flicker. The transition lives only on the is-lit rule below, so
-     it plays going in and never going out. */
-}
-/* A short teal rule that draws itself in above the sentence, from the left
-   edge now that the paragraph itself is left aligned. */
-.cell__blurb::before {
-  content: "";
-  display: block;
-  width: 34px;
-  height: 2px;
-  margin: 0 0 1.1rem;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  /* same reasoning: draws in on arrival, snaps back instantly on the way out */
-}
-@media (hover: hover) {
-  /* both lines are simply there the moment the pointer lands, and only the
-     arrival is animated */
-  .cell.is-lit .cell__blurb,
-  .cell.is-lit .cell__why {
-    opacity: 1;
-    transition: opacity 120ms ease;
-  }
-  .cell.is-lit .cell__blurb::before {
-    transform: scaleX(1);
-    transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-}
-
-/* A tile in the bottom half of the shelf gets its words up here instead, in
-   the gap between the links and the first row of tiles. The masthead and the
-   status line step back a little so the words have clean room to sit in,
-   rather than landing across the name. */
-body.info-top .cell__blurb,
-body.info-top .cell__why {
-  top: 6vh;
-  bottom: auto;
-}
-body.info-top .masthead,
-body.info-top .status {
-  opacity: 0.15;
-}
-.masthead,
-.status {
-  transition: opacity 160ms ease;
-}
-/* Why the thing was built: the left column of the same bottom row the
-   description sits in. This is the one meant to fill the space, so the
-   sentence itself is the biggest thing in its half of the row, sized to the
-   column rather than to running text. The small caps label is the only quiet
-   part of it. */
-.cell__why {
-  position: fixed;
-  right: 52%;
-  top: auto;
-  bottom: 9vh;
-  z-index: 7;
-  width: min(30vw, 460px);
-  margin: 0;
-  text-align: right;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 120ms ease;
-}
-.cell__why-label {
-  display: block;
-  margin-bottom: 0.6rem;
-  color: var(--accent);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.cell__why-text {
-  display: block;
-  color: var(--text);
-  /* scales with the column: a phrase at this size fills the rectangle the way
-     a headline fills a card, rather than sitting in it like a caption */
-  font-size: clamp(1.55rem, 2.5vw, 2.35rem);
-  font-weight: 500;
-  line-height: 1.18;
-  letter-spacing: -0.005em;
-  text-wrap: balance;
-  text-shadow: 0 2px 18px rgba(4, 6, 10, 0.94), 0 0 4px rgba(4, 6, 10, 0.85);
-}
-
-/* No hover on a touch screen, so the captions would never be reachable.
-   Print them under their tiles instead. */
-@media (hover: none) {
-  .cell__why {
-    position: static;
-    order: -1;
-    width: auto;
-    margin: 0 0 0.7rem;
-    font-size: 0.78rem;
-    line-height: 1.6;
-    text-align: left;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    opacity: 1;
-  }
-  .cell {
-    display: flex;
-    flex-direction: column;
-  }
-  .cell__why-label {
-    margin-bottom: 0.3rem;
-    font-size: 0.7rem;
-  }
-  /* the big headline size is for the fixed side by side layout; stacked above
-     its own tile it goes back to reading like a line of text */
-  .cell__why-text {
-    font-size: 1.05rem;
-    font-weight: 400;
-    line-height: 1.4;
-    text-shadow: none;
-  }
-  .cell__blurb {
-    position: static;
-    width: auto;
-    margin-top: 0.8rem;
-    padding-left: 0.85rem;
-    border-left: 2px solid var(--accent);
-    font-size: 0.8rem;
-    line-height: 1.65;
-    text-align: left;
-    opacity: 1;
-    filter: none;
-    scale: 1;
-  }
-  .cell__blurb::before {
-    display: none;
-  }
-}
-
-/* Each product gets the same double box as the links, so the shelf and the
-   header read as one set of objects. */
-.tile {
-  position: relative;
-  display: block;
-  background: var(--bg-lift);
-  border: 1px solid var(--line);
-  outline: 1px solid rgba(255, 255, 255, 0.09);
-  outline-offset: 3px;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
-  text-decoration: none;
-  color: inherit;
-  transition:
-    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 180ms ease,
-    border-color 180ms ease;
-}
-.cell.is-lit .tile {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
-  border-color: rgba(99, 196, 184, 0.55);
-}
-.tile:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-.tile__shot {
-  display: block;
-  position: relative;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-}
-.tile__shot img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  /* the art is bright; hold it back until the tile is hovered */
-  filter: saturate(0.85) brightness(0.8);
-  transition:
-    transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 260ms ease;
-}
-.cell.is-lit .tile__shot img {
-  transform: scale(1.05);
-  filter: saturate(1.05) brightness(1);
-}
-.tile__plate {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  padding: 0.7rem 0.8rem;
-  border-top: 1px solid var(--line);
-  background: rgba(13, 15, 19, 0.85);
-}
-.tile__name {
-  overflow-wrap: anywhere;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.11em;
-  line-height: 1.35;
-  text-transform: uppercase;
-}
-.tile__go {
-  color: var(--text-dim);
-  font-size: 0.7rem;
-  transition: color 180ms ease;
-}
-.cell.is-lit .tile__go {
-  color: var(--accent);
-}
-
-/* ============================================================ UTILITY ==== */
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+h1, h2, p { margin-top: 0; }
+::selection { background: #7e9d83; color: #101712; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .sr-only {
   position: absolute;
   width: 1px;
@@ -543,47 +44,243 @@ body.info-top .status {
 }
 .skip-link {
   position: absolute;
-  left: 12px;
-  top: -60px;
-  z-index: 100;
+  top: -100px;
+  left: 20px;
+  z-index: 10;
   padding: 12px 18px;
-  background: var(--mark);
-  color: var(--mark-ink);
-  transition: top 160ms ease;
+  background: var(--text);
+  color: var(--bg);
 }
-.skip-link:focus {
-  top: 12px;
+.skip-link:focus { top: 16px; }
+
+.page { position: relative; width: min(1184px, calc(100% - 112px)); margin: auto; }
+.masthead { display: flex; align-items: center; height: 86px; gap: 24px; }
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  white-space: nowrap;
+  font: 400 clamp(23px, 2.2vw, 29px) Iowan Old Style, Palatino Linotype, Georgia, serif;
+  letter-spacing: -.035em;
+}
+.wordmark__emoji {
+  font-family: Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif;
+  font-size: 30px;
+  line-height: 1;
+}
+.central-clock {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-left: auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.central-clock__label {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.central-clock time { font: 400 18px Iowan Old Style, Palatino Linotype, Georgia, serif; }
+.masthead nav { display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: 12px; }
+.masthead nav a:hover, .footer a:hover { color: var(--text); }
+.masthead__email { position: relative; display: inline-flex; align-items: center; gap: 10px; }
+.masthead__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 65px;
+  height: 27px;
+  padding: 0 8px;
+  border: 1px solid rgba(190,211,180,.32);
+  border-radius: 14px;
+  background: rgba(190,211,180,.075);
+  color: #d5e6ce;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.masthead__copy svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.masthead__copy:hover { background: rgba(190,211,180,.16); border-color: rgba(190,211,180,.65); }
+.copy-error {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2;
+  width: 210px;
+  margin: 9px 0 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: #17241d;
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.4;
 }
 
+.work { padding: 64px 0 75px; }
+.work__heading { max-width: 720px; margin-bottom: 40px; }
+.work__heading h1 {
+  margin: 0;
+  font: 400 clamp(48px, 5.6vw, 74px)/1.07 Iowan Old Style, Palatino Linotype, Georgia, serif;
+  letter-spacing: -.055em;
+}
+.work__heading em { color: var(--accent); font-weight: 400; }
+.work__heading p { margin: 17px 0 0; color: #d0ded0; font-size: 15px; line-height: 1.65; }
+.work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 27px; }
+.work-tile { min-width: 0; }
+.work-tile__main { display: block; }
+.work-tile__image {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.6;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(17,33,30,.55);
+  box-shadow: 0 18px 42px rgba(0,8,8,.24);
+}
+.work-tile__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease, filter .4s ease;
+}
+.work-tile__main:hover img, .work-tile__main:focus-visible img { transform: scale(1.035); filter: brightness(1.06); }
+.work-tile__live, .work-tile__status {
+  position: absolute;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 3px;
+  background: rgba(11,24,19,.48);
+  color: #f1f5ec;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+.work-tile__live { left: 10px; gap: 7px; padding: 6px 8px; color: #f4d4d0; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
+.work-tile__live-dot { position: relative; width: 7px; height: 7px; flex: none; border-radius: 50%; background: #f05b56; box-shadow: 0 0 7px rgba(240,91,86,.65); animation: live-beep 2.4s ease-in-out infinite; }
+.work-tile__live-dot::after { content: ""; position: absolute; inset: -4px; border: 1px solid rgba(240,91,86,.75); border-radius: 50%; animation: live-ring 2.4s ease-out infinite; }
+.work-tile__status { right: 10px; padding: 5px 7px; }
+.work-tile__content { display: flex; flex-direction: column; align-items: flex-start; padding: 15px 1px 0; }
+.work-tile__tags { display: flex; flex-wrap: wrap; gap: 6px; color: #c9ddbd; font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+.work-tile__tags span + span::before { content: "·"; margin-right: 6px; color: #9fb49d; }
+.work-tile__title { margin-top: 8px; font: 400 27px/1.15 Iowan Old Style, Palatino Linotype, Georgia, serif; letter-spacing: -.025em; }
+.work-tile__teaser { margin-top: 7px; color: #d2ded1; font-size: 12px; line-height: 1.45; }
+.work-tile__more {
+  margin-top: 11px;
+  padding: 0 0 5px;
+  border: 0;
+  border-bottom: 1px solid rgba(201,221,189,.55);
+  border-radius: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.work-tile__more:hover { color: var(--text); border-color: var(--text); }
+
+.project-dialog {
+  position: relative;
+  width: min(960px, calc(100% - 36px));
+  max-height: min(750px, 90dvh);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(206,226,199,.2);
+  border-radius: 14px;
+  background: #17241f;
+  color: var(--text);
+  box-shadow: 0 32px 110px rgba(0,8,6,.55);
+}
+.project-dialog[open] { animation: dialog-in .27s cubic-bezier(.2,.75,.25,1); }
+.project-dialog::backdrop { background: rgba(3,12,9,.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.project-dialog__layout { display: grid; grid-template-columns: 1fr 1.05fr; min-height: 490px; max-height: min(750px, 90dvh); }
+.project-dialog__image { min-height: 0; background: #23382e; }
+.project-dialog__image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.project-dialog__content { overflow-y: auto; padding: 56px 45px 38px; color: #cad9c8; font-size: 13px; line-height: 1.7; }
+.project-dialog__close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border: 1px solid rgba(206,226,199,.28);
+  border-radius: 50%;
+  background: rgba(21,37,29,.8);
+  color: var(--text);
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+}
+.project-dialog__close:hover { background: rgba(206,226,199,.16); }
+.project-dialog__category { margin: 0 0 9px; color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.project-dialog h2 { margin: 0 0 9px; color: var(--text); font: 400 clamp(38px, 4vw, 57px)/1.07 Iowan Old Style, Palatino Linotype, Georgia, serif; letter-spacing: -.04em; }
+.project-dialog__teaser { color: var(--text); font-size: 15px; }
+.project-dialog__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 24px; color: var(--accent); font-size: 11px; }
+.project-dialog__tags span + span::before { content: "·"; margin-right: 8px; }
+.project-dialog__content > p { margin-bottom: 16px; }
+.project-dialog__link { display: inline-block; margin-top: 9px; padding: 9px 0 5px; border-bottom: 1px solid currentColor; color: var(--accent); font-size: 12px; font-weight: 700; }
+
+.footer { display: flex; justify-content: space-between; gap: 30px; padding: 25px 0; margin-bottom: 30px; border-top: 1px solid rgba(220,235,214,.24); color: var(--muted); font-size: 11px; }
+
+@keyframes live-beep { 0%,68%,100% { opacity: .7; box-shadow: 0 0 4px rgba(240,91,86,.3); } 12%,28% { opacity: 1; box-shadow: 0 0 10px rgba(240,91,86,.9); } }
+@keyframes live-ring { 0% { transform: scale(.5); opacity: .8; } 58%,100% { transform: scale(1.55); opacity: 0; } }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+@media (max-width: 1000px) {
+  .page { width: calc(100% - 64px); }
+  .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .page { width: calc(100% - 40px); }
+  .masthead { display: grid; grid-template-columns: 1fr auto; height: auto; min-height: 72px; gap: 12px 8px; padding: 17px 0; }
+  .wordmark { grid-column: 1; grid-row: 1; font-size: 22px; }
+  .wordmark__emoji { font-size: 25px; }
+  .central-clock { grid-column: 2; grid-row: 1; margin: 0; gap: 5px; }
+  .central-clock__label { font-size: 9px; }
+  .central-clock time { font-size: 16px; }
+  .masthead nav { grid-column: 1 / -1; grid-row: 2; gap: 24px; }
+  .masthead__email { gap: 7px; }
+  .work { padding: 40px 0 60px; }
+  .work__heading { margin-bottom: 26px; }
+  .work__heading h1 { font-size: 50px; }
+  .work__heading p { margin-top: 13px; font-size: 14px; }
+  .work-grid { grid-template-columns: 1fr; gap: 37px; }
+  .work-tile__image { aspect-ratio: 1.75; }
+  .work-tile__title { font-size: 26px; }
+  .project-dialog { width: calc(100% - 24px); max-height: 92dvh; }
+  .project-dialog__layout { display: flex; flex-direction: column; max-height: 92dvh; }
+  .project-dialog__image { height: 210px; flex: none; }
+  .project-dialog__content { padding: 26px 24px 29px; }
+  .project-dialog h2 { font-size: 38px; }
+  .project-dialog__close { top: 12px; right: 12px; }
+}
+@media (max-width: 390px) {
+  .wordmark { font-size: 19px; }
+  .masthead nav { gap: 19px; }
+}
 @media (prefers-reduced-motion: reduce) {
-  html,
-  body {
-    scroll-behavior: auto;
-  }
-  .status__dot,
-  .status__cursor {
-    animation: none;
-  }
-  .tile,
-  .tile__shot img,
-  .chip {
-    transition: none;
-  }
-  .cell__blurb,
-  .cell__why {
-    transition: none;
-  }
-  .cell.is-lit .cell__blurb,
-  .cell.is-lit .cell__why {
-    transition: opacity 100ms linear;
-  }
-  .cell__blurb::before {
-    transform: scaleX(1);
-    transition: none;
-  }
-  .cell.is-lit .tile,
-  .chip:hover,
-  .cell.is-lit .tile__shot img {
-    transform: none;
-  }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }

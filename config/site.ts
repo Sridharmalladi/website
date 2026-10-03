@@ -1,159 +1,216 @@
-// Single edit point for identity + contact + the product shelf.
-export const site = {
-  name: "SRIDHAR MALLADI",
-  // Not printed on the page any more. This is the meta description and the
-  // social card subtitle only.
-  tagline: "Data scientist. I work on LLMs and on models that run in production.",
+export type Project = {
+  id: string;
+  name: string;
+  category: "Data & ML" | "AI systems" | "Experiments";
+  teaser: string;
+  summary: string;
+  detail: string;
+  href: string;
+  shot: string;
+  alt: string;
+  featured: boolean;
+  tags: string[];
+  linkLabel: "Open project" | "View source" | "Try it" | "View extension";
+};
 
-  // Each entry is a product on the shelf: an image, a name, a live link.
-  //
-  // `shot` is a 1440x900 picture of the project's own output. It can be a shot of
-  // the thing running, a chart drawn from its real artifacts, a diagram of what
-  // it actually wires together. Never stock art: the picture has to say what
-  // the project does. It sits in /public/shots.
-  //
-  // `blurb` is what appears when the tile is hovered, and it is written off the
-  // project's README, in three beats:
-  //
-  //   1. what it does, in the plainest words that are still true
-  //   2. how it works, which means the mechanism and not the stack
-  //   3. what it is actually good for, or the thing it found out
-  //
-  // House style for every word a visitor reads on this site: simple Indian
-  // English, short sentences, and no dashes anywhere. If a sentence wants a
-  // dash, it wants a full stop instead. No jargon the README does not earn, and
-  // no adjective doing work a number could do. Same recipe for whatever gets
-  // added next.
+export const site = {
+  name: "Sridhar Malladi",
+  url: "https://sridharmalladi.online",
+  tagline: "Associate AI Engineer. Curious, collaborative, pragmatic.",
   projects: [
     {
+      id: "cityfit",
+      teaser: "Find a city that fits your life.",
       name: "CityFit",
-      inspiration:
-        "Wanted to explore where to live without limiting the search to big cities.",
-      blurb:
-        "Explore 32,333 US places by changing priorities for rent, commute, air quality and climate. Census, EPA and NOAA data feed a transparent ranking, while a trained model finds similar places and estimates missing rent. Each place shows how its rank changes with your priorities, where the data is uncertain, and how old the numbers are. The rent model averages $188 error on places in states held out from training, against $320 for the median baseline.",
+      category: "Data & ML",
+      summary:
+        "Explore 32,333 US places through the things that matter to you: rent, commute, air quality, and climate. See how changing your priorities changes the ranking, with uncertainty and data age in view.",
+      detail:
+        "Census, EPA, and NOAA data feed a transparent ranking, while a trained model finds similar places and estimates missing rent. On places in states held out from training, the rent model averages $188 error, compared with $320 for the median baseline.",
       href: "https://sridharmalladi.github.io/cityfit/",
       shot: "/shots/cityfit.png",
-      alt: "CityFit running with the US map, sliders for personal priorities, and ranked places with rent, commute and climate data",
+      alt: "CityFit map with priority sliders and places ranked by rent, commute, and climate",
+      featured: true,
+      tags: ["Analytics", "Forecasting"],
+      linkLabel: "Open project",
     },
     {
+      id: "prior-auth-criteria-engine",
+      teaser: "Make policy decisions traceable.",
       name: "Prior Auth Criteria Engine",
-      inspiration:
-        "Policy criteria interlock in ways flat retrieval cannot untangle, so I built a graph instead.",
-      blurb:
-        "Checks whether a clinical note satisfies a published Medicare coverage policy, and names the exact clause blocking it. The policy becomes a tree of true, false and unknown criteria, and the note becomes structured facts, evaluated together instead of matched by similar looking text. On its own eval it gets every decision right, and names the correct blocking clause on 6 of 8 denials, which is the part plain retrieval has no way to do at all.",
+      category: "AI systems",
+      summary:
+        "A prototype that checks clinical notes against a published Medicare coverage policy. It turns policy clauses into explicit criteria and points to the clause behind each decision.",
+      detail:
+        "The policy becomes a tree of true, false, and unknown criteria, evaluated against structured facts from the note. In a small internal evaluation, it matched all expected decisions and identified the correct blocking clause for 6 of 8 denials. Those results do not establish clinical reliability.",
       href: "https://sridharmalladi.github.io/prior-auth-criteria-engine/",
       shot: "/shots/prior-auth-criteria-engine.jpg",
-      alt: "The Prior Auth Criteria Engine running: a criteria tree on the left with satisfied clauses lit green, the clinical note with its evidence underlined in the middle, and the verdict with a full breakdown on the right",
+      alt: "Policy criteria tree beside a clinical note, highlighted evidence, and a decision breakdown",
+      featured: true,
+      tags: ["Healthcare", "GenAI"],
+      linkLabel: "Open project",
     },
     {
+      id: "judge-loop",
+      teaser: "See where iteration helps.",
       name: "Judge Loop",
-      inspiration:
-        "Model council: LLMs debate and judge each other to a better answer.",
-      blurb:
-        "One model writes an answer. A second model scores it. Then the first one tries again, and this keeps going round after round. You can pick self refinement, judging across models, or prompt tuning. Every round streams live, so you can see the exact point where it stops getting better.",
+      category: "AI systems",
+      summary:
+        "Watch a model write, receive feedback, and revise its answer over successive rounds. Compare refinement modes and inspect the point where another round stops making a difference.",
+      detail:
+        "Choose self refinement, judging across models, or prompt tuning. Each round streams live, exposing the answers and scores so you can inspect what changed instead of seeing only the final response.",
       href: "https://judge-loop.netlify.app/",
       shot: "/shots/judge-loop.png",
-      alt: "Judge Loop landing page, a pixel art highway at dusk with the mode picker",
+      alt: "Judge Loop mode picker over a pixel art highway at dusk",
+      featured: true,
+      tags: ["GenAI", "Evaluation"],
+      linkLabel: "Try it",
     },
     {
+      id: "dsbuddy",
+      teaser: "Find the weak spots in your data.",
       name: "dsbuddy",
-      inspiration:
-        "Data science is repetitive, so I built a buddy to automate it.",
-      blurb:
-        "Pick a dataset and tell it which column matters. It runs about two hundred checks on the data, trains real models, and scores them on a fifth of the rows they never saw. Claude reads all of that, writes a plain summary, and warns you about leakage. Say drop that column and the whole thing runs again for real.",
+      category: "Data & ML",
+      summary:
+        "Give it a dataset and a target column. It checks the data, trains models, and explains the results, with an emphasis on catching leakage before trusting a score.",
+      detail:
+        "The workflow runs about 200 checks and evaluates models on a held out fifth of the rows. Claude summarizes the findings and flags potential leakage; requests such as dropping a column rerun the analysis and training.",
       href: "https://www.dsbuddy.com/",
       shot: "/shots/dsbuddy.png",
-      alt: "dsbuddy landing page with a live dataset analysis panel",
+      alt: "dsbuddy landing page with a dataset analysis panel",
+      featured: true,
+      tags: ["Analytics", "ML"],
+      linkLabel: "Try it",
     },
     {
+      id: "partycam",
+      teaser: "Turn gestures into play.",
       name: "PartyCam",
-      inspiration:
-        "Wanted to see how much fun computer vision could be with nothing but the browser.",
-      blurb:
-        "Pinch a slice of pizza and take a bite, purse your lips to blow out birthday candles, or spark up a pixel cigarette, all with your face and hands. MediaPipe reads your hands and face right there in the browser tab, on your own device, and nothing is uploaded anywhere. It turns a webcam into a party trick, no app to install and no server watching.",
+      category: "Experiments",
+      summary:
+        "A webcam playground where face and hand gestures control virtual props. Pinch a pizza slice or blow out birthday candles, with tracking running directly in your browser.",
+      detail:
+        "MediaPipe tracks hands and faces on the device without uploading camera footage. The interactions turn those landmarks into gestures for pizza, candles, and a pixel cigarette, with no app installation required.",
       href: "https://sridharmalladi.github.io/partycam/",
       shot: "/shots/partycam.jpg",
-      alt: "PartyCam start screen, the pizza, candle and cigarette gestures listed above the start camera button",
+      alt: "PartyCam start screen listing face and hand gestures above the camera button",
+      featured: false,
+      tags: ["Vision", "Play"],
+      linkLabel: "Try it",
     },
     {
-      name: "signup-conversion-model",
-      inspiration:
-        "Curious what changing one variable reveals in the data.",
-      blurb:
-        "This predicts who will not finish signing up. Taking out one leaky feature pulled the score from 0.93 down to 0.78, and splitting the data by time pulled it down to 0.68. The real lesson is that 84 percent do not convert anyway, so knowing who will not convert is only 1.19 times better than picking people at random.",
+      id: "signup-conversion-model",
+      teaser: "Catch the score that misleads.",
+      name: "Signup conversion",
+      category: "Data & ML",
+      summary:
+        "A study in how a promising prediction score can unravel. Removing a leaky feature and testing on a later time period exposed the limits of predicting signup abandonment.",
+      detail:
+        "Removing one leaky feature reduced the reported score from 0.93 to 0.78; a time based split reduced it to 0.68. With 84% of users already not converting, targeting predicted nonconverters was only 1.19 times better than random selection.",
       href: "https://github.com/Sridharmalladi/signup-conversion-model",
       shot: "/shots/signup-conversion-model.jpg",
-      alt: "Bar chart of the actual conversion rate in each predicted risk decile, going from 0.4 percent in the riskiest tenth up to 43 percent in the safest",
+      alt: "Conversion rates by predicted risk decile, from 0.4% in the highest risk group to 43% in the lowest",
+      featured: false,
+      tags: ["Analytics", "ML"],
+      linkLabel: "View source",
     },
     {
+      id: "raglens",
+      teaser: "See what retrieval changed.",
       name: "RAGLens",
-      inspiration:
-        "Wanted every retrieval strategy to answer one prompt, side by side.",
-      blurb:
-        "It asks one question in four ways at the same time. No search, dense search, hybrid, and hybrid with a reranker, all over a shelf of 50 papers. A second model then grades every answer. Each card opens up to show the exact chunks that were fed in, so you can see what the search step really bought you.",
+      category: "AI systems",
+      summary:
+        "Ask one question and compare four retrieval setups side by side. Inspect the answers, model grades, and source chunks to see what each search strategy contributes to the response.",
+      detail:
+        "The comparison runs no retrieval, dense search, hybrid search, and hybrid search with reranking over 50 papers. A second model grades each answer, while expandable cards reveal the exact chunks supplied as context.",
       href: "https://huggingface.co/spaces/Malladi05/raglens",
       shot: "/shots/raglens.jpg",
-      alt: "RAGLens running, with its four retrieval setups laid out side by side, from no search up to hybrid search with a cross encoder rerank",
+      alt: "Four RAGLens answer panels comparing no retrieval, dense search, hybrid search, and reranking",
+      featured: false,
+      tags: ["RAG", "Evaluation"],
+      linkLabel: "Try it",
     },
     {
-      name: "jobfinddaily",
-      inspiration:
-        "Job hunting is repetitive, so I built an assistant to do it.",
-      blurb:
-        "This is an MCP server that your assistant talks to in plain English. It pulls remote AI and ML jobs from HN Who Is Hiring, RemoteOK, Tavily and Firecrawl, throws out the senior roles and the ones without visa sponsorship using plain regex instead of an LLM, scores whatever is left, and keeps track of what you applied to.",
+      id: "jobfinddaily",
+      teaser: "Make job search less manual.",
+      name: "Job Find Daily",
+      category: "AI systems",
+      summary:
+        "An MCP server that lets an assistant search remote AI and ML jobs, filter listings, and track applications. Explicit text rules handle seniority and sponsorship filtering before results are scored.",
+      detail:
+        "It gathers listings through HN Who Is Hiring, RemoteOK, Tavily, and Firecrawl. Regular expressions filter senior roles and listings without visa sponsorship before the remaining opportunities are scored and application progress is recorded.",
       href: "https://github.com/Sridharmalladi/jobfinddaily",
       shot: "/shots/jobfinddaily-mcp.jpg",
-      alt: "How jobfinddaily is wired. The MCP client of the host app on the left, the server over stdio in the middle, and on the right the three things it does: find jobs, find people, track applications",
+      alt: "Job Find Daily architecture connecting an MCP client to job search, people search, and application tracking",
+      featured: false,
+      tags: ["MCP", "Automation"],
+      linkLabel: "View source",
     },
     {
+      id: "scroll-miles",
+      teaser: "See your scrolling add up.",
       name: "Scroll Miles",
-      inspiration:
-        "People scroll compulsively, so I made the habit visible.",
-      blurb:
-        "A Chrome extension that counts how far you scroll and turns it into miles. It sits quietly in the background, keeps a dashboard of the day and the week, and hands out achievements as the miles add up. The point is not to stop you scrolling. It is to make an invisible habit visible.",
+      category: "Experiments",
+      summary:
+        "A Chrome extension that turns scrolling into distance. Daily and weekly views make an easy to overlook habit visible, with achievements marking the miles as they add up.",
+      detail:
+        "The extension counts scrolling in the background and converts it into miles. A dashboard shows daily and weekly activity, giving the habit a concrete measure you can check over time.",
       href: "https://chromewebstore.google.com/detail/scroll-miles/kdeibhcngffpofgiaglnbhfpiocffihh",
       shot: "/shots/scroll-miles.jpg",
-      alt: "The Scroll Miles site, with the extension logo, the line about turning scrolling into meaningful metrics, and the store badges",
+      alt: "Scroll Miles website introducing the scrolling distance extension",
+      featured: false,
+      tags: ["Analytics", "Browser"],
+      linkLabel: "View extension",
     },
     {
+      id: "focado",
+      teaser: "A tiny timer for deep work.",
       name: "focado",
-      inspiration:
-        "I could not focus, so I built a timer to keep the phone away.",
-      blurb:
-        "A pomodoro timer for macOS that sits on your desktop as a small pixel avocado. Press enter and it starts a 25 minute block, then a break, and the time left shows in the pit. Written in Swift with the art drawn pixel by pixel in code, so it is one little window and nothing else.",
+      category: "Experiments",
+      summary:
+        "A small avocado on your Mac desktop keeps time for a focused work session. Start a 25 minute block, then take a break, with the countdown in its pit.",
+      detail:
+        "Built in Swift, the timer starts with the Enter key and moves from a focus block to a break. The avocado is drawn pixel by pixel in code and lives in a single small window.",
       href: "https://github.com/Sridharmalladi/focado",
       shot: "/shots/focado.jpg",
-      alt: "The focado avocado timer on a desktop, showing 25:00 and a start prompt in its pit",
+      alt: "Pixel avocado timer with a 25:00 countdown and a start prompt in its pit",
+      featured: false,
+      tags: ["macOS", "Focus"],
+      linkLabel: "View source",
     },
     {
+      id: "hungerheal",
+      teaser: "Put surplus food to use.",
       name: "HungerHeal",
-      inspiration:
-        "A hackathon idea: let surplus food find people who need it.",
-      blurb:
-        "Restaurants, bakeries and grocery stores post the food they have left over, with the place, the quantity and the time it goes bad. Adding an ID lifts its trust score, and NGOs, shelters and neighbours find it on a live map and go and collect it. A post deletes itself once it expires, so nobody turns up for food that is already gone.",
+      category: "Experiments",
+      summary:
+        "A hackathon project connecting surplus food with nearby people and organizations. Businesses post what is available and when it expires, while a map helps others find it for collection.",
+      detail:
+        "Listings include location, quantity, and expiry time; adding identification increases the listing's trust score. NGOs, shelters, and neighbours can find food on a live map, and expired posts are removed automatically.",
       href: "https://healhunger.streamlit.app/",
       shot: "/shots/hungerheal.jpg",
-      alt: "HungerHeal running, with its three tabs and the figures on how much food the world throws away",
+      alt: "HungerHeal interface with navigation tabs and food waste figures",
+      featured: false,
+      tags: ["Community", "Maps"],
+      linkLabel: "Try it",
     },
     {
-      name: "prepify",
-      inspiration:
-        "A hackathon interview buddy with a talking avatar, built with a friend.",
-      blurb:
-        "Practice for an interview against a digital avatar that plays the interviewer, listening and speaking back to you. Give it the role, the company, your resume and the job description, and it runs the whole interview, follows up on your answers, and scores you at the end. Past attempts are kept, so you can see if you are actually improving.",
+      id: "prepify",
+      teaser: "Practice the questions that matter.",
+      name: "Prepify",
+      category: "AI systems",
+      summary:
+        "An interview practice tool built with a friend at a hackathon. A speaking avatar asks questions tailored to a role, follows up on answers, and scores the completed session.",
+      detail:
+        "Provide the company, role, resume, and job description to shape the interview. The avatar listens and speaks back, while saved attempts let you compare scores across practice sessions.",
       href: "https://github.com/Sridharmalladi/prepify",
       shot: "/shots/prepify.jpg",
-      alt: "The prepify dashboard, showing past interview counts and scores above the form that starts a new practice interview",
+      alt: "Prepify dashboard showing previous interview scores and a form to start a practice session",
+      featured: false,
+      tags: ["GenAI", "Voice"],
+      linkLabel: "View source",
     },
-  ] as {
-    name: string;
-    inspiration: string;
-    blurb: string;
-    href?: string;
-    shot?: string;
-    alt?: string;
-  }[],
-
+  ] satisfies Project[],
   socials: {
     github: "https://github.com/Sridharmalladi",
     linkedin: "https://www.linkedin.com/in/sridhar-malladi/",

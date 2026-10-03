@@ -13,7 +13,7 @@ export default function Sky() {
  const hour=now?hourInCentral(now):21;
  const night=hour<6.5||hour>=19.5;
  const colors=paletteAt(hour);
- return <figure className="sky" aria-hidden="true"><div className={`sky__frame${night?" sky__frame--night":""}`}>
+ return <figure className={`sky${night ? "" : " sky--day"}`} aria-hidden="true"><div className={`sky__frame${night?" sky__frame--night":""}`}>
         <svg className="sky__art" viewBox="220 0 1160 1000" preserveAspectRatio="xMidYMid slice">
           <defs>
             <linearGradient id={`${id}-sky`} x2="0" y2="1"><stop stopColor={colors.high}/><stop offset="1" stopColor={colors.horizon}/></linearGradient>
@@ -39,14 +39,21 @@ export default function Sky() {
           <circle cx="1190" cy="215" r={night ? 26 : 36} fill={colors.light} opacity=".86"/>
           {night && <g className="sky__stars" fill={colors.light}>{stars.map((star,i) => <circle key={i} cx={star.x} cy={star.y} r={star.radius} style={{ animationDelay: `${-i * 3}s` }}/>)}</g>}
           {night && <path className="sky__comet" d="M470 185l-31 13" fill="none" stroke={colors.light} strokeWidth="1" strokeLinecap="round" opacity=".35"/>}
-          {!night && <g transform="translate(610 315)" opacity=".56">
+          {!night && <g transform="translate(620 225) scale(.7)" opacity=".83">
             <g className="sky__creature" fill={colors.light}>
               <path d="M-43 0Q-24-12 1-6Q19-15 34-5Q43-2 48 4Q30 10 14 7Q-11 14-32 5L-44 14L-42 3L-47-8Z"/>
               <path d="M-9-4Q-16-26 9-29Q18-23 14-7Z" opacity=".7"/>
               <circle cx="27" cy="-1" r="1.2" fill={colors.ground}/>
             </g>
           </g>}
-          <g transform="translate(800 258)" opacity={night ? ".76" : ".76"}>
+          {!night && <g transform="translate(1055 310)" opacity=".68">
+            <g className="sky__airship" fill="none" stroke={colors.light} strokeWidth="1.5">
+              <ellipse cx="0" cy="0" rx="52" ry="17" fill={colors.far} fillOpacity=".68"/>
+              <path d="M-37 8Q0 19 37 8M-17 18L-11 29H12L18 18M-14 29H15M-52 0L-67-9V10L-52 3"/>
+              <path d="M-18-13Q0-19 19-13" opacity=".55"/>
+            </g>
+          </g>}
+          <g transform="translate(800 258)" opacity={night ? ".76" : ".9"}>
             <g className="sky__ufo">
               {night && <path d="M-15 12L-37 105Q0 117 37 105L15 12Z" fill={colors.light} opacity=".045"/>}
               <path d="M-17 1Q0-19 17 1Z" fill={colors.middle} stroke={colors.light} strokeWidth="1.2"/>

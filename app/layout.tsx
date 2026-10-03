@@ -4,7 +4,7 @@ import "./globals.css";
 import "@/aesthetics/sky.css";
 
 export const metadata: Metadata = {
-  title: "Sridhar Malladi | Associate AI Engineer",
+  title: "Sridhar Malladi",
   description: site.tagline,
   metadataBase: new URL(site.url),
   alternates: { canonical: "/" },

@@ -109,36 +109,19 @@ h1, h2, p { margin-top: 0; }
 }
 .central-clock time { font: 400 18px Iowan Old Style, Palatino Linotype, Georgia, serif; }
 .masthead nav { display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: 12px; }
-.masthead nav a, .footer a { transition: color .2s ease; }
-.masthead nav a:hover, .footer a:hover { color: var(--accent-2); }
-.masthead__email { position: relative; display: inline-flex; align-items: center; gap: 10px; }
-.masthead__copy {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  min-width: 65px;
-  height: 27px;
-  padding: 0 8px;
-  border: 1px solid rgba(238,124,117,.34);
-  border-radius: 14px;
-  background: rgba(238,124,117,.09);
-  color: #f5b1a8;
-  font-size: 10px;
-  font-weight: 600;
+.masthead nav a, .masthead__email-button, .footer a { transition: color .2s ease; }
+.masthead nav a:hover, .masthead__email-button:hover, .footer a:hover { color: var(--accent-2); }
+.masthead__email { position: relative; display: inline-flex; align-items: center; }
+.masthead__email-button {
+  appearance: none;
+  min-width: 43px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
   cursor: pointer;
-  transition: background .2s, border-color .2s;
 }
-.masthead__copy svg {
-  width: 13px;
-  height: 13px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.masthead__copy:hover { background: rgba(238,124,117,.18); border-color: rgba(241,201,133,.68); }
 .copy-error {
   position: absolute;
   top: 100%;
@@ -154,6 +137,7 @@ h1, h2, p { margin-top: 0; }
   font-size: 11px;
   line-height: 1.4;
 }
+.copy-error__address { display: block; margin-top: 2px; color: var(--text); overflow-wrap: anywhere; }
 
 .work { padding: 64px 0 75px; }
 .work__heading { max-width: 720px; margin-bottom: 40px; }
@@ -291,7 +275,6 @@ h1, h2, p { margin-top: 0; }
   .central-clock__label { font-size: 9px; }
   .central-clock time { font-size: 16px; }
   .masthead nav { grid-column: 1 / -1; grid-row: 2; gap: 24px; }
-  .masthead__email { gap: 7px; }
   .work { padding: 40px 0 60px; }
   .work__heading { margin-bottom: 26px; }
   .work__heading h1 { font-size: 50px; }

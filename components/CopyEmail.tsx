@@ -24,8 +24,14 @@ export default function CopyEmail({
       setFailed(false);
       setCopied(true);
       if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => setCopied(false), 2200);
+      timer.current = setTimeout(() => {
+        setCopied(false);
+        timer.current = null;
+      }, 2200);
     } catch {
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = null;
+      setCopied(false);
       setFailed(true);
     }
   };
@@ -41,9 +47,9 @@ export default function CopyEmail({
         {copied ? "Copied" : children}
       </button>
       <span role="status" aria-live="polite" className="sr-only">
-        {copied ? "Email address copied to clipboard" : failed ? "Could not copy. Use the Email link to open your mail app." : ""}
+        {copied ? "Email address copied to clipboard" : failed ? `Could not copy. Select ${email} manually.` : ""}
       </span>
-      {failed && <p className="copy-error">Could not copy. Use the Email link instead.</p>}
+      {failed && <p className="copy-error">Copy failed.<span className="copy-error__address">{email}</span></p>}
     </>
   );
 }

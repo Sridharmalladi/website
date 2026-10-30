@@ -23,7 +23,7 @@ export default function Portfolio() {
           <nav aria-label="Main navigation">
             <a href={site.socials.github} target="_blank" rel="noopener noreferrer">GitHub<span className="sr-only">, opens in a new tab</span></a>
             <a href={site.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn<span className="sr-only">, opens in a new tab</span></a>
-            <span className="masthead__email"><a href={`mailto:${site.socials.email}`}>Email</a><CopyEmail className="masthead__copy" email={site.socials.email}><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="6" y="6" width="10" height="11" rx="1.5"/><path d="M13 6V4a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h1"/></svg>Copy</CopyEmail></span>
+            <span className="masthead__email"><CopyEmail className="masthead__email-button" email={site.socials.email}>Email</CopyEmail></span>
           </nav>
         </header>
         <main id="main" tabIndex={-1}>

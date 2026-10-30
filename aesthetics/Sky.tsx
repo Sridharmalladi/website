@@ -45,10 +45,23 @@ export default function Sky() {
                 <g fill={colors.light} opacity=".9"><circle cx="-6" cy="7" r="1.5"/><circle cx="0" cy="5" r="1.5"/><circle cx="6" cy="7" r="1.5"/><circle cx="-3" cy="12" r="1.4"/><circle cx="4" cy="12" r="1.4"/></g>
               </g>
             </g>
+            <g id={`${id}-bee`}>
+              <g className="sky__bee-wings" fill={colors.light} stroke={colors.light} strokeWidth=".7">
+                <ellipse cx="-4" cy="-5" rx="6.5" ry="3.2" transform="rotate(-28 -4 -5)" opacity=".28"/>
+                <ellipse cx="3" cy="-5" rx="6.5" ry="3.2" transform="rotate(24 3 -5)" opacity=".36"/>
+              </g>
+              <ellipse rx="8.8" ry="5.2" fill={colors.light}/>
+              <path d="M-4-4Q-6 0-4 4M1-5Q-1 0 1 5" fill="none" stroke={colors.ground} strokeWidth="2.1"/>
+              <circle cx="7" cy="-1" r="3.5" fill={colors.ground}/>
+              <circle cx="8.4" cy="-2" r=".7" fill={colors.light}/>
+              <path d="M7-4Q8-8 11-8M5-4Q4-8 1-9" fill="none" stroke={colors.ground} strokeWidth=".8" strokeLinecap="round"/>
+            </g>
           </defs>
           <path fill={`url(#${id}-sky)`} d="M0 0h1600v1000H0z"/>
-          <circle cx="1190" cy="215" r="190" fill={`url(#${id}-glow)`}/>
-          <circle cx="1190" cy="215" r={night ? 26 : 36} fill={colors.light} opacity=".86"/>
+          <g className="sky__celestial">
+            <circle cx="1190" cy="215" r="190" fill={`url(#${id}-glow)`}/>
+            <circle cx="1190" cy="215" r={night ? 26 : 36} fill={colors.light} opacity=".86"/>
+          </g>
           {night && <g className="sky__stars" fill={colors.light}>{stars.map((star,i) => <circle key={i} cx={star.x} cy={star.y} r={star.radius} style={{ animationDelay: `${-i * 3}s` }}/>)}</g>}
           {night && <path className="sky__comet" d="M470 185l-31 13" fill="none" stroke={colors.light} strokeWidth="1" strokeLinecap="round" opacity=".35"/>}
           {!night && <g transform="translate(620 225) scale(.7)" opacity=".83">
@@ -92,6 +105,10 @@ export default function Sky() {
             <g transform="translate(318 755) scale(.72)"><use className="sky__poppy sky__poppy--late" href={`#${id}-poppy`}/></g>
             <g transform="translate(1262 696) scale(1.18)"><use className="sky__poppy sky__poppy--late" href={`#${id}-poppy`}/></g>
             <g transform="translate(1350 750) scale(.78)"><use className="sky__poppy" href={`#${id}-poppy`}/></g>
+          </g>
+          <g className={`sky__bees${night ? " sky__bees--night" : ""}`}>
+            <g transform="translate(374 678) scale(.78)"><g className="sky__bee" data-ambient="bee"><use href={`#${id}-bee`}/></g></g>
+            <g transform="translate(1195 650) scale(.62)"><g className="sky__bee sky__bee--late" data-ambient="bee"><use href={`#${id}-bee`}/></g></g>
           </g>
           <g className="sky__pollen" fill={colors.blossom} opacity=".32">
             <circle cx="286" cy="676" r="2.2"/><circle cx="338" cy="706" r="1.4"/><circle cx="1215" cy="662" r="1.8"/><circle cx="1322" cy="682" r="2.1"/><circle cx="1280" cy="620" r="1.2"/>

@@ -7,13 +7,14 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run test:export",
     "start": "npm run preview",
     "preview": "serve out -l 3000",
     "assets": "node scripts/prepare-assets.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
-    "check": "npm run typecheck && npm run lint"
+    "check": "npm run typecheck && npm run lint",
+    "test:export": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "next": "15.5.26",

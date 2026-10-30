@@ -33,6 +33,18 @@ export default function Sky() {
               </g>
               <g fill={colors.light} opacity=".22"><ellipse cx="143" cy="72" rx="27" ry="7"/><ellipse cx="62" cy="111" rx="23" ry="6"/><ellipse cx="213" cy="137" rx="25" ry="6"/></g>
             </g>
+            <g id={`${id}-poppy`}>
+              <path d="M0 130C-4 94 7 57 1 20" fill="none" stroke={colors.leaf} strokeWidth="4" strokeLinecap="round"/>
+              <path d="M-1 91C-19 79-27 71-31 58C-14 60-5 69 1 80M2 70C19 58 28 49 31 36C14 39 6 48 1 59" fill={colors.leaf} opacity=".76"/>
+              <g transform="translate(1 20)">
+                <path d="M0 1C-11-19-39-22-47-4C-56 16-31 33-4 18Z" fill={colors.blossom} opacity=".9"/>
+                <path d="M0 1C10-20 39-22 47-4C56 16 31 33 4 18Z" fill={colors.blossom}/>
+                <path d="M0 4C-23 5-29 28-9 37C7 44 17 27 9 12Z" fill={colors.blossom} opacity=".72"/>
+                <path d="M0 4C22 5 29 27 10 37C-6 44-17 27-9 12Z" fill={colors.blossom} opacity=".82"/>
+                <ellipse cy="9" rx="11" ry="8" fill={colors.ground}/>
+                <g fill={colors.light} opacity=".9"><circle cx="-6" cy="7" r="1.5"/><circle cx="0" cy="5" r="1.5"/><circle cx="6" cy="7" r="1.5"/><circle cx="-3" cy="12" r="1.4"/><circle cx="4" cy="12" r="1.4"/></g>
+              </g>
+            </g>
           </defs>
           <path fill={`url(#${id}-sky)`} d="M0 0h1600v1000H0z"/>
           <circle cx="1190" cy="215" r="190" fill={`url(#${id}-glow)`}/>
@@ -69,9 +81,21 @@ export default function Sky() {
           <path d="M0 492H1600V690H0Z" fill={`url(#${id}-mist)`} className="sky__mist"/>
           <path d="M0 635Q118 575 255 640T510 594Q658 546 784 625T1040 590Q1188 541 1307 603T1600 566V1000H0Z" fill={colors.near}/>
           <use href={`#${id}-tree`} transform="translate(1090 415) scale(.55)" opacity=".58"/>
+          <g className="sky__poppies sky__poppies--far" opacity=".48">
+            <g transform="translate(350 640) scale(.46)"><use className="sky__poppy" href={`#${id}-poppy`}/></g>
+            <g transform="translate(414 648) scale(.34)"><use className="sky__poppy sky__poppy--late" href={`#${id}-poppy`}/></g>
+            <g transform="translate(1015 606) scale(.42)"><use className="sky__poppy" href={`#${id}-poppy`}/></g>
+          </g>
           <path d="M0 784Q172 651 367 751T741 748Q947 642 1145 714T1600 692V1000H0Z" fill={colors.ground}/>
-          <use href={`#${id}-tree`} transform="translate(1300 370) scale(1.25)"/>
-          <use href={`#${id}-tree`} transform="translate(-115 493) scale(1.35)" opacity=".85"/>
+          <g className="sky__poppies sky__poppies--near">
+            <g transform="translate(246 713) scale(1.05)"><use className="sky__poppy" href={`#${id}-poppy`}/></g>
+            <g transform="translate(318 755) scale(.72)"><use className="sky__poppy sky__poppy--late" href={`#${id}-poppy`}/></g>
+            <g transform="translate(1262 696) scale(1.18)"><use className="sky__poppy sky__poppy--late" href={`#${id}-poppy`}/></g>
+            <g transform="translate(1350 750) scale(.78)"><use className="sky__poppy" href={`#${id}-poppy`}/></g>
+          </g>
+          <g className="sky__pollen" fill={colors.blossom} opacity=".32">
+            <circle cx="286" cy="676" r="2.2"/><circle cx="338" cy="706" r="1.4"/><circle cx="1215" cy="662" r="1.8"/><circle cx="1322" cy="682" r="2.1"/><circle cx="1280" cy="620" r="1.2"/>
+          </g>
           <g fill="none" stroke={colors.blossom} strokeWidth="1" opacity=".13"><path d="M0 817Q178 702 335 765M1090 755Q1310 829 1600 731M49 914Q183 870 310 902M1150 913Q1360 850 1540 886"/></g>
           <g className="sky__birds" fill="none" stroke={colors.light} strokeWidth="1.6" strokeLinecap="round" opacity=".48">
             <path d="M0 0q7-6 14 0 7-6 14 0"/><path d="M-40 17q6-5 12 0 6-5 12 0"/><path d="M35 25q5-4 10 0 5-4 10 0"/>

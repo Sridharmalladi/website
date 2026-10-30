@@ -1,12 +1,12 @@
 export const CENTRAL_TIME_ZONE = "America/Chicago";
 const palettes = [
-  { hour: 0, high: "#0b182a", horizon: "#344f61", far: "#2d4b57", middle: "#233e48", near: "#193732", ground: "#11261f", blossom: "#aaa9b8", light: "#e4e7d4" },
-  { hour: 6, high: "#657f8d", horizon: "#e0bea0", far: "#809495", middle: "#5c7975", near: "#3d6055", ground: "#284537", blossom: "#e4c5b1", light: "#ffebc6" },
-  { hour: 12, high: "#89afb5", horizon: "#e4dfc2", far: "#8ba9a4", middle: "#648981", near: "#42685b", ground: "#2a4b3a", blossom: "#ebd2bf", light: "#fff0cf" },
-  { hour: 18, high: "#596c7e", horizon: "#c49b80", far: "#7c8180", middle: "#576d6e", near: "#35534d", ground: "#22392e", blossom: "#d6b4af", light: "#f5deba" },
-  { hour: 21, high: "#152b40", horizon: "#4c6377", far: "#40586a", middle: "#2f4b53", near: "#223f3b", ground: "#162c24", blossom: "#b9aabc", light: "#e4e7d4" },
+  { hour: 0, high: "#0d1028", horizon: "#2b2a50", far: "#373958", middle: "#293c52", near: "#1a3b48", ground: "#102b32", blossom: "#c85f72", light: "#eac786", leaf: "#5f8f86" },
+  { hour: 6, high: "#262849", horizon: "#70445f", far: "#55516d", middle: "#36515c", near: "#23505b", ground: "#163a42", blossom: "#e57872", light: "#f1cf92", leaf: "#72a99a" },
+  { hour: 12, high: "#243b59", horizon: "#8d5b6e", far: "#5b596f", middle: "#38616a", near: "#22515d", ground: "#163a43", blossom: "#e77a70", light: "#f1d092", leaf: "#75a99a" },
+  { hour: 18, high: "#2b234a", horizon: "#8d4a60", far: "#5c4968", middle: "#37495d", near: "#1e4652", ground: "#14343c", blossom: "#ea6f6e", light: "#f1c783", leaf: "#679888" },
+  { hour: 21, high: "#12132f", horizon: "#3b3159", far: "#3d3c5c", middle: "#2b3e53", near: "#193b48", ground: "#102c33", blossom: "#d46679", light: "#e8c789", leaf: "#5f8d84" },
 ];
-const keys = ["high", "horizon", "far", "middle", "near", "ground", "blossom", "light"] as const;
+const keys = ["high", "horizon", "far", "middle", "near", "ground", "blossom", "light", "leaf"] as const;
 export function hourInCentral(date: Date): number {
   const parts = new Intl.DateTimeFormat("en-US", { timeZone: CENTRAL_TIME_ZONE, hour: "numeric", minute: "numeric", hourCycle: "h23" }).formatToParts(date);
   return Number(parts.find(p => p.type === "hour")?.value) + Number(parts.find(p => p.type === "minute")?.value) / 60;

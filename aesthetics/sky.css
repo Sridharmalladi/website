@@ -1,5 +1,5 @@
 .sky { position:fixed; inset:0; width:100%; height:100vh; margin:0; z-index:-2; pointer-events:none; overflow:hidden; }
-.sky__frame { width:100%; height:100%; overflow:hidden; background:#203e40; }
+.sky__frame { width:100%; height:100%; overflow:hidden; background:#15172f; }
 .sky__art { display:block; width:100%; height:100%; }
 .sky__art path,.sky__art ellipse,.sky__art circle,.sky__art stop { transition:fill 45s linear,stop-color 45s linear; }
 .sky__caption { position:absolute; right:clamp(20px,4vw,70px); bottom:24px; display:flex; justify-content:flex-end; gap:16px; color:#e7eee3; font-size:12px; }
@@ -16,6 +16,9 @@
 .sky__creature { animation:sky-creature 37s ease-in-out infinite alternate; }
 .sky__airship { animation:sky-airship 46s ease-in-out infinite alternate; }
 .sky__comet { animation:sky-comet 22s ease-in-out infinite; }
+.sky__poppy { transform-box:fill-box; transform-origin:50% 100%; animation:sky-poppy-sway 8s ease-in-out infinite alternate; }
+.sky__poppy--late { animation-delay:-4s; animation-duration:10s; }
+.sky__pollen { animation:sky-pollen 18s ease-in-out infinite alternate; }
 @keyframes sky-drift { from { transform:translateX(-20px); } to { transform:translateX(25px); } }
 @keyframes sky-breathe { from { opacity:.6; } to { opacity:1; } }
 @keyframes sky-birds { 0% { transform:translate(-80px,260px); opacity:0; } 5%,60% { opacity:.4; } 70%,100% { transform:translate(1700px,120px); opacity:0; } }
@@ -24,5 +27,7 @@
 @keyframes sky-creature { from { transform:translate(-16px,2px) rotate(-2deg); } to { transform:translate(18px,-5px) rotate(2deg); } }
 @keyframes sky-airship { from { transform:translate(14px,-4px); } to { transform:translate(-17px,3px); } }
 @keyframes sky-comet { 0%,70%,100% { opacity:0; } 75%,83% { opacity:.5; } }
+@keyframes sky-poppy-sway { from { transform:rotate(-1.8deg); } to { transform:rotate(2.2deg); } }
+@keyframes sky-pollen { from { transform:translate(0,4px); opacity:.2; } to { transform:translate(13px,-9px); opacity:.45; } }
 @media(max-width:700px) { .sky__caption { font-size:11px; bottom:12px; } }
 @media(prefers-reduced-motion:reduce) { .sky * { animation:none !important; transition:none !important; } .sky__birds { display:none; } }

@@ -12,7 +12,11 @@ export default function Portfolio() {
       <div className="page" id="top">
         <header className="masthead">
           <a className="wordmark" href="#top" aria-label="Sridhar Malladi, home">
-            <span className="wordmark__emoji" aria-hidden="true">👋</span>
+            <svg className="wordmark__mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+              <path d="M16 29C15 22 18 15 16 8M16 21C11 18 9 15 8 12M17 18C22 15 24 12 24 9" />
+              <path className="wordmark__petal" d="M16 9C12 3 4 4 4 10C4 15 11 17 16 13C21 17 28 15 28 10C28 4 20 3 16 9Z" />
+              <circle cx="16" cy="11" r="3" />
+            </svg>
             {site.name}
           </a>
           <CentralClock />

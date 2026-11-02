@@ -32,7 +32,7 @@ npm run preview
 
 After replacing source screenshots, run `npm run assets` to regenerate the checked-in optimized images and social card.
 
-Keep short project tags visible. The grid shows all projects; each card links to the project or source, while its Details button opens a native dialog with the fuller description. Use real screenshots, descriptive links, semantic headings, and reduced-motion styles. Check narrow screens and keyboard navigation when changing the layout. The full-page landscape follows America/Chicago (Texas Central Time), including daylight saving, with subtle birds, stars, UFOs, and mist.
+The grid shows all projects. Each card keeps its title and one short line visible, then reveals a little more on hover or keyboard focus; touch screens keep that context visible. Use real screenshots, descriptive links, semantic headings, and reduced-motion styles. Check narrow screens and keyboard navigation when changing the layout. The full-page landscape follows America/Chicago (Texas Central Time), including daylight saving, with subtle birds, stars, UFOs, and mist.
 
 `legacy/` preserves the previous site and is excluded from the current build.
 

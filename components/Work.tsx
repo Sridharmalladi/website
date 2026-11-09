@@ -7,7 +7,7 @@ export default function Work() {
     <section className="work" id="work" aria-labelledby="work-title">
       <div className="work__heading">
         <h1 id="work-title">Things I’ve built.</h1>
-        <p>AI engineer in Texas. I like useful tools, honest numbers, and small experiments.</p>
+        <p>I like useful tools, honest numbers, and small experiments.</p>
       </div>
       <div className="work-grid">
         {site.projects.map(project => {

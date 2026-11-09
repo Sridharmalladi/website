@@ -17,7 +17,7 @@
     "test:export": "node --test tests/*.test.mjs"
   },
   "dependencies": {
-    "next": "15.5.26",
+    "next": "15.5.29",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -31,8 +31,10 @@
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@typescript-eslint/eslint-plugin": "8.71.0",
+    "@typescript-eslint/parser": "8.71.0",
     "eslint": "^9.39.0",
-    "eslint-config-next": "15.5.26",
+    "eslint-config-next": "15.5.29",
     "serve": "^14.2.5",
     "sharp": "^0.35.5",
     "typescript": "~5.9.3"

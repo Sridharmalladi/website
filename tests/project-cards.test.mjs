@@ -25,3 +25,16 @@ test("Focado offers the released DMG as its primary action", () => {
   );
   assert.match(html, /href="https:\/\/github\.com\/Sridharmalladi\/focado"[^>]*>Source code/);
 });
+
+test("ReadHelp is displayed as a private desktop app without a dead repository link", () => {
+  const titleIndex = html.indexOf(">ReadHelp<");
+  assert.notEqual(titleIndex, -1, "ReadHelp card should be present");
+
+  const articleStart = html.lastIndexOf("<article", titleIndex);
+  const articleEnd = html.indexOf("</article>", titleIndex);
+  const card = html.slice(articleStart, articleEnd + "</article>".length);
+
+  assert.match(card, /Private Mac app/);
+  assert.doesNotMatch(card, /<a\b/);
+  assert.doesNotMatch(card, /github\.com\/Sridharmalladi\/readhelp/);
+});

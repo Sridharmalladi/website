@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title description">
+  <title id="title">ReadHelp desktop reader</title>
+  <desc id="description">A calm reading interface showing the word understanding, playback controls, and a speed of 300 words per minute.</desc>
+  <rect width="1440" height="900" fill="#f8faf9"/>
+  <rect width="1440" height="96" fill="#eef2f3"/>
+  <circle cx="72" cy="48" r="18" fill="none" stroke="#13233a" stroke-width="4"/>
+  <circle cx="72" cy="48" r="5" fill="#ef6a5b"/>
+  <text x="106" y="59" fill="#13233a" font-family="Arial, sans-serif" font-size="30" font-weight="700">ReadHelp</text>
+  <text x="1368" y="57" text-anchor="end" fill="#657180" font-family="Arial, sans-serif" font-size="18">The Great Gatsby · Chapter 3</text>
+  <rect x="0" y="96" width="1440" height="4" fill="#dfe6e8"/>
+  <rect x="0" y="96" width="604" height="4" fill="#ef6a5b"/>
+
+  <rect x="719" y="174" width="3" height="58" rx="2" fill="#ef6a5b"/>
+  <line x1="710" y1="231" x2="730" y2="231" stroke="#ef6a5b" stroke-width="2"/>
+  <text x="720" y="475" text-anchor="middle" fill="#13233a" font-family="Arial, sans-serif" font-size="142" font-weight="500" letter-spacing="-7">under<tspan fill="#ef6a5b" font-weight="700">s</tspan>tanding</text>
+  <rect x="719" y="602" width="3" height="58" rx="2" fill="#ef6a5b"/>
+  <line x1="710" y1="603" x2="730" y2="603" stroke="#ef6a5b" stroke-width="2"/>
+  <text x="58" y="690" fill="#657180" font-family="Arial, sans-serif" font-size="16">42% complete</text>
+  <text x="1382" y="690" text-anchor="end" fill="#657180" font-family="Arial, sans-serif" font-size="16">8 min remaining</text>
+
+  <rect x="0" y="728" width="1440" height="172" fill="#ffffff"/>
+  <line x1="0" y1="728" x2="1440" y2="728" stroke="#dfe6e8"/>
+  <rect x="56" y="780" width="196" height="60" rx="12" fill="#eef2f3"/>
+  <rect x="62" y="786" width="90" height="48" rx="9" fill="#ffffff"/>
+  <text x="107" y="817" text-anchor="middle" fill="#13233a" font-family="Arial, sans-serif" font-size="17" font-weight="700">Word</text>
+  <text x="201" y="817" text-anchor="middle" fill="#657180" font-family="Arial, sans-serif" font-size="17">Phrase</text>
+
+  <circle cx="630" cy="810" r="34" fill="#ffffff" stroke="#cad4d7" stroke-width="2"/>
+  <path d="M638 796l-16 14 16 14z" fill="#13233a"/>
+  <circle cx="720" cy="810" r="45" fill="#13233a"/>
+  <path d="M710 792l25 18-25 18z" fill="#ffffff"/>
+  <circle cx="810" cy="810" r="34" fill="#ffffff" stroke="#cad4d7" stroke-width="2"/>
+  <path d="M802 796l16 14-16 14z" fill="#13233a"/>
+
+  <text x="1125" y="797" fill="#657180" font-family="Arial, sans-serif" font-size="15">Reading speed</text>
+  <text x="1380" y="797" text-anchor="end" fill="#13233a" font-family="Arial, sans-serif" font-size="19" font-weight="700">300 WPM</text>
+  <line x1="1125" y1="829" x2="1380" y2="829" stroke="#cad4d7" stroke-width="6" stroke-linecap="round"/>
+  <line x1="1125" y1="829" x2="1277" y2="829" stroke="#ef6a5b" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="1277" cy="829" r="11" fill="#ef6a5b"/>
+</svg>

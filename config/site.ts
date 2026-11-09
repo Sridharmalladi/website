@@ -3,13 +3,13 @@ export type Project = {
   name: string;
   teaser: string;
   summary: string;
-  href: string;
+  href?: string;
   sourceHref?: string;
   shot: string;
   alt: string;
   featured: boolean;
   tags: string[];
-  linkLabel: "Open project" | "View source" | "Try it" | "View extension" | "Download for Mac";
+  linkLabel: "Open project" | "View source" | "Try it" | "View extension" | "Download for Mac" | "Private Mac app";
 };
 
 export const site = {
@@ -137,6 +137,17 @@ export const site = {
       featured: false,
       tags: ["macOS", "Focus"],
       linkLabel: "Download for Mac",
+    },
+    {
+      id: "readhelp",
+      teaser: "Read without losing your place.",
+      name: "ReadHelp",
+      summary: "A private desktop reader that turns PDF, EPUB, and TXT books into a paced stream while preserving context and progress.",
+      shot: "/shots/readhelp.svg",
+      alt: "ReadHelp desktop reader showing one focused word with reading controls and a 300 words-per-minute setting",
+      featured: false,
+      tags: ["macOS", "Reading"],
+      linkLabel: "Private Mac app",
     },
     {
       id: "hungerheal",

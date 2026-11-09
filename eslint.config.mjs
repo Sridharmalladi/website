@@ -7,7 +7,7 @@ const compat = new FlatCompat({
 });
 
 const config = [
-  { ignores: [".next/**", "out/**", "legacy/**", "next-env.d.ts"] },
+  { ignores: [".next/**", "out/**", "legacy/**", "public/readhelp/**", "next-env.d.ts"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 

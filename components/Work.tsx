@@ -16,7 +16,7 @@ export default function Work() {
             <>
               <span className="work-tile__image">
                 <Image src={project.featured ? `/shots/${project.id}-1440.webp` : project.shot} alt={project.alt} width={720} height={450} loading="lazy" sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 33vw" />
-                {isLive ? <LiveIndicator /> : <span className="work-tile__status">{project.linkLabel === "Download for Mac" ? "Mac app" : project.linkLabel === "Private Mac app" ? "Private app" : "Source"}</span>}
+                {isLive ? <LiveIndicator /> : <span className="work-tile__status">{project.linkLabel === "Download for Mac" ? "Mac app" : "Source"}</span>}
                 <span className="work-tile__note">
                   <span className="work-tile__tags">{project.tags.join(" · ")}</span>
                   <span>{project.summary}</span>

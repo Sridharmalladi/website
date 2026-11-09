@@ -38,3 +38,9 @@ test("ReadHelp opens its hosted demo without exposing the private repository", (
   assert.match(card, /Try demo/);
   assert.doesNotMatch(card, /github\.com\/Sridharmalladi\/readhelp/);
 });
+
+test("ReadHelp is the first project shown", () => {
+  const firstCard = html.match(/<article class="work-tile">.*?<\/article>/s)?.[0];
+
+  assert.match(firstCard ?? "", />ReadHelp</);
+});

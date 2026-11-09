@@ -18,6 +18,18 @@ export const site = {
   tagline: "AI engineer building useful tools with data and AI.",
   projects: [
     {
+      id: "readhelp",
+      teaser: "Read without losing your place.",
+      name: "ReadHelp",
+      summary: "A private desktop reader that turns PDF, EPUB, and TXT books into a paced stream while preserving context and progress.",
+      href: "https://sridharmalladi.online/readhelp/?demo=1",
+      shot: "/shots/readhelp.svg",
+      alt: "ReadHelp desktop reader showing one focused word with reading controls and a 300 words-per-minute setting",
+      featured: false,
+      tags: ["macOS", "Reading"],
+      linkLabel: "Try demo",
+    },
+    {
       id: "cityfit",
       teaser: "Find a city that fits your life.",
       name: "CityFit",
@@ -137,18 +149,6 @@ export const site = {
       featured: false,
       tags: ["macOS", "Focus"],
       linkLabel: "Download for Mac",
-    },
-    {
-      id: "readhelp",
-      teaser: "Read without losing your place.",
-      name: "ReadHelp",
-      summary: "A private desktop reader that turns PDF, EPUB, and TXT books into a paced stream while preserving context and progress.",
-      href: "https://sridharmalladi.online/readhelp/?demo=1",
-      shot: "/shots/readhelp.svg",
-      alt: "ReadHelp desktop reader showing one focused word with reading controls and a 300 words-per-minute setting",
-      featured: false,
-      tags: ["macOS", "Reading"],
-      linkLabel: "Try demo",
     },
     {
       id: "hungerheal",
